@@ -16,7 +16,7 @@ import {
 import { getCurrentUser } from '@/lib/core/services/auth-service'
 import type { BackendMode } from '@/lib/core/contracts/common'
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
     const setting = await getConfiguredBackendSetting()
 
     return jsonSuccess(setting)

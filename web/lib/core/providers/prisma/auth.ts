@@ -6,15 +6,11 @@ import type {
     AuthMutationResult,
     AuthProvider,
     AuthUserDto,
-    LoginInput,
     MessageResult,
-    PasswordResetInput,
-    PasswordResetRequestInput,
-    RegisterInput,
     SessionSummaryDto,
     VerifyEmailInput,
 } from '@/lib/core/contracts/auth'
-import type { AuthContext, RequestContext } from '@/lib/core/contracts/common'
+import type { RequestContext } from '@/lib/core/contracts/common'
 import { authCookieNames } from '@/lib/core/auth/constants'
 import { generateOpaqueToken, hashOpaqueToken } from '@/lib/core/auth/token'
 
