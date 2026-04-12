@@ -1,28 +1,11 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 
 import { env } from "@/lib/config/env";
 import { AppError, statusToErrorCode } from "@/lib/core/errors";
 import { logger } from "@/lib/core/logger";
 import type { ApiErrorEnvelope } from "@/lib/shared/types/api";
 
-export const internalApiClient = axios.create({
-  baseURL: env.NEXT_PUBLIC_API_BASE_URL,
-  withCredentials: true,
-  headers: {
-    "X-App-Client": "kejasafe-web",
-  },
-});
-
-export const laravelApiClient = axios.create({
-  baseURL: env.LARAVEL_API_BASE_URL,
-  withCredentials: true,
-  headers: {
-    Accept: "application/json",
-    "X-App-Client": "kejasafe-web",
-  },
-});
-
-for (const client of [internalApiClient, laravelApiClient]) {
+function attachResponseInterceptor(client: AxiosInstance) {
   client.interceptors.response.use(
     (response: AxiosResponse) => response,
     (error: AxiosError<ApiErrorEnvelope>) => {
@@ -52,3 +35,31 @@ for (const client of [internalApiClient, laravelApiClient]) {
     },
   );
 }
+
+export const internalApiClient = axios.create({
+  withCredentials: true,
+  headers: {
+    "X-App-Client": "kejasafe-web",
+  },
+});
+
+internalApiClient.interceptors.request.use((config) => ({
+  ...config,
+  baseURL: config.baseURL ?? env.NEXT_PUBLIC_API_BASE_URL,
+}));
+
+export const laravelApiClient = axios.create({
+  withCredentials: true,
+  headers: {
+    Accept: "application/json",
+    "X-App-Client": "kejasafe-web",
+  },
+});
+
+laravelApiClient.interceptors.request.use((config) => ({
+  ...config,
+  baseURL: config.baseURL ?? env.LARAVEL_API_BASE_URL,
+}));
+
+attachResponseInterceptor(internalApiClient);
+attachResponseInterceptor(laravelApiClient);

@@ -4,13 +4,15 @@ import { env } from "@/lib/config/env";
 import { authCookieNames } from "@/lib/core/auth/constants";
 import type { BackendMode } from "@/lib/core/contracts/common";
 
-const baseCookieOptions = {
-  httpOnly: true,
-  sameSite: "lax" as const,
-  secure: process.env.NODE_ENV === "production",
-  path: "/",
-  domain: env.COOKIE_DOMAIN,
-};
+function getBaseCookieOptions() {
+  return {
+    httpOnly: true,
+    sameSite: "lax" as const,
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    domain: env.COOKIE_DOMAIN,
+  };
+}
 
 export function attachAuthCookies(
   response: NextResponse,
@@ -19,12 +21,12 @@ export function attachAuthCookies(
   expiresAt: Date,
 ) {
   response.cookies.set(authCookieNames.session, sessionToken, {
-    ...baseCookieOptions,
+    ...getBaseCookieOptions(),
     expires: expiresAt,
   });
 
   response.cookies.set(authCookieNames.refresh, refreshToken, {
-    ...baseCookieOptions,
+    ...getBaseCookieOptions(),
     expires: expiresAt,
   });
 }
@@ -39,7 +41,7 @@ export function attachBackendModeCookie(
   mode: BackendMode,
 ) {
   response.cookies.set(authCookieNames.backendMode, mode, {
-    ...baseCookieOptions,
+    ...getBaseCookieOptions(),
     httpOnly: false,
     maxAge: 60 * 60 * 24 * 365,
   });
@@ -47,7 +49,7 @@ export function attachBackendModeCookie(
 
 export function attachCsrfCookie(response: NextResponse, csrfToken: string) {
   response.cookies.set(authCookieNames.csrf, csrfToken, {
-    ...baseCookieOptions,
+    ...getBaseCookieOptions(),
     httpOnly: false,
     maxAge: 60 * 60 * 2,
   });
