@@ -1,4 +1,4 @@
-# 🛡️ Kejasafe
+# ![Kejasafe](./web/public/logo.png) Kejasafe
 
 **Kejasafe** is a robust and secure application platform built for efficiency and trust. Our mission is to provide an integrated solution that balances top-tier security with a seamless user experience.
 
