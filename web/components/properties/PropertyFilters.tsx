@@ -9,6 +9,12 @@ interface PropertyFiltersProps {
   values: PropertySearchInput;
 }
 
+const inputClass =
+  "h-11 w-full min-w-0 rounded-xl border border-stone-200 bg-white px-3 text-sm text-stone-900 outline-none transition focus:border-brand placeholder:text-stone-400";
+
+const labelClass =
+  "text-xs font-medium uppercase tracking-[0.14em] text-stone-500";
+
 export function PropertyFilters({
   action = "/properties",
   values,
@@ -16,38 +22,34 @@ export function PropertyFilters({
   return (
     <form
       action={action}
-      className="grid gap-4 rounded-[32px] border border-white/10 bg-white/75 p-5 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)] backdrop-blur-sm dark:bg-white/5 md:grid-cols-2 xl:grid-cols-5"
+      className="grid gap-4 rounded-2xl border border-stone-200 bg-white p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
-      <label className="grid gap-2">
-        <span className="text-xs font-medium uppercase tracking-[0.18em] text-stone-500">
-          County
-        </span>
+      <label className="grid gap-2 min-w-0">
+        <span className={labelClass}>County</span>
         <input
           name="county"
           defaultValue={values.county ?? ""}
-          placeholder="nairobi"
-          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none ring-0 transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
+          placeholder="Nairobi"
+          autoCapitalize="words"
+          className={`${inputClass} capitalize placeholder:normal-case`}
         />
       </label>
-      <label className="grid gap-2">
-        <span className="text-xs font-medium uppercase tracking-[0.18em] text-stone-500">
-          City
-        </span>
+      <label className="grid gap-2 min-w-0">
+        <span className={labelClass}>City</span>
         <input
           name="city"
           defaultValue={values.city ?? ""}
-          placeholder="westlands"
-          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
+          placeholder="Westlands"
+          autoCapitalize="words"
+          className={`${inputClass} capitalize placeholder:normal-case`}
         />
       </label>
-      <label className="grid gap-2">
-        <span className="text-xs font-medium uppercase tracking-[0.18em] text-stone-500">
-          Property type
-        </span>
+      <label className="grid gap-2 min-w-0">
+        <span className={labelClass}>Property type</span>
         <select
           name="propertyType"
           defaultValue={values.propertyType ?? ""}
-          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
+          className={inputClass}
         >
           <option value="">All types</option>
           <option value="apartment">Apartment</option>
@@ -59,14 +61,12 @@ export function PropertyFilters({
           <option value="hostel-student-housing">Student housing</option>
         </select>
       </label>
-      <label className="grid gap-2">
-        <span className="text-xs font-medium uppercase tracking-[0.18em] text-stone-500">
-          Purpose
-        </span>
+      <label className="grid gap-2 min-w-0">
+        <span className={labelClass}>Purpose</span>
         <select
           name="listingPurpose"
           defaultValue={values.listingPurpose ?? ""}
-          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
+          className={inputClass}
         >
           <option value="">Rent, sale, short stay</option>
           <option value="rent">Rent</option>
@@ -74,38 +74,34 @@ export function PropertyFilters({
           <option value="short_stay">Short stay</option>
         </select>
       </label>
-      <div className="grid grid-cols-2 gap-3">
-        <label className="grid gap-2">
-          <span className="text-xs font-medium uppercase tracking-[0.18em] text-stone-500">
-            Min KES
-          </span>
-          <input
-            name="minPrice"
-            defaultValue={values.minPrice ?? ""}
-            placeholder="25000"
-            className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
-          />
-        </label>
-        <label className="grid gap-2">
-          <span className="text-xs font-medium uppercase tracking-[0.18em] text-stone-500">
-            Max KES
-          </span>
-          <input
-            name="maxPrice"
-            defaultValue={values.maxPrice ?? ""}
-            placeholder="120000"
-            className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
-          />
-        </label>
-      </div>
-      <label className="grid gap-2">
-        <span className="text-xs font-medium uppercase tracking-[0.18em] text-stone-500">
-          Bedrooms
-        </span>
+
+      <label className="grid gap-2 min-w-0">
+        <span className={labelClass}>Min KES</span>
+        <input
+          name="minPrice"
+          inputMode="numeric"
+          defaultValue={values.minPrice ?? ""}
+          placeholder="25,000"
+          className={inputClass}
+        />
+      </label>
+      <label className="grid gap-2 min-w-0">
+        <span className={labelClass}>Max KES</span>
+        <input
+          name="maxPrice"
+          inputMode="numeric"
+          defaultValue={values.maxPrice ?? ""}
+          placeholder="120,000"
+          className={inputClass}
+        />
+      </label>
+
+      <label className="grid gap-2 min-w-0">
+        <span className={labelClass}>Bedrooms</span>
         <select
           name="bedrooms"
           defaultValue={values.bedrooms ?? ""}
-          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
+          className={inputClass}
         >
           <option value="">Any</option>
           <option value="1">1+</option>
@@ -114,14 +110,12 @@ export function PropertyFilters({
           <option value="4">4+</option>
         </select>
       </label>
-      <label className="grid gap-2">
-        <span className="text-xs font-medium uppercase tracking-[0.18em] text-stone-500">
-          Bathrooms
-        </span>
+      <label className="grid gap-2 min-w-0">
+        <span className={labelClass}>Bathrooms</span>
         <select
           name="bathrooms"
           defaultValue={values.bathrooms ?? ""}
-          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
+          className={inputClass}
         >
           <option value="">Any</option>
           <option value="1">1+</option>
@@ -129,26 +123,26 @@ export function PropertyFilters({
           <option value="3">3+</option>
         </select>
       </label>
-      <label className="grid gap-2">
-        <span className="text-xs font-medium uppercase tracking-[0.18em] text-stone-500">
-          Sort by
-        </span>
+
+      <label className="grid gap-2 min-w-0 sm:col-span-2">
+        <span className={labelClass}>Sort by</span>
         <select
           name="sortBy"
           defaultValue={values.sortBy ?? "newest"}
-          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
+          className={inputClass}
         >
           <option value="newest">Newest</option>
           <option value="price_asc">Price: low to high</option>
           <option value="price_desc">Price: high to low</option>
         </select>
       </label>
-      <div className="flex items-end gap-3 xl:col-span-2">
-        <Button type="submit" size="lg" className="h-12 rounded-2xl px-5">
+
+      <div className="flex items-end gap-3 sm:col-span-2 lg:col-span-3 xl:col-span-2">
+        <Button type="submit" size="lg" className="h-11 rounded-xl px-5">
           <FiSearch />
           Search listings
         </Button>
-        <Button asChild variant="outline" size="lg" className="h-12 rounded-2xl">
+        <Button asChild variant="outline" size="lg" className="h-11 rounded-xl">
           <Link href={action}>Reset</Link>
         </Button>
       </div>

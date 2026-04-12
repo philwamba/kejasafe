@@ -6,16 +6,17 @@ import { PublicPageShell } from "@/components/site/PublicPageShell";
 import { blogPosts } from "@/modules/cms/content";
 
 export const metadata: Metadata = {
-  title: "Insights | Kejasafe",
-  description: "Guides and market insights for tenants, landlords, and property operators.",
+  title: "Blog",
+  description:
+    "Rental guides, housing market updates, and advice for Kenyan tenants and landlords.",
 };
 
 export default function BlogPage() {
   return (
     <PublicPageShell
-      eyebrow="Insights"
+      eyebrow="Blog"
       title="Market notes, operational guidance, and housing intelligence."
-      description="The blog route structure is now in place for SEO and CMS evolution. Content is static for now, but the path and metadata model are production-ready."
+      description="Guides, market updates, and housing operations content from the Kejasafe team."
     >
       <ContentSection title="Latest posts">
         <div className="grid gap-4 lg:grid-cols-3">
@@ -23,14 +24,14 @@ export default function BlogPage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="rounded-[24px] border border-white/10 bg-white/5 p-6 transition hover:bg-white/8"
+              className="rounded-2xl border border-stone-200 bg-white p-6 transition hover:border-brand hover:shadow-md"
             >
-              <p className="text-xs uppercase tracking-[0.22em] text-orange-300">
+              <p className="text-xs uppercase tracking-[0.22em] text-brand">
                 {post.category}
               </p>
-              <h2 className="mt-4 text-xl font-semibold text-white">{post.title}</h2>
-              <p className="mt-3 text-sm leading-7 text-stone-300">{post.excerpt}</p>
-              <p className="mt-4 text-xs uppercase tracking-[0.2em] text-stone-400">
+              <h2 className="mt-4 text-xl font-semibold text-stone-950">{post.title}</h2>
+              <p className="mt-3 text-sm leading-7 text-stone-600">{post.excerpt}</p>
+              <p className="mt-4 text-xs uppercase tracking-[0.2em] text-stone-500">
                 {post.publishedAt} • {post.readingTime}
               </p>
             </Link>

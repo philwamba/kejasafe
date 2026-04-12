@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 
+import { Button } from "@/components/ui/button";
 import {
   fetchCsrfToken,
   requestEmailVerification,
@@ -63,9 +64,9 @@ export function VerifyEmailPanel({ user, token }: VerifyEmailPanelProps) {
 
   if (user?.emailVerifiedAt) {
     return (
-      <div className="rounded-[28px] border border-orange-400/20 bg-orange-400/10 p-6 text-sm leading-7 text-orange-100">
+      <div className="rounded-xl border border-green-200 bg-green-50 p-5 text-sm leading-7 text-green-800">
         Your email is already verified. You can return to{" "}
-        <Link href="/dashboard" className="font-medium text-white">
+        <Link href="/dashboard" className="font-semibold text-brand hover:underline">
           the dashboard
         </Link>
         .
@@ -75,36 +76,38 @@ export function VerifyEmailPanel({ user, token }: VerifyEmailPanelProps) {
 
   return (
     <div className="grid gap-5">
-      <div className="rounded-[28px] border border-white/10 bg-white/5 p-6 text-sm leading-7 text-stone-300">
+      <div className="rounded-xl border border-stone-200 bg-stone-50 p-5 text-sm leading-7 text-stone-700">
         {token
-          ? "A verification token was supplied. Confirm it below to mark the account email as verified."
-          : "Request a verification token from the active backend. In development, the token is exposed as a debug value so the flow can be tested without an email provider."}
+          ? "A verification token was supplied. Confirm it below to mark your email as verified."
+          : "Request a verification email to confirm your account."}
       </div>
 
-      {message ? <p className="text-sm text-orange-300">{message}</p> : null}
-      {serverError ? <p className="text-sm text-rose-300">{serverError}</p> : null}
+      {message ? <p className="text-sm text-green-700">{message}</p> : null}
+      {serverError ? <p className="text-sm text-red-600">{serverError}</p> : null}
 
       {token ? (
-        <button
+        <Button
           type="button"
+          size="lg"
           onClick={runConfirm}
           disabled={isPending}
-          className="h-12 rounded-2xl bg-orange-400 px-5 text-sm font-semibold text-stone-950 transition hover:bg-orange-300 disabled:opacity-60"
+          className="h-12 rounded-xl"
         >
           {isPending ? "Verifying..." : "Verify email"}
-        </button>
+        </Button>
       ) : user ? (
-        <button
+        <Button
           type="button"
+          size="lg"
           onClick={runRequest}
           disabled={isPending}
-          className="h-12 rounded-2xl bg-orange-400 px-5 text-sm font-semibold text-stone-950 transition hover:bg-orange-300 disabled:opacity-60"
+          className="h-12 rounded-xl"
         >
-          {isPending ? "Issuing..." : "Request verification"}
-        </button>
+          {isPending ? "Sending..." : "Send verification email"}
+        </Button>
       ) : (
-        <p className="text-sm text-stone-300">
-          Sign in first if you want to request verification for your active account.
+        <p className="text-sm text-stone-600">
+          Sign in first to request verification for your account.
         </p>
       )}
     </div>

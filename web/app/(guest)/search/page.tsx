@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 
-import { PropertyFilters } from "@/components/properties/PropertyFilters";
+import { PropertyFiltersToggle } from "@/components/properties/PropertyFiltersToggle";
 import { PropertyGrid } from "@/components/properties/PropertyGrid";
+import { PropertySearchBar } from "@/components/properties/PropertySearchBar";
 import { fetchProperties } from "@/lib/core/sdk/property-client";
 import { parsePropertySearchParams, type PropertySearchPageParams } from "@/modules/properties/search";
 
 export const metadata: Metadata = {
-  title: "Search Properties | Kejasafe",
-  description: "Filter housing listings by location, price, size, and purpose.",
+  title: "Search Houses in Kenya",
+  description:
+    "Search verified houses, apartments, and bedsitters by county, budget, and property type.",
 };
 
 export default async function SearchPage({
@@ -25,26 +27,22 @@ export default async function SearchPage({
   });
 
   return (
-    <main className="min-h-screen bg-stone-50 px-6 py-8 text-stone-950 dark:bg-stone-950 dark:text-white">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
-        <section className="rounded-[36px] border border-stone-200 bg-white p-8 dark:border-white/10 dark:bg-white/5">
-          <p className="text-xs uppercase tracking-[0.24em] text-stone-500">
-            Search workspace
-          </p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight">
-            Refine listings with URL-based search filters.
-          </h1>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-stone-600 dark:text-stone-300">
-            This page is intentionally filter-first. It is useful for shared search links,
-            future indexable location results, and admin support workflows when staff need
-            to reproduce a user search exactly.
-          </p>
-          <div className="mt-8">
-            <PropertyFilters action="/search" values={filters} />
-          </div>
-        </section>
-        <PropertyGrid properties={result.data} />
-      </div>
-    </main>
+    <>
+      <section className="space-y-4">
+        <p className="text-xs uppercase tracking-[0.24em] text-stone-500">
+          Search workspace
+        </p>
+        <h1 className="text-4xl font-semibold tracking-tight text-stone-950">
+          Refine listings with URL-based search filters.
+        </h1>
+        <p className="max-w-2xl text-sm leading-7 text-stone-600">
+          Filter-first page for shared search links, indexable location results,
+          and admin support workflows.
+        </p>
+      </section>
+      <PropertySearchBar />
+      <PropertyFiltersToggle action="/search" values={filters} />
+      <PropertyGrid properties={result.data} />
+    </>
   );
 }

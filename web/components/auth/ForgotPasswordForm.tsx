@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Button } from "@/components/ui/button";
 import { forgotPasswordSchema } from "@/lib/core/auth/schemas";
 import { fetchCsrfToken, requestPasswordResetToken } from "@/lib/core/sdk/auth-client";
 
@@ -12,15 +12,16 @@ type ForgotPasswordValues = {
   email: string;
 };
 
+const inputClass =
+  "h-12 rounded-xl border border-stone-200 bg-white px-4 text-sm text-stone-900 outline-none transition focus:border-brand placeholder:text-stone-400";
+
 export function ForgotPasswordForm() {
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState<string | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
   const form = useForm<ForgotPasswordValues>({
     resolver: zodResolver(forgotPasswordSchema),
-    defaultValues: {
-      email: "",
-    },
+    defaultValues: { email: "" },
   });
 
   const onSubmit = form.handleSubmit((values) => {
@@ -43,40 +44,30 @@ export function ForgotPasswordForm() {
   return (
     <form onSubmit={onSubmit} className="grid gap-5">
       <div className="grid gap-2">
-        <label className="text-sm font-medium text-white" htmlFor="email">
-          Account email
+        <label className="text-sm font-medium text-stone-900" htmlFor="email">
+          Email Address <span className="text-red-600">*</span>
         </label>
         <input
           id="email"
           type="email"
+          autoComplete="email"
           {...form.register("email")}
-          className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-orange-400"
+          className={inputClass}
           placeholder="you@example.com"
         />
         {form.formState.errors.email ? (
-          <p className="text-sm text-rose-300">
+          <p className="text-sm text-red-600">
             {form.formState.errors.email.message}
           </p>
         ) : null}
       </div>
 
-      {message ? <p className="text-sm text-orange-300">{message}</p> : null}
-      {serverError ? <p className="text-sm text-rose-300">{serverError}</p> : null}
+      {message ? <p className="text-sm text-green-700">{message}</p> : null}
+      {serverError ? <p className="text-sm text-red-600">{serverError}</p> : null}
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="h-12 rounded-2xl bg-orange-400 px-5 text-sm font-semibold text-stone-950 transition hover:bg-orange-300 disabled:opacity-60"
-      >
+      <Button type="submit" size="lg" disabled={isPending} className="h-12 rounded-xl">
         {isPending ? "Submitting..." : "Send reset instructions"}
-      </button>
-
-      <p className="text-sm text-stone-300">
-        Remembered it?{" "}
-        <Link href="/login" className="text-orange-300">
-          Back to sign in
-        </Link>
-      </p>
+      </Button>
     </form>
   );
 }

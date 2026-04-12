@@ -22,7 +22,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${page.title} | Kejasafe`,
+    title: page.title,
     description: page.description,
   };
 }
@@ -50,7 +50,7 @@ export default async function LegalPage({
           <ContentSection key={section.heading} title={section.heading}>
             <div className="grid gap-4">
               {section.body.map((paragraph) => (
-                <p key={paragraph} className="text-sm leading-7 text-stone-300">
+                <p key={paragraph} className="text-sm leading-7 text-stone-600">
                   {paragraph}
                 </p>
               ))}

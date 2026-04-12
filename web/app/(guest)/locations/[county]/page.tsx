@@ -11,8 +11,8 @@ export async function generateMetadata({
   const { county } = await params;
 
   return {
-    title: `${county} listings | Kejasafe`,
-    description: `Explore property listings, rental demand, and neighborhood positioning for ${county}.`,
+    title: `Houses & Properties in ${county}`,
+    description: `Verified rental and sale listings across ${county}, Kenya.`,
   };
 }
 
@@ -30,7 +30,7 @@ export default async function CountyPage({
       description="Location landing pages are important for SEO, navigation, and future editorial content. This route is ready to evolve into CMS-backed market pages."
     >
       <ContentSection title={`Why ${county} matters`}>
-        <p className="text-sm leading-7 text-stone-300">
+        <p className="text-sm leading-7 text-stone-600">
           This county page is the correct foundation for search-focused location content, neighborhood breakdowns, internal linking, and future listing clusters.
         </p>
       </ContentSection>

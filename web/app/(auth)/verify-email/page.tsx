@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
+
 import { AuthShell } from "@/components/auth/AuthShell";
 import { VerifyEmailPanel } from "@/components/auth/VerifyEmailPanel";
 import { getServerCurrentUser } from "@/lib/core/auth/server";
+
+export const metadata: Metadata = {
+  title: "Verify Email",
+  description: "Confirm your Kejasafe email address.",
+  robots: { index: false, follow: false },
+};
 
 export default async function VerifyEmailPage({
   searchParams,
@@ -13,8 +21,8 @@ export default async function VerifyEmailPage({
   return (
     <AuthShell
       eyebrow="Email verification"
-      title="Verify your email address"
-      description="Verification requests and token confirmation now go through the shared internal auth API, so the route stays stable regardless of the active backend."
+      title="Verify your email"
+      description="Confirm your email address to finish setting up your account."
     >
       <VerifyEmailPanel user={user} token={params.token} />
     </AuthShell>

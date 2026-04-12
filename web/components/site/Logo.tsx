@@ -3,40 +3,53 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 
+const LOGO_WIDTH = 52;
+const LOGO_HEIGHT = 70;
+
 interface LogoProps {
   href?: string | null;
-  size?: number;
+  height?: number;
   showWordmark?: boolean;
+  showBetaBadge?: boolean;
   className?: string;
   wordmarkClassName?: string;
 }
 
 export function Logo({
   href = "/",
-  size = 32,
+  height = 36,
   showWordmark = true,
+  showBetaBadge = false,
   className,
   wordmarkClassName,
 }: LogoProps) {
+  const width = Math.round((LOGO_WIDTH / LOGO_HEIGHT) * height);
+
   const content = (
     <span className={cn("inline-flex items-center gap-2", className)}>
       <Image
         src="/logo.png"
         alt="Kejasafe"
-        width={size}
-        height={size}
+        width={width}
+        height={height}
         priority
-        className="h-auto w-auto"
-        style={{ width: size, height: size }}
+        style={{ width, height }}
       />
       {showWordmark ? (
-        <span
-          className={cn(
-            "text-sm font-semibold tracking-[0.24em] text-orange-600",
-            wordmarkClassName,
-          )}
-        >
-          KEJASAFE
+        <span className="inline-flex items-start gap-2">
+          <span
+            className={cn(
+              "text-sm font-semibold tracking-[0.24em] text-brand",
+              wordmarkClassName,
+            )}
+          >
+            KEJASAFE
+          </span>
+          {showBetaBadge ? (
+            <span className="inline-flex h-5 items-center border border-brand/25 bg-brand/10 px-1.5 text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-brand">
+              Beta
+            </span>
+          ) : null}
         </span>
       ) : null}
     </span>

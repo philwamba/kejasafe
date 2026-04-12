@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
+
 import { AuthShell } from "@/components/auth/AuthShell";
 import { ResetPasswordForm } from "@/components/auth/ResetPasswordForm";
+
+export const metadata: Metadata = {
+  title: "Reset Password",
+  description: "Set a new password for your Kejasafe account.",
+  robots: { index: false, follow: false },
+};
 
 export default async function ResetPasswordPage({
   searchParams,
@@ -12,7 +20,7 @@ export default async function ResetPasswordPage({
     <AuthShell
       eyebrow="Password reset"
       title="Set a new password"
-      description="Reset tokens are consumed through the shared internal auth API, so the browser flow stays stable even if the active backend changes."
+      description="Choose a strong password to secure your account."
     >
       <ResetPasswordForm
         defaultEmail={params.email}

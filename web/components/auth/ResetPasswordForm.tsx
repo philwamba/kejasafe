@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Button } from "@/components/ui/button";
 import { resetPasswordSchema } from "@/lib/core/auth/schemas";
 import { fetchCsrfToken, resetPassword } from "@/lib/core/sdk/auth-client";
 
@@ -20,6 +20,11 @@ interface ResetPasswordFormProps {
   defaultEmail?: string;
   defaultToken?: string;
 }
+
+const inputClass =
+  "h-12 rounded-xl border border-stone-200 bg-white px-4 text-sm text-stone-900 outline-none transition focus:border-brand placeholder:text-stone-400";
+const labelClass = "text-sm font-medium text-stone-900";
+const errorClass = "text-sm text-red-600";
 
 export function ResetPasswordForm({
   defaultEmail = "",
@@ -62,78 +67,66 @@ export function ResetPasswordForm({
   return (
     <form onSubmit={onSubmit} className="grid gap-5">
       <div className="grid gap-2">
-        <label className="text-sm font-medium text-white" htmlFor="email">
-          Email address
+        <label className={labelClass} htmlFor="email">
+          Email address <span className="text-red-600">*</span>
         </label>
         <input
           id="email"
           type="email"
+          autoComplete="email"
           {...form.register("email")}
-          className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-orange-400"
+          className={inputClass}
         />
       </div>
       <div className="grid gap-2">
-        <label className="text-sm font-medium text-white" htmlFor="token">
-          Reset token
+        <label className={labelClass} htmlFor="token">
+          Reset token <span className="text-red-600">*</span>
         </label>
-        <input
-          id="token"
-          {...form.register("token")}
-          className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-orange-400"
-        />
+        <input id="token" {...form.register("token")} className={inputClass} />
       </div>
-      <div className="grid gap-2 md:grid-cols-2 md:gap-4">
+      <div className="grid gap-4 md:grid-cols-2">
         <div className="grid gap-2">
-          <label className="text-sm font-medium text-white" htmlFor="password">
-            New password
+          <label className={labelClass} htmlFor="password">
+            New password <span className="text-red-600">*</span>
           </label>
           <input
             id="password"
             type="password"
+            autoComplete="new-password"
             {...form.register("password")}
-            className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-orange-400"
+            className={inputClass}
           />
           {form.formState.errors.password ? (
-            <p className="text-sm text-rose-300">
+            <p className={errorClass}>
               {form.formState.errors.password.message}
             </p>
           ) : null}
         </div>
         <div className="grid gap-2">
-          <label className="text-sm font-medium text-white" htmlFor="passwordConfirmation">
-            Confirm password
+          <label className={labelClass} htmlFor="passwordConfirmation">
+            Confirm password <span className="text-red-600">*</span>
           </label>
           <input
             id="passwordConfirmation"
             type="password"
+            autoComplete="new-password"
             {...form.register("passwordConfirmation")}
-            className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-orange-400"
+            className={inputClass}
           />
           {form.formState.errors.passwordConfirmation ? (
-            <p className="text-sm text-rose-300">
+            <p className={errorClass}>
               {form.formState.errors.passwordConfirmation.message}
             </p>
           ) : null}
         </div>
       </div>
 
-      {message ? <p className="text-sm text-orange-300">{message}</p> : null}
-      {serverError ? <p className="text-sm text-rose-300">{serverError}</p> : null}
+      {message ? <p className="text-sm text-green-700">{message}</p> : null}
+      {serverError ? <p className={errorClass}>{serverError}</p> : null}
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="h-12 rounded-2xl bg-orange-400 px-5 text-sm font-semibold text-stone-950 transition hover:bg-orange-300 disabled:opacity-60"
-      >
+      <Button type="submit" size="lg" disabled={isPending} className="h-12 rounded-xl">
         {isPending ? "Resetting..." : "Reset password"}
-      </button>
-
-      <p className="text-sm text-stone-300">
-        Already fixed?{" "}
-        <Link href="/login" className="text-orange-300">
-          Return to sign in
-        </Link>
-      </p>
+      </Button>
     </form>
   );
 }

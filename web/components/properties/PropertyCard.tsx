@@ -1,12 +1,22 @@
+import Image from "next/image";
 import Link from "next/link";
-import { FiArrowUpRight, FiDroplet, FiHeart, FiMapPin, FiMoon, FiStar } from "react-icons/fi";
+import { FiCalendar, FiMapPin } from "react-icons/fi";
+import { LuBedDouble } from "react-icons/lu";
 
-import { Card, CardContent } from "@/components/ui/card";
 import type { PropertyCardDto } from "@/lib/core/contracts/property";
 import { buildPropertySubtitle, formatKes } from "@/modules/properties/search";
+import { cn } from "@/lib/utils";
 
 interface PropertyCardProps {
   property: PropertyCardDto;
+}
+
+function statusLabel(status: string) {
+  const normalized = status.toLowerCase();
+  if (["available", "active", "published"].includes(normalized)) return "Available";
+  if (["taken", "occupied", "rented", "sold"].includes(normalized)) return "Occupied / Taken";
+  if (["pending", "draft", "review"].includes(normalized)) return "Pending";
+  return status.replace(/_/g, " ");
 }
 
 export function PropertyCard({ property }: PropertyCardProps) {
@@ -15,89 +25,77 @@ export function PropertyCard({ property }: PropertyCardProps) {
     property.city,
     property.county,
   ]);
+  const status = statusLabel(property.listingStatus);
 
   return (
-    <Link href={`/properties/${property.slug}`} className="block">
-      <Card className="overflow-hidden rounded-[28px] border border-white/10 bg-white/80 p-0 shadow-[0_20px_80px_-40px_rgba(15,23,42,0.45)] backdrop-blur-sm transition-transform duration-200 hover:-translate-y-1 dark:bg-white/5">
-        <div className="relative h-64 overflow-hidden bg-gradient-to-br from-orange-200 via-white to-stone-200 dark:from-orange-950/40 dark:via-stone-950 dark:to-stone-900">
-          {property.coverImageUrl ? (
-            <div
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover/card:scale-105"
-              style={{ backgroundImage: `url(${property.coverImageUrl})` }}
+    <article className="group flex flex-col overflow-hidden rounded-md border border-stone-200 bg-stone-50 shadow-sm transition hover:shadow-md">
+      <Link href={`/properties/${property.slug}`} className="relative block aspect-4/3 overflow-hidden bg-stone-100">
+        {property.coverImageUrl ? (
+          <Image
+            src={property.coverImageUrl}
+            alt={property.title}
+            fill
+            sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center">
+            <Image
+              src="/logo.png"
+              alt="Kejasafe"
+              width={220}
+              height={220}
+              className="opacity-90"
             />
-          ) : null}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-          <div className="absolute left-4 top-4 flex items-center gap-2">
-            <span className="rounded-full bg-black/55 px-3 py-1 text-xs font-medium text-white backdrop-blur">
-              {property.listingPurpose.replace("_", " ")}
+          </div>
+        )}
+        <span
+          className={cn(
+            "absolute right-0 top-3 px-3 py-1 text-xs font-medium text-white",
+            "bg-stone-500/90 [clip-path:polygon(8px_0,100%_0,100%_100%,8px_100%,0_50%)]",
+          )}
+        >
+          {status}
+        </span>
+      </Link>
+
+      <div className="flex flex-1 flex-col gap-3 px-4 pt-4 pb-3">
+        <Link
+          href={`/properties/${property.slug}`}
+          className="text-lg font-semibold text-stone-900 underline decoration-stone-900/30 underline-offset-4 hover:decoration-brand"
+        >
+          {property.title}
+        </Link>
+        <p className="text-xl font-semibold text-stone-900">
+          {formatKes(property.price)}
+        </p>
+        {subtitle ? (
+          <p className="flex items-center gap-2 text-sm">
+            <FiMapPin className="size-4 text-brand" />
+            <span className="underline decoration-stone-300 underline-offset-2 text-stone-700">
+              {subtitle}
             </span>
-            {property.isFeatured ? (
-              <span className="inline-flex items-center gap-1 rounded-full bg-amber-300/90 px-3 py-1 text-xs font-medium text-stone-900">
-                <FiStar className="size-3" />
-                Featured
-              </span>
-            ) : null}
-          </div>
-          <button
-            type="button"
-            className="absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur"
-            aria-label={`Save ${property.title}`}
-          >
-            <FiHeart />
-          </button>
-          <div className="absolute bottom-4 left-4 right-4">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-stone-700">
-              <FiMapPin className="size-3.5" />
-              {subtitle || property.county}
-            </div>
-          </div>
-        </div>
-        <CardContent className="space-y-4 px-5 pb-5 pt-5">
-          <div className="space-y-2">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-orange-700 dark:text-orange-300">
-                  {property.propertyType ?? "Property"}
-                </p>
-                <h3 className="text-xl font-semibold tracking-tight text-stone-950 dark:text-white">
-                  {property.title}
-                </h3>
-              </div>
-              <FiArrowUpRight className="mt-1 size-5 text-stone-400" />
-            </div>
-            <p className="line-clamp-2 text-sm leading-6 text-stone-600 dark:text-stone-300">
-              {property.summary}
-            </p>
-          </div>
-          <div className="flex items-center gap-4 text-sm text-stone-500 dark:text-stone-300">
-            {property.bedrooms !== null && property.bedrooms !== undefined ? (
-              <span className="inline-flex items-center gap-2">
-                <FiMoon className="size-4" />
-                {property.bedrooms} bed
-              </span>
-            ) : null}
-            {property.bathrooms !== null && property.bathrooms !== undefined ? (
-              <span className="inline-flex items-center gap-2">
-                <FiDroplet className="size-4" />
-                {property.bathrooms} bath
-              </span>
-            ) : null}
-          </div>
-          <div className="flex items-end justify-between gap-3 border-t border-stone-200/70 pt-4 dark:border-white/10">
-            <div>
-              <p className="text-xs uppercase tracking-[0.18em] text-stone-400">
-                Starting from
-              </p>
-              <p className="text-2xl font-semibold tracking-tight text-stone-950 dark:text-white">
-                {formatKes(property.price)}
-              </p>
-            </div>
-            <span className="text-sm font-medium text-orange-700 dark:text-orange-300">
-              View details
-            </span>
-          </div>
-        </CardContent>
-      </Card>
-    </Link>
+          </p>
+        ) : null}
+        <p className="flex items-center gap-2 text-xs text-stone-500">
+          <FiCalendar className="size-4 text-brand" />
+          New listing
+        </p>
+      </div>
+
+      <div className="flex items-center justify-between bg-brand px-4 py-2 text-xs font-medium text-white">
+        <span className="inline-flex items-center gap-2">
+          {property.bedrooms !== null && property.bedrooms !== undefined ? (
+            <>
+              <LuBedDouble className="size-4" />
+              {property.bedrooms}
+            </>
+          ) : (
+            <span>&nbsp;</span>
+          )}
+        </span>
+        <span className="capitalize">{property.listingPurpose.replace("_", " ")}</span>
+      </div>
+    </article>
   );
 }

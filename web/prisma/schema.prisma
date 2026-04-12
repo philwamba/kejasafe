@@ -104,7 +104,7 @@ model User {
   id                      String           @id @default(uuid()) @db.Uuid
   fullName                String
   email                   String           @unique
-  phone                   String?          @unique
+  phone                   String           @unique
   passwordHash            String
   status                  UserStatus       @default(active)
   emailVerifiedAt         DateTime?

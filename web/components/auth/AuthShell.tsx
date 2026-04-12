@@ -1,6 +1,6 @@
-"use client";
-
 import type { ReactNode } from "react";
+import Link from "next/link";
+import { FiCheckCircle, FiHome, FiShield } from "react-icons/fi";
 
 import { Logo } from "@/components/site/Logo";
 
@@ -12,6 +12,24 @@ interface AuthShellProps {
   footer?: ReactNode;
 }
 
+const trustPoints = [
+  {
+    icon: FiShield,
+    label: "Verified landlords",
+    copy: "Every listing goes through identity and ownership checks.",
+  },
+  {
+    icon: FiCheckCircle,
+    label: "No scams",
+    copy: "Browse real homes from real people — not brokers posing as owners.",
+  },
+  {
+    icon: FiHome,
+    label: "All of Kenya",
+    copy: "Rentals, sales, and short-stay homes across every county.",
+  },
+];
+
 export function AuthShell({
   eyebrow,
   title,
@@ -20,32 +38,82 @@ export function AuthShell({
   footer,
 }: AuthShellProps) {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top_left,_rgba(16,185,129,0.18),_transparent_22%),linear-gradient(180deg,_#06110d_0%,_#0f172a_58%,_#020617_100%)] px-6 py-16 text-stone-50">
-      <section className="grid w-full max-w-6xl gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="flex flex-col justify-between rounded-[36px] border border-white/10 bg-white/5 p-8 backdrop-blur-sm">
-          <div>
-            <Logo wordmarkClassName="text-orange-300" />
-            <p className="mt-10 text-xs uppercase tracking-[0.28em] text-orange-200">
-              {eyebrow}
-            </p>
-            <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white">
-              {title}
-            </h1>
-            <p className="mt-4 max-w-md text-sm leading-7 text-stone-300">
-              {description}
-            </p>
+    <main className="min-h-screen bg-white">
+      <div className="grid min-h-screen lg:grid-cols-[1.05fr_0.95fr]">
+        {/* Brand panel */}
+        <aside className="relative hidden overflow-hidden bg-brand lg:flex lg:flex-col lg:justify-between lg:p-12 lg:text-white">
+          <div
+            className="absolute inset-0 opacity-10"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 20% 10%, rgba(255,255,255,0.6) 0, transparent 40%), radial-gradient(circle at 80% 80%, rgba(255,255,255,0.4) 0, transparent 45%)",
+            }}
+          />
+          <div className="relative">
+            <Logo wordmarkClassName="text-white" />
           </div>
-          <div className="grid gap-3 text-sm text-stone-300">
-            <p>Cookie-based auth only.</p>
-            <p>Provider-backed session flows.</p>
-            <p>No backend-specific UI branching.</p>
+          <div className="relative space-y-10">
+            <div className="space-y-4">
+              <h2 className="text-4xl font-semibold leading-tight tracking-tight">
+                Find safe, verified houses across Kenya.
+              </h2>
+              <p className="max-w-md text-base leading-7 text-white/80">
+                Kejasafe is the trusted way to discover rentals and properties
+                without scams, broker tricks, or ghost listings.
+              </p>
+            </div>
+            <ul className="grid gap-5">
+              {trustPoints.map((point) => {
+                const Icon = point.icon;
+                return (
+                  <li key={point.label} className="flex items-start gap-4">
+                    <span className="mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-white/15">
+                      <Icon className="size-4" />
+                    </span>
+                    <div>
+                      <p className="font-semibold">{point.label}</p>
+                      <p className="text-sm leading-6 text-white/80">
+                        {point.copy}
+                      </p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
-        </div>
-        <div className="rounded-[36px] border border-white/10 bg-white/5 p-8 backdrop-blur-sm">
-          {children}
-          {footer ? <div className="mt-6">{footer}</div> : null}
-        </div>
-      </section>
+          <p className="relative text-xs uppercase tracking-[0.24em] text-white/60">
+            © {new Date().getFullYear()} Kejasafe
+          </p>
+        </aside>
+
+        {/* Form panel */}
+        <section className="flex min-h-screen flex-col px-6 py-10 sm:px-12 lg:py-16">
+          <div className="mb-10 flex items-center justify-between lg:hidden">
+            <Logo />
+            <Link
+              href="/"
+              className="text-sm font-medium text-stone-500 hover:text-brand"
+            >
+              Back to home
+            </Link>
+          </div>
+          <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
+            <div className="space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand">
+                {eyebrow}
+              </p>
+              <h1 className="text-3xl font-semibold tracking-tight text-stone-950 sm:text-4xl">
+                {title}
+              </h1>
+              <p className="text-sm leading-7 text-stone-600">{description}</p>
+            </div>
+            <div className="mt-8">{children}</div>
+            {footer ? (
+              <div className="mt-6 text-sm text-stone-600">{footer}</div>
+            ) : null}
+          </div>
+        </section>
+      </div>
     </main>
   );
 }

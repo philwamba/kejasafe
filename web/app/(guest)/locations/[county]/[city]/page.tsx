@@ -11,8 +11,8 @@ export async function generateMetadata({
   const { county, city } = await params;
 
   return {
-    title: `${city}, ${county} listings | Kejasafe`,
-    description: `Explore listings and housing market context for ${city}, ${county}.`,
+    title: `Houses in ${city}, ${county}`,
+    description: `Verified rental and sale listings in ${city}, ${county}, Kenya.`,
   };
 }
 
@@ -30,7 +30,7 @@ export default async function CityPage({
       description="City-level landing pages give the platform indexable search entry points and a structured place for localized market information."
     >
       <ContentSection title="Location strategy">
-        <p className="text-sm leading-7 text-stone-300">
+        <p className="text-sm leading-7 text-stone-600">
           This page is a deliberate SEO and content shell. Later it should surface neighborhood trends, listing clusters, FAQs, and internal links to relevant property searches.
         </p>
       </ContentSection>

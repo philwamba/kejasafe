@@ -3,9 +3,11 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { loginSchema } from "@/lib/core/auth/schemas";
 import { fetchCsrfToken, loginWithCredentials } from "@/lib/core/sdk/auth-client";
 
@@ -18,6 +20,9 @@ type LoginFormValues = {
 interface LoginFormProps {
   next?: string;
 }
+
+const inputClass =
+  "h-12 rounded-xl border border-stone-200 bg-white px-4 text-sm text-stone-900 outline-none transition focus:border-brand placeholder:text-stone-400";
 
 export function LoginForm({ next = "/dashboard" }: LoginFormProps) {
   const router = useRouter();
@@ -52,18 +57,19 @@ export function LoginForm({ next = "/dashboard" }: LoginFormProps) {
   return (
     <form onSubmit={onSubmit} className="grid gap-5">
       <div className="grid gap-2">
-        <label className="text-sm font-medium text-white" htmlFor="email">
-          Email address
+        <label className="text-sm font-medium text-stone-900" htmlFor="email">
+          Email address <span className="text-red-600">*</span>
         </label>
         <input
           id="email"
           type="email"
+          autoComplete="email"
           {...form.register("email")}
-          className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-orange-400"
+          className={inputClass}
           placeholder="you@example.com"
         />
         {form.formState.errors.email ? (
-          <p className="text-sm text-rose-300">
+          <p className="text-sm text-red-600">
             {form.formState.errors.email.message}
           </p>
         ) : null}
@@ -71,45 +77,47 @@ export function LoginForm({ next = "/dashboard" }: LoginFormProps) {
 
       <div className="grid gap-2">
         <div className="flex items-center justify-between gap-3">
-          <label className="text-sm font-medium text-white" htmlFor="password">
-            Password
+          <label className="text-sm font-medium text-stone-900" htmlFor="password">
+            Password <span className="text-red-600">*</span>
           </label>
-          <Link href="/forgot-password" className="text-sm text-orange-300">
+          <Link href="/forgot-password" className="text-sm font-medium text-brand hover:underline">
             Forgot password?
           </Link>
         </div>
         <input
           id="password"
           type="password"
+          autoComplete="current-password"
           {...form.register("password")}
-          className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-orange-400"
+          className={inputClass}
           placeholder="Your password"
         />
         {form.formState.errors.password ? (
-          <p className="text-sm text-rose-300">
+          <p className="text-sm text-red-600">
             {form.formState.errors.password.message}
           </p>
         ) : null}
       </div>
 
-      <label className="inline-flex items-center gap-3 text-sm text-stone-300">
-        <input
-          type="checkbox"
-          {...form.register("rememberMe")}
-          className="size-4 rounded border-white/20 bg-white/5"
-        />
-        Keep me signed in on this device
-      </label>
+      <Controller
+        control={form.control}
+        name="rememberMe"
+        render={({ field }) => (
+          <label className="inline-flex items-center gap-3 text-sm text-stone-700">
+            <Checkbox
+              checked={field.value}
+              onCheckedChange={(checked) => field.onChange(Boolean(checked))}
+            />
+            Keep me signed in on this device
+          </label>
+        )}
+      />
 
-      {serverError ? <p className="text-sm text-rose-300">{serverError}</p> : null}
+      {serverError ? <p className="text-sm text-red-600">{serverError}</p> : null}
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="h-12 rounded-2xl bg-orange-400 px-5 text-sm font-semibold text-stone-950 transition hover:bg-orange-300 disabled:opacity-60"
-      >
+      <Button type="submit" size="lg" disabled={isPending} className="h-12 rounded-xl">
         {isPending ? "Signing in..." : "Sign in"}
-      </button>
+      </Button>
     </form>
   );
 }

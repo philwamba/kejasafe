@@ -4,8 +4,9 @@ import { ContentSection } from "@/components/cms/ContentSection";
 import { PublicPageShell } from "@/components/site/PublicPageShell";
 
 export const metadata: Metadata = {
-  title: "Pricing | Kejasafe",
-  description: "Illustrative pricing structure for listing plans and operational tooling.",
+  title: "Pricing",
+  description:
+    "Landlord and agent pricing plans for listing homes on Kejasafe.",
 };
 
 export default function PricingPage() {
@@ -22,9 +23,9 @@ export default function PricingPage() {
             ["Growth", "For agents and managers handling active portfolios and lead flow."],
             ["Enterprise", "For larger operational teams, custom processes, and reporting."],
           ].map(([name, copy]) => (
-            <article key={name} className="rounded-[24px] border border-white/10 bg-white/5 p-6">
-              <p className="text-xs uppercase tracking-[0.24em] text-orange-300">{name}</p>
-              <p className="mt-4 text-sm leading-7 text-stone-300">{copy}</p>
+            <article key={name} className="rounded-2xl border border-stone-200 bg-white p-6">
+              <p className="text-xs uppercase tracking-[0.24em] text-brand">{name}</p>
+              <p className="mt-4 text-sm leading-7 text-stone-600">{copy}</p>
             </article>
           ))}
         </div>

@@ -5,8 +5,9 @@ import { PublicPageShell } from "@/components/site/PublicPageShell";
 import { faqItems } from "@/modules/cms/content";
 
 export const metadata: Metadata = {
-  title: "FAQ | Kejasafe",
-  description: "Frequently asked questions about the Kejasafe platform.",
+  title: "FAQ",
+  description:
+    "Answers to common questions about renting, listing, and verification on Kejasafe.",
 };
 
 export default function FaqPage() {
@@ -19,9 +20,9 @@ export default function FaqPage() {
       <ContentSection title="Frequently asked questions">
         <div className="grid gap-4">
           {faqItems.map((item) => (
-            <article key={item.question} className="rounded-[24px] border border-white/10 bg-white/5 p-5">
-              <h2 className="text-lg font-semibold text-white">{item.question}</h2>
-              <p className="mt-3 text-sm leading-7 text-stone-300">{item.answer}</p>
+            <article key={item.question} className="rounded-2xl border border-stone-200 bg-white p-5">
+              <h2 className="text-lg font-semibold text-stone-950">{item.question}</h2>
+              <p className="mt-3 text-sm leading-7 text-stone-600">{item.answer}</p>
             </article>
           ))}
         </div>

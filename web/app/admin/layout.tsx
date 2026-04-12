@@ -27,19 +27,19 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-50">
-      <header className="border-b border-white/10 bg-white/5">
+    <div className="min-h-screen bg-white text-stone-950">
+      <header className="border-b border-stone-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
-            <Logo wordmarkClassName="text-orange-300" />
+            <Logo />
             <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-zinc-400">
+              <p className="text-xs uppercase tracking-[0.24em] text-stone-500">
                 Admin Console
               </p>
-              <h1 className="text-lg font-semibold text-white">Operations</h1>
+              <h1 className="text-lg font-semibold text-stone-950">Operations</h1>
             </div>
           </div>
-          <div className="text-sm text-zinc-300">
+          <div className="text-sm text-stone-600">
             {user.fullName} · {user.backendMode}
           </div>
         </div>

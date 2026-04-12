@@ -22,7 +22,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${post.title} | Kejasafe`,
+    title: post.title,
     description: post.excerpt,
   };
 }
@@ -46,7 +46,7 @@ export default async function BlogPostPage({
       description={post.excerpt}
     >
       <ContentSection title="Article body">
-        <div className="grid gap-4 text-sm leading-8 text-stone-300">
+        <div className="grid gap-4 text-sm leading-8 text-stone-600">
           <p>
             This article route is intentionally production-shaped even though the body is static today.
             It supports future author data, scheduling, SEO fields, related content, and FAQ/article schema.
@@ -54,7 +54,7 @@ export default async function BlogPostPage({
           <p>
             In later sprints, this surface should be backed by the CMS and blog domain so content managers can publish and revise insights without changing application code.
           </p>
-          <p className="text-xs uppercase tracking-[0.2em] text-stone-400">
+          <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
             Published {post.publishedAt} • {post.readingTime}
           </p>
         </div>

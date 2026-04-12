@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Button } from "@/components/ui/button";
 import { registerSchema } from "@/lib/core/auth/schemas";
 import { fetchCsrfToken, registerAccount } from "@/lib/core/sdk/auth-client";
 
@@ -16,6 +16,11 @@ type RegisterFormValues = {
   password: string;
   passwordConfirmation: string;
 };
+
+const inputClass =
+  "h-12 rounded-xl border border-stone-200 bg-white px-4 text-sm text-stone-900 outline-none transition focus:border-brand placeholder:text-stone-400";
+const labelClass = "text-sm font-medium text-stone-900";
+const errorClass = "text-sm text-red-600";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -52,115 +57,104 @@ export function RegisterForm() {
   return (
     <form onSubmit={onSubmit} className="grid gap-5">
       <div className="grid gap-2">
-        <label className="text-sm font-medium text-white" htmlFor="fullName">
-          Full name
+        <label className={labelClass} htmlFor="fullName">
+          Full name <span className="text-red-600">*</span>
         </label>
         <input
           id="fullName"
+          autoComplete="name"
+          autoCapitalize="words"
           {...form.register("fullName")}
-          className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-sky-400"
+          className={`${inputClass} capitalize placeholder:normal-case`}
           placeholder="Your full name"
         />
         {form.formState.errors.fullName ? (
-          <p className="text-sm text-rose-300">
-            {form.formState.errors.fullName.message}
-          </p>
+          <p className={errorClass}>{form.formState.errors.fullName.message}</p>
         ) : null}
       </div>
 
-      <div className="grid gap-2 md:grid-cols-2 md:gap-4">
-        <div className="grid gap-2">
-          <label className="text-sm font-medium text-white" htmlFor="email">
-            Email address
-          </label>
-          <input
-            id="email"
-            type="email"
-            {...form.register("email")}
-            className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-sky-400"
-            placeholder="you@example.com"
-          />
-          {form.formState.errors.email ? (
-            <p className="text-sm text-rose-300">
-              {form.formState.errors.email.message}
-            </p>
-          ) : null}
-        </div>
-        <div className="grid gap-2">
-          <label className="text-sm font-medium text-white" htmlFor="phone">
-            Phone number
-          </label>
-          <input
-            id="phone"
-            {...form.register("phone")}
-            className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-sky-400"
-            placeholder="+254..."
-          />
-          {form.formState.errors.phone ? (
-            <p className="text-sm text-rose-300">
-              {form.formState.errors.phone.message}
-            </p>
-          ) : null}
-        </div>
+      <div className="grid gap-2">
+        <label className={labelClass} htmlFor="email">
+          Email address <span className="text-red-600">*</span>
+        </label>
+        <input
+          id="email"
+          type="email"
+          autoComplete="email"
+          {...form.register("email")}
+          className={inputClass}
+          placeholder="you@example.com"
+        />
+        {form.formState.errors.email ? (
+          <p className={errorClass}>{form.formState.errors.email.message}</p>
+        ) : null}
       </div>
 
-      <div className="grid gap-2 md:grid-cols-2 md:gap-4">
+      <div className="grid gap-2">
+        <label className={labelClass} htmlFor="phone">
+          Phone number <span className="text-red-600">*</span>
+        </label>
+        <input
+          id="phone"
+          type="tel"
+          autoComplete="tel"
+          {...form.register("phone")}
+          className={inputClass}
+          placeholder="+254 700 000 000"
+        />
+        {form.formState.errors.phone ? (
+          <p className={errorClass}>{form.formState.errors.phone.message}</p>
+        ) : null}
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
         <div className="grid gap-2">
-          <label className="text-sm font-medium text-white" htmlFor="password">
-            Password
+          <label className={labelClass} htmlFor="password">
+            Password <span className="text-red-600">*</span>
           </label>
           <input
             id="password"
             type="password"
+            autoComplete="new-password"
             {...form.register("password")}
-            className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-sky-400"
+            className={inputClass}
             placeholder="Minimum 8 characters"
           />
           {form.formState.errors.password ? (
-            <p className="text-sm text-rose-300">
+            <p className={errorClass}>
               {form.formState.errors.password.message}
             </p>
           ) : null}
         </div>
         <div className="grid gap-2">
-          <label className="text-sm font-medium text-white" htmlFor="passwordConfirmation">
-            Confirm password
+          <label className={labelClass} htmlFor="passwordConfirmation">
+            Confirm password <span className="text-red-600">*</span>
           </label>
           <input
             id="passwordConfirmation"
             type="password"
+            autoComplete="new-password"
             {...form.register("passwordConfirmation")}
-            className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-sky-400"
+            className={inputClass}
             placeholder="Repeat password"
           />
           {form.formState.errors.passwordConfirmation ? (
-            <p className="text-sm text-rose-300">
+            <p className={errorClass}>
               {form.formState.errors.passwordConfirmation.message}
             </p>
           ) : null}
         </div>
       </div>
 
-      <p className="text-sm leading-7 text-stone-300">
-        By creating an account, you agree to the platform terms and consent to secure session handling via cookie-based authentication.
+      <p className="text-xs leading-6 text-stone-500">
+        By creating an account you agree to our terms and privacy policy.
       </p>
 
-      {serverError ? <p className="text-sm text-rose-300">{serverError}</p> : null}
+      {serverError ? <p className={errorClass}>{serverError}</p> : null}
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="h-12 rounded-2xl bg-sky-300 px-5 text-sm font-semibold text-stone-950 transition hover:bg-sky-200 disabled:opacity-60"
-      >
+      <Button type="submit" size="lg" disabled={isPending} className="h-12 rounded-xl">
         {isPending ? "Creating account..." : "Create account"}
-      </button>
-
-      <p className="text-sm text-stone-300">
-        Already have an account?{" "}
-        <Link href="/login" className="text-sky-300">
-          Sign in
-        </Link>
-      </p>
+      </Button>
     </form>
   );
 }
