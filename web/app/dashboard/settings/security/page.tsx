@@ -7,7 +7,7 @@ export default function DashboardSecurityPage() {
     <main className="mx-auto max-w-6xl px-6 py-10">
       <div className="grid gap-6">
         <section className="rounded-3xl border border-white/10 bg-white/5 p-8">
-          <p className="text-xs uppercase tracking-[0.24em] text-emerald-300">
+          <p className="text-xs uppercase tracking-[0.24em] text-orange-300">
             Account security
           </p>
           <h2 className="mt-3 text-3xl font-semibold text-white">Manage active sessions</h2>
@@ -24,7 +24,7 @@ export default function DashboardSecurityPage() {
             Email verification, login alerts, and broader account hardening flows are staged next on top of the route and session structures already in place.
           </p>
           <div className="mt-4">
-            <Link href="/verify-email" className="text-sm text-emerald-300">
+            <Link href="/verify-email" className="text-sm text-orange-300">
               View verification route
             </Link>
           </div>

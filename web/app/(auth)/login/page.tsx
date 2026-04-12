@@ -18,7 +18,7 @@ export default async function LoginPage({
       footer={
         <p className="text-sm text-stone-300">
           Need an account?{" "}
-          <Link href="/register" className="text-emerald-300">
+          <Link href="/register" className="text-orange-300">
             Create one
           </Link>
         </p>

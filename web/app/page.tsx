@@ -14,7 +14,7 @@ export default function Home() {
 
         <section className="grid gap-8 rounded-[40px] border border-white/10 bg-white/5 p-8 backdrop-blur-sm lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
           <div className="space-y-8">
-            <span className="inline-flex w-fit rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-1 text-xs font-medium uppercase tracking-[0.3em] text-emerald-200">
+            <span className="inline-flex w-fit rounded-full border border-orange-400/20 bg-orange-400/10 px-4 py-1 text-xs font-medium uppercase tracking-[0.3em] text-orange-200">
               Dual-backend property platform
             </span>
             <div className="space-y-5">
@@ -41,8 +41,8 @@ export default function Home() {
             </div>
           </div>
           <div className="grid gap-4">
-            <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-emerald-300/20 via-white/10 to-white/5 p-6">
-              <FiMapPin className="size-6 text-emerald-300" />
+            <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-orange-300/20 via-white/10 to-white/5 p-6">
+              <FiMapPin className="size-6 text-orange-300" />
               <h2 className="mt-6 text-2xl font-semibold text-white">
                 Location-first discovery
               </h2>
@@ -52,7 +52,7 @@ export default function Home() {
               </p>
             </div>
             <div className="rounded-[32px] border border-white/10 bg-white/5 p-6">
-              <FiShield className="size-6 text-emerald-300" />
+              <FiShield className="size-6 text-orange-300" />
               <h2 className="mt-6 text-2xl font-semibold text-white">
                 Provider-safe architecture
               </h2>
@@ -62,7 +62,7 @@ export default function Home() {
               </p>
             </div>
             <div className="rounded-[32px] border border-white/10 bg-white/5 p-6">
-              <FiTrendingUp className="size-6 text-emerald-300" />
+              <FiTrendingUp className="size-6 text-orange-300" />
               <h2 className="mt-6 text-2xl font-semibold text-white">
                 Production-grade growth path
               </h2>
@@ -75,15 +75,15 @@ export default function Home() {
         </section>
         <section className="grid gap-4 lg:grid-cols-3">
           <Link href="/about" className="rounded-[28px] border border-white/10 bg-white/5 p-6 transition hover:bg-white/8">
-            <p className="text-xs uppercase tracking-[0.22em] text-emerald-300">About</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-orange-300">About</p>
             <h2 className="mt-3 text-2xl font-semibold text-white">How the platform is being built</h2>
           </Link>
           <Link href="/blog" className="rounded-[28px] border border-white/10 bg-white/5 p-6 transition hover:bg-white/8">
-            <p className="text-xs uppercase tracking-[0.22em] text-emerald-300">Insights</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-orange-300">Insights</p>
             <h2 className="mt-3 text-2xl font-semibold text-white">Guides, market notes, and housing operations content</h2>
           </Link>
           <Link href="/contact" className="rounded-[28px] border border-white/10 bg-white/5 p-6 transition hover:bg-white/8">
-            <p className="text-xs uppercase tracking-[0.22em] text-emerald-300">Contact</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-orange-300">Contact</p>
             <h2 className="mt-3 text-2xl font-semibold text-white">Talk to the team or prepare for onboarding</h2>
           </Link>
         </section>

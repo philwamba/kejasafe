@@ -5,7 +5,7 @@ export function PublicFooter() {
     <footer className="mt-12 rounded-[32px] border border-white/10 bg-white/5 p-6 text-sm text-stone-300 backdrop-blur">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="font-semibold tracking-[0.24em] text-emerald-300">KEJASAFE</p>
+          <p className="font-semibold tracking-[0.24em] text-orange-300">KEJASAFE</p>
           <p className="mt-2 max-w-2xl leading-7 text-stone-400">
             A modern property, housing, and tenant operations platform built for scalable public discovery and operational workflows.
           </p>

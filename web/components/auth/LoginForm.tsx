@@ -59,7 +59,7 @@ export function LoginForm({ next = "/dashboard" }: LoginFormProps) {
           id="email"
           type="email"
           {...form.register("email")}
-          className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-emerald-400"
+          className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-orange-400"
           placeholder="you@example.com"
         />
         {form.formState.errors.email ? (
@@ -74,7 +74,7 @@ export function LoginForm({ next = "/dashboard" }: LoginFormProps) {
           <label className="text-sm font-medium text-white" htmlFor="password">
             Password
           </label>
-          <Link href="/forgot-password" className="text-sm text-emerald-300">
+          <Link href="/forgot-password" className="text-sm text-orange-300">
             Forgot password?
           </Link>
         </div>
@@ -82,7 +82,7 @@ export function LoginForm({ next = "/dashboard" }: LoginFormProps) {
           id="password"
           type="password"
           {...form.register("password")}
-          className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-emerald-400"
+          className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-orange-400"
           placeholder="Your password"
         />
         {form.formState.errors.password ? (
@@ -106,7 +106,7 @@ export function LoginForm({ next = "/dashboard" }: LoginFormProps) {
       <button
         type="submit"
         disabled={isPending}
-        className="h-12 rounded-2xl bg-emerald-400 px-5 text-sm font-semibold text-stone-950 transition hover:bg-emerald-300 disabled:opacity-60"
+        className="h-12 rounded-2xl bg-orange-400 px-5 text-sm font-semibold text-stone-950 transition hover:bg-orange-300 disabled:opacity-60"
       >
         {isPending ? "Signing in..." : "Sign in"}
       </button>

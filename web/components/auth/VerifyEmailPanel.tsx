@@ -63,7 +63,7 @@ export function VerifyEmailPanel({ user, token }: VerifyEmailPanelProps) {
 
   if (user?.emailVerifiedAt) {
     return (
-      <div className="rounded-[28px] border border-emerald-400/20 bg-emerald-400/10 p-6 text-sm leading-7 text-emerald-100">
+      <div className="rounded-[28px] border border-orange-400/20 bg-orange-400/10 p-6 text-sm leading-7 text-orange-100">
         Your email is already verified. You can return to{" "}
         <Link href="/dashboard" className="font-medium text-white">
           the dashboard
@@ -81,7 +81,7 @@ export function VerifyEmailPanel({ user, token }: VerifyEmailPanelProps) {
           : "Request a verification token from the active backend. In development, the token is exposed as a debug value so the flow can be tested without an email provider."}
       </div>
 
-      {message ? <p className="text-sm text-emerald-300">{message}</p> : null}
+      {message ? <p className="text-sm text-orange-300">{message}</p> : null}
       {serverError ? <p className="text-sm text-rose-300">{serverError}</p> : null}
 
       {token ? (
@@ -89,7 +89,7 @@ export function VerifyEmailPanel({ user, token }: VerifyEmailPanelProps) {
           type="button"
           onClick={runConfirm}
           disabled={isPending}
-          className="h-12 rounded-2xl bg-emerald-400 px-5 text-sm font-semibold text-stone-950 transition hover:bg-emerald-300 disabled:opacity-60"
+          className="h-12 rounded-2xl bg-orange-400 px-5 text-sm font-semibold text-stone-950 transition hover:bg-orange-300 disabled:opacity-60"
         >
           {isPending ? "Verifying..." : "Verify email"}
         </button>
@@ -98,7 +98,7 @@ export function VerifyEmailPanel({ user, token }: VerifyEmailPanelProps) {
           type="button"
           onClick={runRequest}
           disabled={isPending}
-          className="h-12 rounded-2xl bg-emerald-400 px-5 text-sm font-semibold text-stone-950 transition hover:bg-emerald-300 disabled:opacity-60"
+          className="h-12 rounded-2xl bg-orange-400 px-5 text-sm font-semibold text-stone-950 transition hover:bg-orange-300 disabled:opacity-60"
         >
           {isPending ? "Issuing..." : "Request verification"}
         </button>

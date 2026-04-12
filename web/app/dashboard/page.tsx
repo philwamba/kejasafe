@@ -17,7 +17,7 @@ export default function DashboardPage() {
           </p>
           <a
             href="/dashboard/settings/security"
-            className="mt-4 inline-flex text-sm font-medium text-emerald-300"
+            className="mt-4 inline-flex text-sm font-medium text-orange-300"
           >
             Open security settings
           </a>

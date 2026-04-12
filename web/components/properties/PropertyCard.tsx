@@ -19,7 +19,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
   return (
     <Link href={`/properties/${property.slug}`} className="block">
       <Card className="overflow-hidden rounded-[28px] border border-white/10 bg-white/80 p-0 shadow-[0_20px_80px_-40px_rgba(15,23,42,0.45)] backdrop-blur-sm transition-transform duration-200 hover:-translate-y-1 dark:bg-white/5">
-        <div className="relative h-64 overflow-hidden bg-gradient-to-br from-emerald-200 via-white to-stone-200 dark:from-emerald-950/40 dark:via-stone-950 dark:to-stone-900">
+        <div className="relative h-64 overflow-hidden bg-gradient-to-br from-orange-200 via-white to-stone-200 dark:from-orange-950/40 dark:via-stone-950 dark:to-stone-900">
           {property.coverImageUrl ? (
             <div
               className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover/card:scale-105"
@@ -56,7 +56,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
           <div className="space-y-2">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-300">
+                <p className="text-xs uppercase tracking-[0.2em] text-orange-700 dark:text-orange-300">
                   {property.propertyType ?? "Property"}
                 </p>
                 <h3 className="text-xl font-semibold tracking-tight text-stone-950 dark:text-white">
@@ -92,7 +92,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
                 {formatKes(property.price)}
               </p>
             </div>
-            <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+            <span className="text-sm font-medium text-orange-700 dark:text-orange-300">
               View details
             </span>
           </div>

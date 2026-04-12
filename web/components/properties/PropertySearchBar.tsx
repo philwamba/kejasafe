@@ -13,7 +13,7 @@ export function PropertySearchBar() {
           Location
         </span>
         <div className="flex h-12 items-center gap-3 rounded-2xl border border-stone-200 bg-white px-4 dark:border-white/10 dark:bg-stone-950/60">
-          <FiMapPin className="size-4 text-emerald-600" />
+          <FiMapPin className="size-4 text-orange-600" />
           <input
             name="county"
             placeholder="Nairobi"

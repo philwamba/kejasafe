@@ -25,11 +25,11 @@ export function AuthShell({
           <div>
             <Link
               href="/"
-              className="text-sm font-semibold tracking-[0.24em] text-emerald-300"
+              className="text-sm font-semibold tracking-[0.24em] text-orange-300"
             >
               KEJASAFE
             </Link>
-            <p className="mt-10 text-xs uppercase tracking-[0.28em] text-emerald-200">
+            <p className="mt-10 text-xs uppercase tracking-[0.28em] text-orange-200">
               {eyebrow}
             </p>
             <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white">

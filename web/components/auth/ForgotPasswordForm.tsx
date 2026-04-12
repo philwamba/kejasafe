@@ -50,7 +50,7 @@ export function ForgotPasswordForm() {
           id="email"
           type="email"
           {...form.register("email")}
-          className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-emerald-400"
+          className="h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm outline-none transition focus:border-orange-400"
           placeholder="you@example.com"
         />
         {form.formState.errors.email ? (
@@ -60,20 +60,20 @@ export function ForgotPasswordForm() {
         ) : null}
       </div>
 
-      {message ? <p className="text-sm text-emerald-300">{message}</p> : null}
+      {message ? <p className="text-sm text-orange-300">{message}</p> : null}
       {serverError ? <p className="text-sm text-rose-300">{serverError}</p> : null}
 
       <button
         type="submit"
         disabled={isPending}
-        className="h-12 rounded-2xl bg-emerald-400 px-5 text-sm font-semibold text-stone-950 transition hover:bg-emerald-300 disabled:opacity-60"
+        className="h-12 rounded-2xl bg-orange-400 px-5 text-sm font-semibold text-stone-950 transition hover:bg-orange-300 disabled:opacity-60"
       >
         {isPending ? "Submitting..." : "Send reset instructions"}
       </button>
 
       <p className="text-sm text-stone-300">
         Remembered it?{" "}
-        <Link href="/login" className="text-emerald-300">
+        <Link href="/login" className="text-orange-300">
           Back to sign in
         </Link>
       </p>

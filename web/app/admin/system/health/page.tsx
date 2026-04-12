@@ -30,7 +30,7 @@ export default async function AdminSystemHealthPage() {
                 <span
                   className={`rounded-full px-3 py-1 text-xs font-medium ${
                     entry.isHealthy
-                      ? "bg-emerald-400/15 text-emerald-300"
+                      ? "bg-orange-400/15 text-orange-300"
                       : "bg-rose-400/15 text-rose-300"
                   }`}
                 >

@@ -12,7 +12,7 @@ export function PropertyGallery({ property }: PropertyGalleryProps) {
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1.6fr_1fr]">
-      <div className="relative min-h-[360px] overflow-hidden rounded-[32px] bg-gradient-to-br from-emerald-200 via-white to-stone-200 dark:from-emerald-950/40 dark:via-stone-950 dark:to-stone-900">
+      <div className="relative min-h-[360px] overflow-hidden rounded-[32px] bg-gradient-to-br from-orange-200 via-white to-stone-200 dark:from-orange-950/40 dark:via-stone-950 dark:to-stone-900">
         {heroImage ? (
           <div
             className="absolute inset-0 bg-cover bg-center"

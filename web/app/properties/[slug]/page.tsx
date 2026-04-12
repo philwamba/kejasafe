@@ -72,7 +72,7 @@ export default async function PropertyDetailPage({
           <div className="space-y-6">
             <div className="space-y-4">
               <div className="flex flex-wrap items-center gap-3">
-                <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.24em] text-emerald-700 dark:text-emerald-300">
+                <span className="rounded-full bg-orange-500/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.24em] text-orange-700 dark:text-orange-300">
                   {property.propertyType ?? "Property"}
                 </span>
                 <span className="rounded-full bg-stone-950 px-3 py-1 text-xs font-medium uppercase tracking-[0.24em] text-white dark:bg-white dark:text-stone-950">
@@ -114,18 +114,18 @@ export default async function PropertyDetailPage({
                       key={amenity}
                       className="inline-flex items-center gap-3 rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm font-medium dark:border-white/10 dark:bg-stone-900/70"
                     >
-                      <FiCheckCircle className="size-4 text-emerald-600" />
+                      <FiCheckCircle className="size-4 text-orange-600" />
                       {amenity}
                     </div>
                   ))
                 ) : (
                   <>
                     <div className="inline-flex items-center gap-3 rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm font-medium dark:border-white/10 dark:bg-stone-900/70">
-                      <FiShield className="size-4 text-emerald-600" />
+                      <FiShield className="size-4 text-orange-600" />
                       Secure entry workflow ready
                     </div>
                     <div className="inline-flex items-center gap-3 rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm font-medium dark:border-white/10 dark:bg-stone-900/70">
-                      <FiWifi className="size-4 text-emerald-600" />
+                      <FiWifi className="size-4 text-orange-600" />
                       Connectivity data supported
                     </div>
                   </>

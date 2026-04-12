@@ -28,7 +28,7 @@ export default function AdminPage() {
             href="/admin/system/health"
             className="rounded-[24px] border border-white/10 bg-white/5 p-6 transition hover:bg-white/8"
           >
-            <p className="text-xs uppercase tracking-[0.24em] text-emerald-300">
+            <p className="text-xs uppercase tracking-[0.24em] text-orange-300">
               System health
             </p>
             <h3 className="mt-3 text-xl font-semibold text-white">

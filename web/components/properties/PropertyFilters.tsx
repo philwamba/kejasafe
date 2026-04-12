@@ -26,7 +26,7 @@ export function PropertyFilters({
           name="county"
           defaultValue={values.county ?? ""}
           placeholder="nairobi"
-          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none ring-0 transition focus:border-emerald-400 dark:border-white/10 dark:bg-stone-950/60"
+          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none ring-0 transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
         />
       </label>
       <label className="grid gap-2">
@@ -37,7 +37,7 @@ export function PropertyFilters({
           name="city"
           defaultValue={values.city ?? ""}
           placeholder="westlands"
-          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-stone-950/60"
+          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
         />
       </label>
       <label className="grid gap-2">
@@ -47,7 +47,7 @@ export function PropertyFilters({
         <select
           name="propertyType"
           defaultValue={values.propertyType ?? ""}
-          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-stone-950/60"
+          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
         >
           <option value="">All types</option>
           <option value="apartment">Apartment</option>
@@ -66,7 +66,7 @@ export function PropertyFilters({
         <select
           name="listingPurpose"
           defaultValue={values.listingPurpose ?? ""}
-          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-stone-950/60"
+          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
         >
           <option value="">Rent, sale, short stay</option>
           <option value="rent">Rent</option>
@@ -83,7 +83,7 @@ export function PropertyFilters({
             name="minPrice"
             defaultValue={values.minPrice ?? ""}
             placeholder="25000"
-            className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-stone-950/60"
+            className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
           />
         </label>
         <label className="grid gap-2">
@@ -94,7 +94,7 @@ export function PropertyFilters({
             name="maxPrice"
             defaultValue={values.maxPrice ?? ""}
             placeholder="120000"
-            className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-stone-950/60"
+            className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
           />
         </label>
       </div>
@@ -105,7 +105,7 @@ export function PropertyFilters({
         <select
           name="bedrooms"
           defaultValue={values.bedrooms ?? ""}
-          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-stone-950/60"
+          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
         >
           <option value="">Any</option>
           <option value="1">1+</option>
@@ -121,7 +121,7 @@ export function PropertyFilters({
         <select
           name="bathrooms"
           defaultValue={values.bathrooms ?? ""}
-          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-stone-950/60"
+          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
         >
           <option value="">Any</option>
           <option value="1">1+</option>
@@ -136,7 +136,7 @@ export function PropertyFilters({
         <select
           name="sortBy"
           defaultValue={values.sortBy ?? "newest"}
-          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-stone-950/60"
+          className="h-12 rounded-2xl border border-stone-200 bg-white px-4 text-sm outline-none transition focus:border-orange-400 dark:border-white/10 dark:bg-stone-950/60"
         >
           <option value="newest">Newest</option>
           <option value="price_asc">Price: low to high</option>

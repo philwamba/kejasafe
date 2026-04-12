@@ -22,7 +22,7 @@ export function PublicPageShell({
         <PublicHeader />
         <section className="rounded-[40px] border border-white/10 bg-white/5 p-8 backdrop-blur-sm lg:p-10">
           {eyebrow ? (
-            <span className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-1 text-xs font-medium uppercase tracking-[0.3em] text-emerald-200">
+            <span className="inline-flex rounded-full border border-orange-400/20 bg-orange-400/10 px-4 py-1 text-xs font-medium uppercase tracking-[0.3em] text-orange-200">
               {eyebrow}
             </span>
           ) : null}

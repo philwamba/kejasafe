@@ -40,7 +40,7 @@ export default async function PropertiesPage({
         <header className="flex flex-col gap-6 rounded-[36px] border border-white/10 bg-white/70 p-8 shadow-[0_25px_90px_-50px_rgba(15,23,42,0.5)] backdrop-blur-sm dark:bg-white/5">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-3xl space-y-4">
-              <span className="inline-flex w-fit rounded-full bg-emerald-500/10 px-4 py-1 text-xs font-medium uppercase tracking-[0.28em] text-emerald-700 dark:text-emerald-300">
+              <span className="inline-flex w-fit rounded-full bg-orange-500/10 px-4 py-1 text-xs font-medium uppercase tracking-[0.28em] text-orange-700 dark:text-orange-300">
                 Verified housing intelligence
               </span>
               <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
@@ -67,7 +67,7 @@ export default async function PropertiesPage({
         {featured ? (
           <section className="grid gap-6 rounded-[36px] border border-stone-200 bg-white/80 p-6 shadow-[0_24px_80px_-48px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-white/5 lg:grid-cols-[1.3fr_0.9fr]">
             <div
-              className="min-h-[320px] rounded-[30px] bg-gradient-to-br from-emerald-200 via-white to-stone-200 bg-cover bg-center dark:from-emerald-950/40 dark:via-stone-950 dark:to-stone-900"
+              className="min-h-[320px] rounded-[30px] bg-gradient-to-br from-orange-200 via-white to-stone-200 bg-cover bg-center dark:from-orange-950/40 dark:via-stone-950 dark:to-stone-900"
               style={
                 featured.coverImageUrl
                   ? { backgroundImage: `linear-gradient(rgba(0,0,0,0.10), rgba(0,0,0,0.45)), url(${featured.coverImageUrl})` }
@@ -80,7 +80,7 @@ export default async function PropertiesPage({
                   Featured now
                 </span>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.22em] text-emerald-700 dark:text-emerald-300">
+                  <p className="text-xs uppercase tracking-[0.22em] text-orange-700 dark:text-orange-300">
                     {featured.propertyType ?? "Property"}
                   </p>
                   <h2 className="mt-2 text-3xl font-semibold tracking-tight">

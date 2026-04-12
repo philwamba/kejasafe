@@ -23,7 +23,7 @@ export default function PricingPage() {
             ["Enterprise", "For larger operational teams, custom processes, and reporting."],
           ].map(([name, copy]) => (
             <article key={name} className="rounded-[24px] border border-white/10 bg-white/5 p-6">
-              <p className="text-xs uppercase tracking-[0.24em] text-emerald-300">{name}</p>
+              <p className="text-xs uppercase tracking-[0.24em] text-orange-300">{name}</p>
               <p className="mt-4 text-sm leading-7 text-stone-300">{copy}</p>
             </article>
           ))}

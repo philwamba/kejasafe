@@ -108,7 +108,7 @@ export function BackendSwitchCard({ setting }: BackendSwitchCardProps) {
         />
       </label>
 
-      {message ? <p className="mt-4 text-sm text-emerald-300">{message}</p> : null}
+      {message ? <p className="mt-4 text-sm text-orange-300">{message}</p> : null}
       {error ? <p className="mt-4 text-sm text-rose-300">{error}</p> : null}
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
