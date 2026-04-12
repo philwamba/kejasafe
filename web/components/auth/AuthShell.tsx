@@ -1,7 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import Link from "next/link";
+
+import { Logo } from "@/components/site/Logo";
 
 interface AuthShellProps {
   eyebrow: string;
@@ -23,12 +24,7 @@ export function AuthShell({
       <section className="grid w-full max-w-6xl gap-8 lg:grid-cols-[0.95fr_1.05fr]">
         <div className="flex flex-col justify-between rounded-[36px] border border-white/10 bg-white/5 p-8 backdrop-blur-sm">
           <div>
-            <Link
-              href="/"
-              className="text-sm font-semibold tracking-[0.24em] text-orange-300"
-            >
-              KEJASAFE
-            </Link>
+            <Logo wordmarkClassName="text-orange-300" />
             <p className="mt-10 text-xs uppercase tracking-[0.28em] text-orange-200">
               {eyebrow}
             </p>
