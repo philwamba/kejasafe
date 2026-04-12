@@ -17,33 +17,33 @@ Follow these steps to set up the frontend locally:
 
 1. **Install Dependencies**:
 
-   ```bash
-   pnpm install
-   # or
-   npm install
-   ```
+    ```bash
+    pnpm install
+    # or
+    npm install
+    ```
 
 2. **Environment Setup**:
 
-   Copy the `.env.example` file to `.env.local` and configure your API connection settings.
+    Copy the `.env.example` file to `.env.local` and configure your API connection settings.
 
-   ```bash
-   cp .env.example .env.local
-   ```
+    ```bash
+    cp .env.example .env.local
+    ```
 
 3. **Local Run**:
 
-   Launch the Next.js development server.
+    Launch the Next.js development server.
 
-   ```bash
-   pnpm dev
-   # or
-   npm run dev
-   ```
+    ```bash
+    pnpm dev
+    # or
+    npm run dev
+    ```
 
 4. **Open in Browser**:
 
-   Visit [http://localhost:3000](http://localhost:3000) to see the application in action.
+    Visit [http://localhost:3000](http://localhost:3000) to see the application in action.
 
 ## Seeding Sample Kenya Listings
 

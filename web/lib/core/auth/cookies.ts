@@ -1,60 +1,60 @@
-import type { NextResponse } from "next/server";
+import type { NextResponse } from 'next/server'
 
-import { env } from "@/lib/config/env";
-import { authCookieNames } from "@/lib/core/auth/constants";
-import type { BackendMode } from "@/lib/core/contracts/common";
+import { env } from '@/lib/config/env'
+import { authCookieNames } from '@/lib/core/auth/constants'
+import type { BackendMode } from '@/lib/core/contracts/common'
 
 function getBaseCookieOptions() {
-  return {
-    httpOnly: true,
-    sameSite: "lax" as const,
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    domain: env.COOKIE_DOMAIN,
-  };
+    return {
+        httpOnly: true,
+        sameSite: 'lax' as const,
+        secure: process.env.NODE_ENV === 'production',
+        path: '/',
+        domain: env.COOKIE_DOMAIN,
+    }
 }
 
 export function attachAuthCookies(
-  response: NextResponse,
-  sessionToken: string,
-  refreshToken: string,
-  expiresAt: Date,
+    response: NextResponse,
+    sessionToken: string,
+    refreshToken: string,
+    expiresAt: Date,
 ) {
-  response.cookies.set(authCookieNames.session, sessionToken, {
-    ...getBaseCookieOptions(),
-    expires: expiresAt,
-  });
+    response.cookies.set(authCookieNames.session, sessionToken, {
+        ...getBaseCookieOptions(),
+        expires: expiresAt,
+    })
 
-  response.cookies.set(authCookieNames.refresh, refreshToken, {
-    ...getBaseCookieOptions(),
-    expires: expiresAt,
-  });
+    response.cookies.set(authCookieNames.refresh, refreshToken, {
+        ...getBaseCookieOptions(),
+        expires: expiresAt,
+    })
 }
 
 export function clearAuthCookies(response: NextResponse) {
-  response.cookies.delete(authCookieNames.session);
-  response.cookies.delete(authCookieNames.refresh);
+    response.cookies.delete(authCookieNames.session)
+    response.cookies.delete(authCookieNames.refresh)
 }
 
 export function attachBackendModeCookie(
-  response: NextResponse,
-  mode: BackendMode,
+    response: NextResponse,
+    mode: BackendMode,
 ) {
-  response.cookies.set(authCookieNames.backendMode, mode, {
-    ...getBaseCookieOptions(),
-    httpOnly: false,
-    maxAge: 60 * 60 * 24 * 365,
-  });
+    response.cookies.set(authCookieNames.backendMode, mode, {
+        ...getBaseCookieOptions(),
+        httpOnly: false,
+        maxAge: 60 * 60 * 24 * 365,
+    })
 }
 
 export function attachCsrfCookie(response: NextResponse, csrfToken: string) {
-  response.cookies.set(authCookieNames.csrf, csrfToken, {
-    ...getBaseCookieOptions(),
-    httpOnly: false,
-    maxAge: 60 * 60 * 2,
-  });
+    response.cookies.set(authCookieNames.csrf, csrfToken, {
+        ...getBaseCookieOptions(),
+        httpOnly: false,
+        maxAge: 60 * 60 * 2,
+    })
 }
 
 export function clearCsrfCookie(response: NextResponse) {
-  response.cookies.delete(authCookieNames.csrf);
+    response.cookies.delete(authCookieNames.csrf)
 }

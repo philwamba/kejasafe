@@ -1,55 +1,57 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next'
+import './globals.css'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://kejasafe.co.ke"),
-  title: {
-    default: "Kejasafe — Find Safe & Verified Houses in Kenya",
-    template: "%s",
-  },
-  description:
-    "Browse verified rentals, sales, and short-stay listings across Kenya. Avoid scams and rent with confidence on Kejasafe.",
-  keywords: [
-    "Kenya rentals",
-    "houses for rent Nairobi",
-    "verified properties Kenya",
-    "bedsitter",
-    "apartment rent Kenya",
-    "property listings Kenya",
-    "Kejasafe",
-  ],
-  openGraph: {
-    title: "Kejasafe — Find Safe & Verified Houses in Kenya",
+    metadataBase: new URL(
+        process.env.NEXT_PUBLIC_APP_URL ?? 'https://kejasafe.co.ke',
+    ),
+    title: {
+        default: 'Kejasafe — Find Safe & Verified Houses in Kenya',
+        template: '%s',
+    },
     description:
-      "Browse verified rentals, sales, and short-stay listings across Kenya. Avoid scams and rent with confidence.",
-    url: process.env.NEXT_PUBLIC_APP_URL ?? "https://kejasafe.co.ke",
-    siteName: "Kejasafe",
-    locale: "en_KE",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Kejasafe — Find Safe & Verified Houses in Kenya",
-    description:
-      "Verified rentals and sales across Kenya. Avoid scams and rent with confidence.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  alternates: {
-    canonical: "/",
-  },
-};
+        'Browse verified rentals, sales, and short-stay listings across Kenya. Avoid scams and rent with confidence on Kejasafe.',
+    keywords: [
+        'Kenya rentals',
+        'houses for rent Nairobi',
+        'verified properties Kenya',
+        'bedsitter',
+        'apartment rent Kenya',
+        'property listings Kenya',
+        'Kejasafe',
+    ],
+    openGraph: {
+        title: 'Kejasafe — Find Safe & Verified Houses in Kenya',
+        description:
+            'Browse verified rentals, sales, and short-stay listings across Kenya. Avoid scams and rent with confidence.',
+        url: process.env.NEXT_PUBLIC_APP_URL ?? 'https://kejasafe.co.ke',
+        siteName: 'Kejasafe',
+        locale: 'en_KE',
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Kejasafe — Find Safe & Verified Houses in Kenya',
+        description:
+            'Verified rentals and sales across Kenya. Avoid scams and rent with confidence.',
+    },
+    robots: {
+        index: true,
+        follow: true,
+    },
+    alternates: {
+        canonical: '/',
+    },
+}
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode
 }>) {
-  return (
-    <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
-    </html>
-  );
+    return (
+        <html lang="en" className="h-full antialiased">
+            <body className="flex min-h-full flex-col">{children}</body>
+        </html>
+    )
 }

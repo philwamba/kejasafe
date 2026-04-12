@@ -1,39 +1,40 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next'
 
-import { ContentSection } from "@/components/cms/ContentSection";
-import { PublicPageShell } from "@/components/site/PublicPageShell";
+import { ContentSection } from '@/components/cms/ContentSection'
+import { PublicPageShell } from '@/components/site/PublicPageShell'
 
 export async function generateMetadata({
-  params,
+    params,
 }: {
-  params: Promise<{ county: string }>;
+    params: Promise<{ county: string }>
 }): Promise<Metadata> {
-  const { county } = await params;
+    const { county } = await params
 
-  return {
-    title: `Houses & Properties in ${county}`,
-    description: `Verified rental and sale listings across ${county}, Kenya.`,
-  };
+    return {
+        title: `Houses & Properties in ${county}`,
+        description: `Verified rental and sale listings across ${county}, Kenya.`,
+    }
 }
 
 export default async function CountyPage({
-  params,
+    params,
 }: {
-  params: Promise<{ county: string }>;
+    params: Promise<{ county: string }>
 }) {
-  const { county } = await params;
+    const { county } = await params
 
-  return (
-    <PublicPageShell
-      eyebrow="Location"
-      title={`Property discovery for ${county}`}
-      description="Location landing pages are important for SEO, navigation, and future editorial content. This route is ready to evolve into CMS-backed market pages."
-    >
-      <ContentSection title={`Why ${county} matters`}>
-        <p className="text-sm leading-7 text-stone-600">
-          This county page is the correct foundation for search-focused location content, neighborhood breakdowns, internal linking, and future listing clusters.
-        </p>
-      </ContentSection>
-    </PublicPageShell>
-  );
+    return (
+        <PublicPageShell
+            eyebrow="Location"
+            title={`Property discovery for ${county}`}
+            description="Location landing pages are important for SEO, navigation, and future editorial content. This route is ready to evolve into CMS-backed market pages.">
+            <ContentSection title={`Why ${county} matters`}>
+                <p className="text-sm leading-7 text-stone-600">
+                    This county page is the correct foundation for
+                    search-focused location content, neighborhood breakdowns,
+                    internal linking, and future listing clusters.
+                </p>
+            </ContentSection>
+        </PublicPageShell>
+    )
 }
