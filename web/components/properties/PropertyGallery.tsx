@@ -27,7 +27,7 @@ export function PropertyGallery({ property }: PropertyGalleryProps) {
                 <button
                     type="button"
                     onClick={() => hero && setLightboxIndex(0)}
-                    className="group/hero relative block min-h-[360px] overflow-hidden rounded-2xl border border-stone-200 bg-stone-100">
+                    className="group/hero relative block min-h-[360px] cursor-pointer overflow-hidden rounded-2xl border border-stone-200 bg-stone-100">
                     {hero ? (
                         <div
                             className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover/hero:scale-[1.02]"
@@ -56,7 +56,7 @@ export function PropertyGallery({ property }: PropertyGalleryProps) {
                                   type="button"
                                   key={image.id}
                                   onClick={() => setLightboxIndex(idx + 1)}
-                                  className="group/thumb relative min-h-28 overflow-hidden rounded-2xl border border-stone-200 bg-cover bg-center transition hover:shadow-md"
+                                  className="group/thumb relative min-h-28 cursor-pointer overflow-hidden rounded-2xl border border-stone-200 bg-cover bg-center transition hover:shadow-md"
                                   style={{
                                       backgroundImage: `url(${image.url})`,
                                   }}
