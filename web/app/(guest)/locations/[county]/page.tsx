@@ -200,39 +200,75 @@ export default async function CountyPage({
                 </ul>
             </section>
 
-            <section className="flex flex-col gap-4">
-                <div>
-                    <h2 className="text-2xl font-semibold tracking-tight text-stone-950">
-                        Cities And Sub-Areas
-                    </h2>
-                    <p className="mt-1 text-sm text-stone-600">
-                        Dive into a specific part of {county.name} — pick a city
-                        to see local listings.
-                    </p>
-                </div>
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    {county.cities.map(city => (
-                        <Link
-                            key={city.name}
-                            href={`/locations/${countySlug}/${slugify(city.name)}`}
-                            className="group hover:border-brand flex items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-white p-4 transition hover:shadow-md">
-                            <div>
-                                <p className="flex items-center gap-2 text-sm font-semibold text-stone-950">
-                                    <FiMapPin className="text-brand size-4" />
-                                    {city.name}
-                                </p>
-                                <p className="mt-1 text-xs text-stone-500">
-                                    {city.neighborhoods.length}{' '}
-                                    {city.neighborhoods.length === 1
-                                        ? 'neighborhood'
-                                        : 'neighborhoods'}
-                                </p>
-                            </div>
-                            <FiArrowRight className="size-4 text-stone-400 transition group-hover:translate-x-0.5 group-hover:text-stone-900" />
-                        </Link>
-                    ))}
-                </div>
-            </section>
+            {county.cities.length > 1 ? (
+                <section className="flex flex-col gap-4">
+                    <div>
+                        <h2 className="text-2xl font-semibold tracking-tight text-stone-950">
+                            Cities In {county.name}
+                        </h2>
+                        <p className="mt-1 text-sm text-stone-600">
+                            Pick a city to see local listings.
+                        </p>
+                    </div>
+                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        {county.cities.map(city => (
+                            <Link
+                                key={city.name}
+                                href={`/locations/${countySlug}/${slugify(city.name)}`}
+                                className="group hover:border-brand flex items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-white p-4 transition hover:shadow-md">
+                                <div>
+                                    <p className="flex items-center gap-2 text-sm font-semibold text-stone-950">
+                                        <FiMapPin className="text-brand size-4" />
+                                        {city.name}
+                                    </p>
+                                    <p className="mt-1 text-xs text-stone-500">
+                                        {city.neighborhoods.length}{' '}
+                                        {city.neighborhoods.length === 1
+                                            ? 'neighborhood'
+                                            : 'neighborhoods'}
+                                    </p>
+                                </div>
+                                <FiArrowRight className="size-4 text-stone-400 transition group-hover:translate-x-0.5 group-hover:text-stone-900" />
+                            </Link>
+                        ))}
+                    </div>
+                </section>
+            ) : null}
+
+            {(() => {
+                const allNeighborhoods = county.cities.flatMap(city =>
+                    city.neighborhoods.map(name => ({
+                        name,
+                        citySlug: slugify(city.name),
+                    })),
+                )
+                if (allNeighborhoods.length === 0) return null
+
+                return (
+                    <section className="flex flex-col gap-4">
+                        <div>
+                            <h2 className="text-2xl font-semibold tracking-tight text-stone-950">
+                                Sub-Areas In {county.name}
+                            </h2>
+                            <p className="mt-1 text-sm text-stone-600">
+                                {allNeighborhoods.length} sub-areas — pick
+                                one to see listings there.
+                            </p>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {allNeighborhoods.map(n => (
+                                <Link
+                                    key={`${n.citySlug}:${n.name}`}
+                                    href={`/locations/${countySlug}/${n.citySlug}?neighborhood=${slugify(n.name)}`}
+                                    className="hover:border-brand hover:text-brand inline-flex items-center gap-2 rounded-full border border-stone-200 bg-white px-4 py-2 text-sm font-medium text-stone-700 transition">
+                                    <FiMapPin className="text-brand size-3.5" />
+                                    {n.name}
+                                </Link>
+                            ))}
+                        </div>
+                    </section>
+                )
+            })()}
 
             {result.data.length > 0 ? (
                 <section className="flex flex-col gap-4">
