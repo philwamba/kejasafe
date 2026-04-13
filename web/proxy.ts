@@ -16,10 +16,13 @@ function isAuthPage(pathname: string) {
 }
 
 function hasSessionCookie(request: NextRequest) {
-    return (
-        request.cookies.has(authCookieNames.session) ||
-        request.cookies.has(env.LARAVEL_SESSION_COOKIE)
-    )
+    if (request.cookies.has(authCookieNames.session)) {
+        return true
+    }
+    if (env.LARAVEL_SESSION_COOKIE) {
+        return request.cookies.has(env.LARAVEL_SESSION_COOKIE)
+    }
+    return false
 }
 
 export function proxy(request: NextRequest) {

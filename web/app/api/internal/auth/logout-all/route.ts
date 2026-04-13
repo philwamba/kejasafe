@@ -40,7 +40,9 @@ export async function POST(request: NextRequest) {
 
     clearAuthCookies(response)
     clearCsrfCookie(response)
-    response.cookies.delete(env.LARAVEL_SESSION_COOKIE)
+    if (env.LARAVEL_SESSION_COOKIE) {
+        response.cookies.delete(env.LARAVEL_SESSION_COOKIE)
+    }
     response.cookies.delete('XSRF-TOKEN')
 
     return response
