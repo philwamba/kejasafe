@@ -10,8 +10,6 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { fetchCsrfToken } from '@/lib/core/sdk/auth-client'
 
-type UserStatus = 'active' | 'invited' | 'suspended' | 'deactivated'
-
 interface Role {
     id: string
     name: string
