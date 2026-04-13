@@ -10,6 +10,7 @@ import {
 } from 'react-icons/fi'
 
 import { Button } from '@/components/ui/button'
+import { FavoriteButton } from '@/components/properties/FavoriteButton'
 import { PropertyGallery } from '@/components/properties/PropertyGallery'
 import { PropertyMap } from '@/components/properties/PropertyMap'
 import { fetchPropertyBySlug } from '@/lib/core/sdk/property-client'
@@ -69,6 +70,11 @@ export default async function PropertyDetailPage({
                         Back to listings
                     </Link>
                 </Button>
+                <FavoriteButton
+                    propertyId={property.id}
+                    propertyTitle={property.title}
+                    variant="detail"
+                />
             </div>
 
             <section className="grid gap-8 lg:grid-cols-[1.35fr_0.85fr]">

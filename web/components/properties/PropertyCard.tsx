@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { FiCalendar, FiMapPin } from 'react-icons/fi'
-import { LuBedDouble } from 'react-icons/lu'
+import { LuBath, LuBedDouble } from 'react-icons/lu'
 
+import { FavoriteButton } from '@/components/properties/FavoriteButton'
 import type { PropertyCardDto } from '@/lib/core/contracts/property'
-import { buildPropertySubtitle, formatKes } from '@/modules/properties/search'
 import { cn } from '@/lib/utils'
+import { buildPropertySubtitle, formatKes } from '@/modules/properties/search'
 
 interface PropertyCardProps {
     property: PropertyCardDto
@@ -16,9 +16,24 @@ function statusLabel(status: string) {
     if (['available', 'active', 'published'].includes(normalized))
         return 'Available'
     if (['taken', 'occupied', 'rented', 'sold'].includes(normalized))
-        return 'Occupied / Taken'
+        return 'Occupied'
     if (['pending', 'draft', 'review'].includes(normalized)) return 'Pending'
     return status.replace(/_/g, ' ')
+}
+
+function purposeLabel(purpose: string) {
+    const map: Record<string, string> = {
+        rent: 'For rent',
+        sale: 'For sale',
+        short_stay: 'Short stay',
+    }
+    return map[purpose] ?? purpose.replace('_', ' ')
+}
+
+function priceSuffix(purpose: string) {
+    if (purpose === 'sale') return null
+    if (purpose === 'short_stay') return 'night'
+    return 'month'
 }
 
 export function PropertyCard({ property }: PropertyCardProps) {
@@ -28,78 +43,106 @@ export function PropertyCard({ property }: PropertyCardProps) {
         property.county,
     ])
     const status = statusLabel(property.listingStatus)
+    const suffix = priceSuffix(property.listingPurpose)
 
     return (
-        <article className="group flex flex-col overflow-hidden rounded-md border border-stone-200 bg-stone-50 shadow-sm transition hover:shadow-md">
+        <article className="group relative flex flex-col gap-3">
             <Link
                 href={`/properties/${property.slug}`}
-                className="relative block aspect-4/3 overflow-hidden bg-stone-100">
+                className="relative block aspect-4/3 overflow-hidden rounded-2xl bg-stone-100"
+                aria-label={property.title}>
                 {property.coverImageUrl ? (
                     <Image
                         src={property.coverImageUrl}
                         alt={property.title}
                         fill
-                        sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 100vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     />
                 ) : (
                     <div className="flex h-full items-center justify-center">
                         <Image
                             src="/logo.png"
                             alt="Kejasafe"
-                            width={220}
-                            height={220}
-                            className="opacity-90"
+                            width={160}
+                            height={160}
+                            className="opacity-80"
                         />
                     </div>
                 )}
-                <span
-                    className={cn(
-                        'absolute top-3 right-0 px-3 py-1 text-xs font-medium text-white',
-                        'bg-stone-500/90 [clip-path:polygon(8px_0,100%_0,100%_100%,8px_100%,0_50%)]',
-                    )}>
-                    {status}
-                </span>
+
+                {/* Top row: purpose badge + status */}
+                <div className="absolute left-3 right-3 top-3 flex items-start justify-between gap-2">
+                    <span className="bg-brand rounded-full px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
+                        {purposeLabel(property.listingPurpose)}
+                    </span>
+                    {property.isFeatured ? (
+                        <span className="rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-semibold text-stone-900 shadow-sm backdrop-blur">
+                            ★ Featured
+                        </span>
+                    ) : null}
+                </div>
+
+                {/* Status chip (bottom-left on hover) */}
+                {status !== 'Available' ? (
+                    <span className="absolute bottom-3 left-3 rounded-full bg-stone-900/85 px-3 py-1 text-[11px] font-semibold text-white backdrop-blur">
+                        {status}
+                    </span>
+                ) : null}
             </Link>
 
-            <div className="flex flex-1 flex-col gap-3 px-4 pt-4 pb-3">
-                <Link
-                    href={`/properties/${property.slug}`}
-                    className="hover:decoration-brand text-lg font-semibold text-stone-900 underline decoration-stone-900/30 underline-offset-4">
-                    {property.title}
-                </Link>
-                <p className="text-xl font-semibold text-stone-900">
-                    {formatKes(property.price)}
-                </p>
-                {subtitle ? (
-                    <p className="flex items-center gap-2 text-sm">
-                        <FiMapPin className="text-brand size-4" />
-                        <span className="text-stone-700 underline decoration-stone-300 underline-offset-2">
-                            {subtitle}
-                        </span>
-                    </p>
-                ) : null}
-                <p className="flex items-center gap-2 text-xs text-stone-500">
-                    <FiCalendar className="text-brand size-4" />
-                    New listing
-                </p>
+            {/* Save button pinned to the photo */}
+            <div className="absolute right-3 top-3 z-10">
+                <FavoriteButton
+                    propertyId={property.id}
+                    propertyTitle={property.title}
+                />
             </div>
 
-            <div className="bg-brand flex items-center justify-between px-4 py-2 text-xs font-medium text-white">
-                <span className="inline-flex items-center gap-2">
-                    {property.bedrooms !== null &&
-                    property.bedrooms !== undefined ? (
-                        <>
-                            <LuBedDouble className="size-4" />
-                            {property.bedrooms}
-                        </>
-                    ) : (
-                        <span>&nbsp;</span>
-                    )}
-                </span>
-                <span className="capitalize">
-                    {property.listingPurpose.replace('_', ' ')}
-                </span>
+            <div className="flex flex-col gap-1.5">
+                <div className="flex items-start justify-between gap-3">
+                    <Link
+                        href={`/properties/${property.slug}`}
+                        className={cn(
+                            'line-clamp-1 text-[15px] font-semibold text-stone-950 transition-colors',
+                            'group-hover:text-brand',
+                        )}>
+                        {property.title}
+                    </Link>
+                </div>
+                {subtitle ? (
+                    <p className="line-clamp-1 text-sm text-stone-500">
+                        {subtitle}
+                    </p>
+                ) : null}
+
+                {property.bedrooms !== null &&
+                property.bedrooms !== undefined ? (
+                    <div className="mt-1 flex items-center gap-4 text-xs text-stone-500">
+                        <span className="inline-flex items-center gap-1.5">
+                            <LuBedDouble className="size-3.5" />
+                            {property.bedrooms}{' '}
+                            {property.bedrooms === 1 ? 'bed' : 'beds'}
+                        </span>
+                        {property.bathrooms !== null &&
+                        property.bathrooms !== undefined ? (
+                            <span className="inline-flex items-center gap-1.5">
+                                <LuBath className="size-3.5" />
+                                {property.bathrooms}{' '}
+                                {property.bathrooms === 1 ? 'bath' : 'baths'}
+                            </span>
+                        ) : null}
+                    </div>
+                ) : null}
+
+                <p className="mt-1 text-[15px] font-semibold text-stone-950">
+                    {formatKes(property.price)}
+                    {suffix ? (
+                        <span className="ml-1 font-normal text-stone-500">
+                            / {suffix}
+                        </span>
+                    ) : null}
+                </p>
             </div>
         </article>
     )
