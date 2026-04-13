@@ -49,7 +49,13 @@ export const laravelPropertyProvider: PropertyProvider = {
         }
     },
 
-    async create(_input: CreatePropertyInput, _ctx: AuthContext) {
-        throw new Error('Laravel property creation is not implemented yet.')
+    async create(input: CreatePropertyInput, ctx: AuthContext) {
+        const response = await laravelApiClient.post<
+            ApiDataEnvelope<PropertyDetailDto>
+        >('/properties', input, {
+            headers: buildHeaders(ctx),
+        })
+
+        return response.data.data
     },
 }

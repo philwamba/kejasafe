@@ -236,7 +236,114 @@ export const prismaPropertyProvider: PropertyProvider = {
         return property ? toPropertyDetailDto(property) : null
     },
 
-    async create(_input: CreatePropertyInput, _ctx: AuthContext) {
-        throw new Error('Prisma property creation is not implemented yet.')
+    async create(input: CreatePropertyInput, ctx: AuthContext) {
+        if (!ctx.userId) {
+            throw new Error('Authentication required to create a listing.')
+        }
+        if (!input.ownershipDeclared || !input.responsibilityAccepted) {
+            throw new Error(
+                'You must declare ownership and accept responsibility before submitting.',
+            )
+        }
+
+        const [county, propertyType] = await Promise.all([
+            prisma.county.findUnique({ where: { slug: input.countySlug } }),
+            prisma.propertyType.findUnique({
+                where: { slug: input.propertyTypeSlug },
+            }),
+        ])
+
+        if (!county) throw new Error(`Unknown county: ${input.countySlug}`)
+        if (!propertyType)
+            throw new Error(`Unknown property type: ${input.propertyTypeSlug}`)
+
+        const city = input.citySlug
+            ? await prisma.city.findUnique({
+                  where: {
+                      countyId_slug: {
+                          countyId: county.id,
+                          slug: input.citySlug,
+                      },
+                  },
+              })
+            : null
+
+        const neighborhood = input.neighborhoodSlug
+            ? await prisma.neighborhood.findFirst({
+                  where: {
+                      countyId: county.id,
+                      slug: input.neighborhoodSlug,
+                  },
+              })
+            : null
+
+        // Generate a unique slug from the title.
+        const baseSlug = input.title
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .slice(0, 80)
+        let slug = baseSlug
+        let attempt = 1
+        while (await prisma.property.findUnique({ where: { slug } })) {
+            attempt += 1
+            slug = `${baseSlug}-${attempt}`
+        }
+
+        const now = new Date()
+
+        const created = await prisma.property.create({
+            data: {
+                ownerId: ctx.userId,
+                ownerType: input.ownerType,
+                propertyTypeId: propertyType.id,
+                countyId: county.id,
+                cityId: city?.id ?? null,
+                neighborhoodId: neighborhood?.id ?? null,
+                title: input.title,
+                slug,
+                summary: input.summary,
+                description: input.description,
+                listingPurpose: input.listingPurpose,
+                listingStatus: 'draft',
+                moderationStatus: 'pending_review',
+                price: input.price,
+                deposit: input.deposit ?? null,
+                billingPeriod: input.billingPeriod ?? null,
+                bedrooms: input.bedrooms ?? null,
+                bathrooms: input.bathrooms ?? null,
+                furnishingStatus: input.furnishingStatus ?? null,
+                petsAllowed: input.petsAllowed ?? false,
+                parkingSlots: input.parkingSlots ?? null,
+                latitude: input.latitude ?? null,
+                longitude: input.longitude ?? null,
+                addressLine1: input.addressLine1 ?? null,
+                submittedAt: now,
+                ownershipDeclaredAt: now,
+                responsibilityAcceptedAt: now,
+                images:
+                    input.images.length > 0
+                        ? {
+                              create: input.images.map(image => ({
+                                  storageKey: image.storageKey,
+                                  url: image.url,
+                                  altText: image.altText ?? null,
+                                  position: image.position,
+                                  isCover: image.isCover,
+                              })),
+                          }
+                        : undefined,
+            },
+            include: {
+                county: true,
+                city: true,
+                neighborhood: true,
+                propertyType: true,
+                images: { orderBy: { position: 'asc' } },
+                amenities: { include: { amenity: true } },
+            },
+        })
+
+        return toPropertyDetailDto(created)
     },
 }

@@ -11,6 +11,7 @@ import {
 
 import { Button } from '@/components/ui/button'
 import { PropertyGallery } from '@/components/properties/PropertyGallery'
+import { PropertyMap } from '@/components/properties/PropertyMap'
 import { fetchPropertyBySlug } from '@/lib/core/sdk/property-client'
 import { buildPropertySubtitle, formatKes } from '@/modules/properties/search'
 
@@ -109,6 +110,24 @@ export default async function PropertyDetailPage({
                             {property.description}
                         </p>
                     </section>
+                    {property.coordinates ? (
+                        <section className="flex flex-col gap-4">
+                            <div>
+                                <h2 className="text-2xl font-semibold tracking-tight text-stone-950">
+                                    Location
+                                </h2>
+                                <p className="mt-1 text-sm text-stone-600">
+                                    {subtitle || property.county}
+                                </p>
+                            </div>
+                            <PropertyMap
+                                latitude={property.coordinates.latitude}
+                                longitude={property.coordinates.longitude}
+                                title={property.title}
+                                addressLabel={subtitle || property.county}
+                            />
+                        </section>
+                    ) : null}
                     <section className="rounded-2xl border border-stone-200 bg-white p-6">
                         <h2 className="text-2xl font-semibold tracking-tight text-stone-950">
                             Amenities and highlights

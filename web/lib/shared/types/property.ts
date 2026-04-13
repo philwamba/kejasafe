@@ -56,16 +56,39 @@ export interface PropertySearchInput {
     sortBy?: 'newest' | 'price_asc' | 'price_desc'
 }
 
+export interface CreatePropertyImageInput {
+    storageKey: string
+    url: string
+    altText?: string
+    position: number
+    isCover: boolean
+}
+
 export interface CreatePropertyInput {
     title: string
     summary: string
     description: string
-    propertyTypeId: string
-    countyId: string
-    cityId?: string
-    neighborhoodId?: string
+    propertyTypeSlug: string
+    countySlug: string
+    citySlug?: string
+    neighborhoodSlug?: string
     listingPurpose: 'rent' | 'sale' | 'short_stay'
     price: number
+    deposit?: number
+    billingPeriod?: string
+    bedrooms?: number
+    bathrooms?: number
+    furnishingStatus?: 'furnished' | 'semi_furnished' | 'unfurnished'
+    petsAllowed?: boolean
+    parkingSlots?: number
+    latitude?: number
+    longitude?: number
+    addressLine1?: string
+    ownerType: 'landlord' | 'agent' | 'property_manager'
+    contactPhone: string
+    ownershipDeclared: boolean
+    responsibilityAccepted: boolean
+    images: CreatePropertyImageInput[]
 }
 
 export interface PropertyProviderContract {
