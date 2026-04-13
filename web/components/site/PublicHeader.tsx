@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 const primaryLinks = [
     { href: '/properties', label: 'Listings' },
     { href: '/search', label: 'Search' },
-    { href: '/locations/nairobi', label: 'Locations' },
+    { href: '/locations', label: 'Locations' },
     { href: '/pricing', label: 'Pricing' },
 ]
 
@@ -56,7 +56,7 @@ export function PublicHeader() {
                         asChild
                         size="lg"
                         className="h-10 rounded-xl px-4 text-sm font-semibold">
-                        <Link href="/portal/properties/new">
+                        <Link href="/login?next=/portal/properties/new">
                             <FiPlus />
                             List property
                         </Link>

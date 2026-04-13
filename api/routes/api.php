@@ -44,9 +44,19 @@ Route::prefix('v1')
             ]));
         });
 
-        Route::prefix('admin')->group(function (): void {
-            Route::get('/backend/health', fn () => response()->json([
-                'message' => 'Backend health endpoint scaffolded for Phase 2.',
-            ]));
+        Route::middleware(['web', 'auth:web'])->group(function (): void {
+            Route::post('/properties', [PropertyController::class, 'store'])->name('properties.store');
         });
+
+        Route::prefix('admin')
+            ->middleware(['web', 'auth:web'])
+            ->name('admin.')
+            ->group(function (): void {
+                Route::get('/backend/health', fn () => response()->json([
+                    'message' => 'Backend health endpoint scaffolded for Phase 2.',
+                ]));
+                Route::get('/properties/moderation', [PropertyController::class, 'moderationQueue'])->name('properties.moderation.index');
+                Route::post('/properties/{id}/approve', [PropertyController::class, 'approve'])->name('properties.approve');
+                Route::post('/properties/{id}/reject', [PropertyController::class, 'reject'])->name('properties.reject');
+            });
     });
