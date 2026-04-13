@@ -1,5 +1,12 @@
-import type { BackendMode, RequestContext } from '@/lib/core/contracts/common'
-import type { PropertySearchInput } from '@/lib/core/contracts/property'
+import type {
+    AuthContext,
+    BackendMode,
+    RequestContext,
+} from '@/lib/core/contracts/common'
+import type {
+    CreatePropertyInput,
+    PropertySearchInput,
+} from '@/lib/core/contracts/property'
 import { logger } from '@/lib/core/logger'
 import {
     getFallbackProvider,
@@ -59,4 +66,13 @@ export async function getPropertyBySlug(
 
         return fallbackProvider.properties.getBySlug(slug, ctx)
     }
+}
+
+export async function createProperty(
+    mode: BackendMode,
+    input: CreatePropertyInput,
+    ctx: AuthContext,
+) {
+    const primaryProvider = getProvider(mode)
+    return primaryProvider.properties.create(input, ctx)
 }
