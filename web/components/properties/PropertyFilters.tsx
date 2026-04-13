@@ -1,7 +1,11 @@
+'use client'
+
 import Link from 'next/link'
+import { useState } from 'react'
 import { FiSearch } from 'react-icons/fi'
 
 import { Button } from '@/components/ui/button'
+import { Combobox, type ComboboxOption } from '@/components/ui/combobox'
 import type { PropertySearchInput } from '@/lib/core/contracts/property'
 
 interface PropertyFiltersProps {
@@ -15,10 +19,63 @@ const inputClass =
 const labelClass =
     'text-xs font-medium uppercase tracking-[0.14em] text-stone-500'
 
+const PROPERTY_TYPE_OPTIONS: ComboboxOption[] = [
+    { value: '', label: 'All types' },
+    { value: 'apartment', label: 'Apartment' },
+    { value: 'bedsitter', label: 'Bedsitter' },
+    { value: 'studio', label: 'Studio' },
+    { value: 'maisonette', label: 'Maisonette' },
+    { value: 'townhouse', label: 'Townhouse' },
+    { value: 'bungalow', label: 'Bungalow' },
+    { value: 'villa', label: 'Villa' },
+    { value: 'office', label: 'Office' },
+    { value: 'hostel-student-housing', label: 'Student housing' },
+]
+
+const PURPOSE_OPTIONS: ComboboxOption[] = [
+    { value: '', label: 'Rent, sale, short stay' },
+    { value: 'rent', label: 'Rent' },
+    { value: 'sale', label: 'Sale' },
+    { value: 'short_stay', label: 'Short stay' },
+]
+
+const BEDROOM_OPTIONS: ComboboxOption[] = [
+    { value: '', label: 'Any' },
+    { value: '1', label: '1+' },
+    { value: '2', label: '2+' },
+    { value: '3', label: '3+' },
+    { value: '4', label: '4+' },
+]
+
+const BATHROOM_OPTIONS: ComboboxOption[] = [
+    { value: '', label: 'Any' },
+    { value: '1', label: '1+' },
+    { value: '2', label: '2+' },
+    { value: '3', label: '3+' },
+]
+
+const SORT_OPTIONS: ComboboxOption[] = [
+    { value: 'newest', label: 'Newest' },
+    { value: 'price_asc', label: 'Price: low to high' },
+    { value: 'price_desc', label: 'Price: high to low' },
+]
+
 export function PropertyFilters({
     action = '/properties',
     values,
 }: PropertyFiltersProps) {
+    const [propertyType, setPropertyType] = useState(values.propertyType ?? '')
+    const [listingPurpose, setListingPurpose] = useState(
+        (values.listingPurpose as string) ?? '',
+    )
+    const [bedrooms, setBedrooms] = useState(
+        values.bedrooms !== undefined ? String(values.bedrooms) : '',
+    )
+    const [bathrooms, setBathrooms] = useState(
+        values.bathrooms !== undefined ? String(values.bathrooms) : '',
+    )
+    const [sortBy, setSortBy] = useState((values.sortBy as string) ?? 'newest')
+
     return (
         <form
             action={action}
@@ -43,36 +100,30 @@ export function PropertyFilters({
                     className={`${inputClass} capitalize placeholder:normal-case`}
                 />
             </label>
-            <label className="grid min-w-0 gap-2">
+            <div className="grid min-w-0 gap-2">
                 <span className={labelClass}>Property type</span>
-                <select
+                <Combobox
+                    options={PROPERTY_TYPE_OPTIONS}
+                    value={propertyType}
+                    onChange={setPropertyType}
                     name="propertyType"
-                    defaultValue={values.propertyType ?? ''}
-                    className={inputClass}>
-                    <option value="">All types</option>
-                    <option value="apartment">Apartment</option>
-                    <option value="bedsitter">Bedsitter</option>
-                    <option value="studio">Studio</option>
-                    <option value="maisonette">Maisonette</option>
-                    <option value="townhouse">Townhouse</option>
-                    <option value="office">Office</option>
-                    <option value="hostel-student-housing">
-                        Student housing
-                    </option>
-                </select>
-            </label>
-            <label className="grid min-w-0 gap-2">
+                    placeholder="All types"
+                    searchPlaceholder="Search types…"
+                    allowClear={false}
+                />
+            </div>
+            <div className="grid min-w-0 gap-2">
                 <span className={labelClass}>Purpose</span>
-                <select
+                <Combobox
+                    options={PURPOSE_OPTIONS}
+                    value={listingPurpose}
+                    onChange={setListingPurpose}
                     name="listingPurpose"
-                    defaultValue={values.listingPurpose ?? ''}
-                    className={inputClass}>
-                    <option value="">Rent, sale, short stay</option>
-                    <option value="rent">Rent</option>
-                    <option value="sale">Sale</option>
-                    <option value="short_stay">Short stay</option>
-                </select>
-            </label>
+                    placeholder="Rent, sale, short stay"
+                    searchPlaceholder="Search purpose…"
+                    allowClear={false}
+                />
+            </div>
 
             <label className="grid min-w-0 gap-2">
                 <span className={labelClass}>Min KES</span>
@@ -95,43 +146,43 @@ export function PropertyFilters({
                 />
             </label>
 
-            <label className="grid min-w-0 gap-2">
+            <div className="grid min-w-0 gap-2">
                 <span className={labelClass}>Bedrooms</span>
-                <select
+                <Combobox
+                    options={BEDROOM_OPTIONS}
+                    value={bedrooms}
+                    onChange={setBedrooms}
                     name="bedrooms"
-                    defaultValue={values.bedrooms ?? ''}
-                    className={inputClass}>
-                    <option value="">Any</option>
-                    <option value="1">1+</option>
-                    <option value="2">2+</option>
-                    <option value="3">3+</option>
-                    <option value="4">4+</option>
-                </select>
-            </label>
-            <label className="grid min-w-0 gap-2">
+                    placeholder="Any"
+                    searchPlaceholder="Search"
+                    allowClear={false}
+                />
+            </div>
+            <div className="grid min-w-0 gap-2">
                 <span className={labelClass}>Bathrooms</span>
-                <select
+                <Combobox
+                    options={BATHROOM_OPTIONS}
+                    value={bathrooms}
+                    onChange={setBathrooms}
                     name="bathrooms"
-                    defaultValue={values.bathrooms ?? ''}
-                    className={inputClass}>
-                    <option value="">Any</option>
-                    <option value="1">1+</option>
-                    <option value="2">2+</option>
-                    <option value="3">3+</option>
-                </select>
-            </label>
+                    placeholder="Any"
+                    searchPlaceholder="Search"
+                    allowClear={false}
+                />
+            </div>
 
-            <label className="grid min-w-0 gap-2 sm:col-span-2">
+            <div className="grid min-w-0 gap-2 sm:col-span-2">
                 <span className={labelClass}>Sort by</span>
-                <select
+                <Combobox
+                    options={SORT_OPTIONS}
+                    value={sortBy}
+                    onChange={setSortBy}
                     name="sortBy"
-                    defaultValue={values.sortBy ?? 'newest'}
-                    className={inputClass}>
-                    <option value="newest">Newest</option>
-                    <option value="price_asc">Price: low to high</option>
-                    <option value="price_desc">Price: high to low</option>
-                </select>
-            </label>
+                    placeholder="Newest"
+                    searchPlaceholder="Search"
+                    allowClear={false}
+                />
+            </div>
 
             <div className="flex items-end gap-3 sm:col-span-2 lg:col-span-3 xl:col-span-2">
                 <Button
