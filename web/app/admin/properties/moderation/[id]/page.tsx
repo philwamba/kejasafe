@@ -195,7 +195,10 @@ export default async function ModerationDetailPage({
                         </dl>
                     </section>
 
-                    <ModerationActions propertyId={property.id} />
+                    <ModerationActions
+                        propertyId={property.id}
+                        propertyTitle={property.title}
+                    />
                 </aside>
             </section>
         </main>

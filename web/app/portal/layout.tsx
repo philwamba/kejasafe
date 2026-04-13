@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react'
 import { redirect } from 'next/navigation'
 
-import { Logo } from '@/components/site/Logo'
+import { AdminTopBar } from '@/components/admin/AdminTopBar'
+import { PortalSidebar } from '@/components/portal/PortalSidebar'
 import { getServerCurrentUser } from '@/lib/core/auth/server'
+import { prisma } from '@/lib/core/prisma/client'
 
 export default async function PortalLayout({
     children,
@@ -15,27 +17,22 @@ export default async function PortalLayout({
         redirect('/login?next=/portal')
     }
 
+    const pendingCount = await prisma.property
+        .count({
+            where: {
+                ownerId: user.id,
+                moderationStatus: 'pending_review',
+            },
+        })
+        .catch(() => 0)
+
     return (
-        <div className="min-h-screen bg-white text-stone-950">
-            <header className="border-b border-stone-200 bg-white">
-                <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-                    <div className="flex items-center gap-4">
-                        <Logo />
-                        <div>
-                            <p className="text-xs tracking-[0.24em] text-stone-500 uppercase">
-                                Landlord / Agent
-                            </p>
-                            <h1 className="text-lg font-semibold text-stone-950">
-                                Portal
-                            </h1>
-                        </div>
-                    </div>
-                    <div className="text-sm text-stone-600">
-                        {user.fullName} · {user.backendMode}
-                    </div>
-                </div>
-            </header>
-            {children}
+        <div className="flex min-h-screen bg-stone-50">
+            <PortalSidebar pendingCount={pendingCount} />
+            <div className="flex min-w-0 flex-1 flex-col">
+                <AdminTopBar user={user} />
+                <div className="flex-1">{children}</div>
+            </div>
         </div>
     )
 }
