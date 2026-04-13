@@ -11,147 +11,56 @@ const locationCatalog = JSON.parse(
     ),
 )
 
-const seedSources = [
-    {
-        slug: 'runda-furnished-garden-house',
-        sourceUrl:
-            'https://www.buyrentkenya.com/listings/3-bedroom-house-for-rent-runda-3931913',
-        title: 'Furnished 3 Bedroom Garden House in Runda',
-        summary:
-            'A quiet furnished home in Runda with a fireplace, mature garden, and staff quarter.',
-        description:
-            'Located in Runda, this furnished three-bedroom house is set in a secure leafy compound and includes a sunken lounge with a fireplace, a separate dining area, a large pantry kitchen, and a mature garden.',
-        county: 'Nairobi',
-        city: 'Nairobi',
-        neighborhood: 'Runda',
-        propertyType: 'House',
-        listingPurpose: 'rent',
-        price: 280000,
-        bedrooms: 3,
-        bathrooms: 4,
-        toilets: 4,
-        billingPeriod: 'monthly',
-        furnishingStatus: 'furnished',
-        petsAllowed: true,
-        parkingSlots: 2,
-        latitude: -1.2245,
-        longitude: 36.8059,
-        amenities: ['Garden', 'Parking', 'Fibre Internet', 'Gated Community'],
-        nearbyPlaces: [
-            {
-                name: 'Village Market',
-                category: 'shopping_centre',
-                distanceKm: 3.4,
-            },
-            { name: 'Rosslyn Academy', category: 'school', distanceKm: 2.8 },
-        ],
-        featured: true,
-    },
-    {
-        slug: 'diani-resort-style-mansion',
-        sourceUrl:
-            'https://www.buyrentkenya.com/listings/furnished-4-bedroom-house-for-sale-diani-3931445',
-        title: 'Resort-Style 4 Bedroom Mansion in Diani',
-        summary:
-            'A newly built Diani home with a private pool, balconies, and beach access within minutes.',
-        description:
-            'This newly built four-bedroom mansion in Diani is designed for resort-style living, with all bedrooms en suite, private balconies, a movie room, a swimming pool, and generous outdoor space close to the beach and Ukunda Airstrip.',
-        county: 'Kwale',
-        city: 'Ukunda',
-        neighborhood: 'Diani',
-        propertyType: 'House',
-        listingPurpose: 'sale',
-        price: 40000000,
-        bedrooms: 4,
-        bathrooms: 5,
-        toilets: 5,
-        furnishingStatus: 'furnished',
-        petsAllowed: false,
-        parkingSlots: 4,
-        latitude: -4.3158,
-        longitude: 39.5757,
-        amenities: ['Swimming Pool', 'Balcony', 'Parking', 'Garden', 'CCTV'],
-        nearbyPlaces: [
-            { name: 'Diani Beach', category: 'beach', distanceKm: 0.7 },
-            { name: 'Ukunda Airstrip', category: 'airport', distanceKm: 0.6 },
-        ],
-        featured: true,
-    },
-    {
-        slug: 'kilifi-creek-italian-villa',
-        sourceUrl:
-            'https://www.buyrentkenya.com/listings/furnished-3-bedroom-villa-for-sale-kilifi-town-3730646',
-        title: 'Italian-Style Villa Overlooking Kilifi Creek',
-        summary:
-            'A furnished creekside villa with an infinity pool, mature trees, and guest accommodation.',
-        description:
-            'This furnished villa overlooking Kilifi Creek combines coastal views with an Italian-inspired layout. The home includes three creek-facing bedrooms, an open kitchen, an infinity pool, mature baobab-lined gardens, and a separate guest wing.',
-        county: 'Kilifi',
-        city: 'Kilifi',
-        neighborhood: 'Kilifi Creek',
-        propertyType: 'Villa',
-        listingPurpose: 'sale',
-        price: 151000000,
-        bedrooms: 3,
-        bathrooms: 4,
-        toilets: 4,
-        furnishingStatus: 'furnished',
-        petsAllowed: false,
-        parkingSlots: 4,
-        latitude: -3.6292,
-        longitude: 39.8526,
-        amenities: [
-            'Swimming Pool',
-            'Garden',
-            'Parking',
-            'Security',
-            'Scenic View',
-        ],
-        nearbyPlaces: [
-            { name: 'Kilifi Creek', category: 'waterfront', distanceKm: 0.1 },
-            {
-                name: 'Naivas Kilifi',
-                category: 'shopping_centre',
-                distanceKm: 0.3,
-            },
-        ],
-        featured: true,
-    },
-    {
-        slug: 'nanyuki-new-2-bedroom-bungalow',
-        sourceUrl:
-            'https://www.buyrentkenya.com/listings/furnished-2-bedroom-house-for-sale-nanyuki-3871345',
-        title: 'New 2 Bedroom Bungalow in Nanyuki',
-        summary:
-            'A newly completed gated bungalow in Nanyuki with en suite bedrooms and strong value pricing.',
-        description:
-            'This newly completed two-bedroom bungalow in Nanyuki offers an open-plan kitchen, bright living spaces, en suite bedrooms, a walk-in closet in the primary suite, a laundry area, and a gated setting a short drive from the CBD.',
-        county: 'Laikipia',
-        city: 'Nanyuki',
-        neighborhood: 'Baraka',
-        propertyType: 'House',
-        listingPurpose: 'sale',
-        price: 6000000,
-        bedrooms: 2,
-        bathrooms: 3,
-        toilets: 3,
-        furnishingStatus: 'furnished',
-        petsAllowed: false,
-        parkingSlots: 2,
-        latitude: 0.017,
-        longitude: 37.0819,
-        amenities: ['Parking', 'Garden', 'Fibre Internet', 'Gated Community'],
-        nearbyPlaces: [
-            { name: 'Nanyuki CBD', category: 'town_centre', distanceKm: 5.0 },
-            {
-                name: 'Nanyuki Teaching and Referral Hospital',
-                category: 'hospital',
-                distanceKm: 4.2,
-            },
-        ],
-        featured: false,
-    },
+const baseSeedSources = [
+   
 ]
+
+function buildNairobiRegionalSeedSources() {
+    const profiles = [
+       
+    ]
+
+    return profiles.flatMap(profile =>
+        profile.variants.map(
+            ([
+                slug,
+                title,
+                price,
+                bedrooms,
+                bathrooms,
+                toilets,
+                parkingSlots,
+                featured,
+            ]) => ({
+                slug: `${profile.slugPrefix}-${slug}`,
+                sourceUrl: profile.sourceUrl,
+                title: `${title} in ${profile.neighborhood}`,
+                summary: `${bedrooms}-bedroom ${profile.propertyType.toLowerCase()} in ${profile.neighborhood} with strong access to ${profile.nearbyPlaces[0].name.toLowerCase()} and established daily conveniences.`,
+                description: `${profile.intro}, this ${bedrooms}-bedroom ${profile.propertyType.toLowerCase()} is seeded to represent active Nairobi-metro demand. It includes core family and commuter features such as ${profile.amenities.slice(0, 4).join(', ').toLowerCase()}, plus proximity to ${profile.nearbyPlaces[0].name} and ${profile.nearbyPlaces[1].name}.`,
+                county: profile.county,
+                city: profile.city,
+                neighborhood: profile.neighborhood,
+                propertyType: profile.propertyType,
+                listingPurpose: profile.listingPurpose,
+                price,
+                bedrooms,
+                bathrooms,
+                toilets,
+                billingPeriod: profile.billingPeriod ?? null,
+                furnishingStatus: profile.furnishingStatus ?? null,
+                petsAllowed: profile.petsAllowed,
+                parkingSlots,
+                latitude: profile.latitude,
+                longitude: profile.longitude,
+                amenities: profile.amenities,
+                nearbyPlaces: profile.nearbyPlaces,
+                featured,
+            }),
+        ),
+    )
+}
+
+const seedSources = [...baseSeedSources, ...buildNairobiRegionalSeedSources()]
 
 function slugify(value) {
     return value
@@ -243,7 +152,13 @@ function extractImageUrls(html, limit = 3) {
         .slice(0, limit)
 }
 
+const sourceImageCache = new Map()
+
 async function fetchSourceImages(sourceUrl) {
+    if (sourceImageCache.has(sourceUrl)) {
+        return sourceImageCache.get(sourceUrl)
+    }
+
     const response = await fetch(sourceUrl, {
         headers: {
             'user-agent': 'kejasafe-seed-bot/1.0',
@@ -260,8 +175,12 @@ async function fetchSourceImages(sourceUrl) {
     const imageUrls = extractImageUrls(html, 3)
 
     if (imageUrls.length === 0) {
-        throw new Error(`No gallery images found on ${sourceUrl}`)
+        console.warn(
+            `No gallery images found on ${sourceUrl} — seed will skip this listing.`,
+        )
     }
+
+    sourceImageCache.set(sourceUrl, imageUrls)
 
     return imageUrls
 }
@@ -470,6 +389,7 @@ async function seedProperties() {
     const owner = await upsertOwner()
     const maps = await upsertLocationModels()
 
+    let skipped = 0
     for (const entry of seedSources) {
         const city = maps.cityMap.get(`${entry.county}:${entry.city}`)
         const neighborhood = maps.neighborhoodMap.get(
@@ -477,7 +397,23 @@ async function seedProperties() {
         )
         const propertyType = maps.propertyTypeMap.get(entry.propertyType)
 
-        const imageUrls = await fetchSourceImages(entry.sourceUrl)
+        let imageUrls
+        try {
+            imageUrls = await fetchSourceImages(entry.sourceUrl)
+        } catch (error) {
+            console.warn(
+                `Skipping ${entry.slug} — ${error.message}`,
+            )
+            skipped += 1
+            continue
+        }
+
+        if (imageUrls.length === 0) {
+            console.warn(`Skipping ${entry.slug} — no images in source.`)
+            skipped += 1
+            continue
+        }
+
         const mirroredImages = []
 
         for (const [index, imageUrl] of imageUrls.entries()) {
@@ -486,19 +422,33 @@ async function seedProperties() {
                 : imageUrl.includes('.webp')
                   ? 'webp'
                   : 'jpg'
-            const storageKey = `properties/${entry.slug}/seed-${index + 1}.${extension}`
-            const mirrored = await mirrorImage(
-                imageUrl,
-                storageKey,
-                storageConfig,
-                s3Client,
+            const storageKey = `properties/${entry.slug}/seed-${mirroredImages.length + 1}.${extension}`
+            try {
+                const mirrored = await mirrorImage(
+                    imageUrl,
+                    storageKey,
+                    storageConfig,
+                    s3Client,
+                )
+                mirroredImages.push({
+                    ...mirrored,
+                    altText: `${entry.title} image ${mirroredImages.length + 1}`,
+                    position: mirroredImages.length,
+                    isCover: mirroredImages.length === 0,
+                })
+            } catch (error) {
+                console.warn(
+                    `  - Skipped image ${index + 1} for ${entry.slug}: ${error.message}`,
+                )
+            }
+        }
+
+        if (mirroredImages.length === 0) {
+            console.warn(
+                `Skipping ${entry.slug} — all image downloads failed.`,
             )
-            mirroredImages.push({
-                ...mirrored,
-                altText: `${entry.title} image ${index + 1}`,
-                position: index,
-                isCover: index === 0,
-            })
+            skipped += 1
+            continue
         }
 
         const property = await prisma.property.upsert({
@@ -604,6 +554,10 @@ async function seedProperties() {
         })
 
         console.log(`Seeded ${entry.slug} from ${entry.sourceUrl}`)
+    }
+
+    if (skipped > 0) {
+        console.log(`\n${skipped} listings skipped (source had no images).`)
     }
 }
 
