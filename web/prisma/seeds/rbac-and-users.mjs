@@ -40,7 +40,11 @@ const ROLE_MATRIX = {
     ],
     landlord: ['manage_listings', 'manage_inquiries', 'manage_bookings'],
     agent: ['manage_listings', 'manage_inquiries', 'manage_bookings'],
-    property_manager: ['manage_listings', 'manage_inquiries', 'manage_bookings'],
+    property_manager: [
+        'manage_listings',
+        'manage_inquiries',
+        'manage_bookings',
+    ],
     tenant: [],
     viewer: [],
 }

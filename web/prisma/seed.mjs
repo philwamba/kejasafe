@@ -374,11 +374,20 @@ async function upsertLocationModels() {
     }
 
     const PROPERTY_TYPE_CATALOG = [
-        ['Apartment', 'Self-contained residential unit in a multi-unit building.'],
+        [
+            'Apartment',
+            'Self-contained residential unit in a multi-unit building.',
+        ],
         ['Bedsitter', 'Single-room unit combining living and sleeping space.'],
-        ['Studio', 'Open-plan single-room unit with kitchenette and en-suite bathroom.'],
+        [
+            'Studio',
+            'Open-plan single-room unit with kitchenette and en-suite bathroom.',
+        ],
         ['Single Room', 'Basic single room, often with shared facilities.'],
-        ['One Bedroom', 'Apartment with one bedroom separate from the living area.'],
+        [
+            'One Bedroom',
+            'Apartment with one bedroom separate from the living area.',
+        ],
         ['Two Bedroom', 'Apartment with two bedrooms.'],
         ['Three Bedroom', 'Apartment with three bedrooms.'],
         ['Four Bedroom', 'Apartment or house with four bedrooms.'],
@@ -389,7 +398,10 @@ async function upsertLocationModels() {
         ['Mansion', 'Large luxury detached house.'],
         ['Penthouse', 'Top-floor luxury apartment.'],
         ['House', 'Detached residential house.'],
-        ['Hostel / Student Housing', 'Accommodation designed primarily for students.'],
+        [
+            'Hostel / Student Housing',
+            'Accommodation designed primarily for students.',
+        ],
         ['Office', 'Commercial office space.'],
         ['Shop', 'Retail commercial space.'],
         ['Warehouse', 'Industrial or storage space.'],

@@ -3,7 +3,6 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import {
     FiArrowLeft,
-    FiCalendar,
     FiCheckCircle,
     FiMapPin,
     FiShield,
@@ -98,10 +97,6 @@ export default async function PropertyDetailPage({
                             <span className="inline-flex items-center gap-2">
                                 <FiMapPin className="text-brand size-4" />
                                 {subtitle || property.county}
-                            </span>
-                            <span className="inline-flex items-center gap-2">
-                                <FiCalendar className="text-brand size-4" />
-                                Status: {property.listingStatus}
                             </span>
                         </div>
                     </div>
