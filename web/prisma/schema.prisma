@@ -94,6 +94,24 @@ enum PropertyOwnerType {
   property_manager
 }
 
+enum ReportReason {
+  fake_listing
+  inaccurate_info
+  suspicious_pricing
+  scam_or_fraud
+  duplicate_listing
+  inappropriate_content
+  already_taken
+  other
+}
+
+enum ReportStatus {
+  open
+  investigating
+  resolved
+  dismissed
+}
+
 enum AuditLogLevel {
   info
   warning
@@ -133,6 +151,8 @@ model User {
   auditLogs               AuditLog[]       @relation("AuditActor")
   activityLogs            ActivityLog[]    @relation("ActivityActor")
   authoredBlogPosts       BlogPost[]       @relation("BlogAuthor")
+  filedReports            Report[]         @relation("ReportReporter")
+  resolvedReports         Report[]         @relation("ReportResolver")
 }
 
 model Profile {
@@ -429,6 +449,7 @@ model Property {
   favorites               Favorite[]
   comparisons             Comparison[]
   reviews                 Review[]
+  reports                 Report[]
 
   @@index([listingStatus, publishedAt])
   @@index([countyId, cityId, neighborhoodId])
@@ -558,6 +579,27 @@ model Favorite {
   user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, propertyId])
+}
+
+model Report {
+  id                 String        @id @default(uuid()) @db.Uuid
+  propertyId         String        @db.Uuid
+  reporterUserId     String?       @db.Uuid
+  reporterEmail      String?
+  reason             ReportReason
+  details            String?
+  status             ReportStatus  @default(open)
+  resolvedAt         DateTime?
+  resolvedByUserId   String?       @db.Uuid
+  resolutionNotes    String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  property           Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  reporter           User?         @relation("ReportReporter", fields: [reporterUserId], references: [id], onDelete: SetNull)
+  resolvedBy         User?         @relation("ReportResolver", fields: [resolvedByUserId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([propertyId])
 }
 
 model Comparison {
