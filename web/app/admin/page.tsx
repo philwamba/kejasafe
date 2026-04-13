@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import type { Prisma } from '@prisma/client'
 import {
     FiArrowRight,
     FiCheckCircle,
@@ -9,6 +10,18 @@ import {
 } from 'react-icons/fi'
 
 import { prisma } from '@/lib/core/prisma/client'
+
+type AuditLogEntry = Prisma.AuditLogGetPayload<{
+    include: {
+        actor: {
+            select: {
+                id: true
+                fullName: true
+                email: true
+            }
+        }
+    }
+}>
 
 interface StatCardProps {
     label: string
@@ -115,6 +128,22 @@ function formatRelative(date: Date): string {
     return `${diffDays}d ago`
 }
 
+async function loadRecentActivity(): Promise<AuditLogEntry[]> {
+    try {
+        return await prisma.auditLog.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: 8,
+            include: {
+                actor: {
+                    select: { id: true, fullName: true, email: true },
+                },
+            },
+        })
+    } catch {
+        return []
+    }
+}
+
 export default async function AdminPage() {
     const [
         pendingCount,
@@ -131,22 +160,7 @@ export default async function AdminPage() {
             .catch(() => 0),
         prisma.property.count().catch(() => 0),
         prisma.user.count().catch(() => 0),
-        prisma.auditLog
-            .findMany({
-                orderBy: { createdAt: 'desc' },
-                take: 8,
-                include: {
-                    actor: {
-                        select: { id: true, fullName: true, email: true },
-                    },
-                },
-            })
-            .catch(
-                () =>
-                    [] as Awaited<
-                        ReturnType<typeof prisma.auditLog.findMany>
-                    >,
-            ),
+        loadRecentActivity(),
     ])
 
     return (
