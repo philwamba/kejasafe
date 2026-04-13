@@ -1,33 +1,101 @@
-export default function DashboardPage() {
+import Link from 'next/link'
+import { FiActivity, FiHeart, FiHome, FiShield } from 'react-icons/fi'
+
+import { Button } from '@/components/ui/button'
+import { getServerCurrentUser } from '@/lib/core/auth/server'
+import { prisma } from '@/lib/core/prisma/client'
+
+export default async function DashboardPage() {
+    const user = await getServerCurrentUser()
+    if (!user) return null
+
+    const [savedCount, mySubmissions] = await Promise.all([
+        prisma.favorite.count({ where: { userId: user.id } }).catch(() => 0),
+        prisma.property
+            .count({ where: { ownerId: user.id } })
+            .catch(() => 0),
+    ])
+
     return (
         <main className="mx-auto max-w-6xl px-6 py-10">
-            <div className="grid gap-6">
-                <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
-                    <h2 className="text-2xl font-semibold text-white">
-                        Protected dashboard shell
+            <section className="mb-10">
+                <p className="text-xs font-semibold tracking-[0.22em] text-stone-500 uppercase">
+                    Welcome Back
+                </p>
+                <h1 className="mt-2 text-3xl font-semibold tracking-tight text-stone-950">
+                    Hi, {user.fullName.split(' ')[0]}
+                </h1>
+                <p className="mt-2 text-sm text-stone-600">
+                    Manage your saved properties, submissions, and account
+                    settings from one place.
+                </p>
+            </section>
+
+            <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <Link
+                    href="/properties"
+                    className="hover:border-brand flex flex-col gap-3 rounded-2xl border border-stone-200 bg-white p-6 shadow-sm transition hover:shadow-md">
+                    <FiHeart className="text-brand size-6" />
+                    <h2 className="text-lg font-semibold text-stone-950">
+                        Saved Properties
                     </h2>
-                    <p className="mt-3 max-w-2xl text-sm leading-7 text-stone-300">
-                        Middleware and server-side auth guards are active for
-                        the dashboard route group. The next implementation step
-                        is wiring real tenant modules to the authenticated
-                        service layer.
+                    <p className="text-sm text-stone-600">
+                        {savedCount}{' '}
+                        {savedCount === 1 ? 'property' : 'properties'} saved.
                     </p>
-                </div>
-                <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
-                    <h3 className="text-xl font-semibold text-white">
-                        Account tools
-                    </h3>
-                    <p className="mt-3 text-sm leading-7 text-stone-300">
-                        Session management is now available in the dashboard
-                        security area.
+                </Link>
+
+                <Link
+                    href="/portal/properties/new"
+                    className="hover:border-brand flex flex-col gap-3 rounded-2xl border border-stone-200 bg-white p-6 shadow-sm transition hover:shadow-md">
+                    <FiHome className="text-brand size-6" />
+                    <h2 className="text-lg font-semibold text-stone-950">
+                        My Listings
+                    </h2>
+                    <p className="text-sm text-stone-600">
+                        {mySubmissions}{' '}
+                        {mySubmissions === 1 ? 'submission' : 'submissions'}.
+                        List a new property.
                     </p>
-                    <a
-                        href="/dashboard/settings/security"
-                        className="mt-4 inline-flex text-sm font-medium text-orange-300">
-                        Open security settings
-                    </a>
+                </Link>
+
+                <Link
+                    href="/dashboard/settings/security"
+                    className="hover:border-brand flex flex-col gap-3 rounded-2xl border border-stone-200 bg-white p-6 shadow-sm transition hover:shadow-md">
+                    <FiShield className="text-brand size-6" />
+                    <h2 className="text-lg font-semibold text-stone-950">
+                        Security
+                    </h2>
+                    <p className="text-sm text-stone-600">
+                        Manage active sessions and account security.
+                    </p>
+                </Link>
+            </section>
+
+            <section className="mt-10 rounded-2xl border border-stone-200 bg-stone-50 p-6">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-start gap-4">
+                        <span className="bg-brand/10 text-brand inline-flex size-11 shrink-0 items-center justify-center rounded-xl">
+                            <FiActivity className="size-5" />
+                        </span>
+                        <div>
+                            <h2 className="text-lg font-semibold text-stone-950">
+                                Looking for a home?
+                            </h2>
+                            <p className="mt-1 text-sm text-stone-600">
+                                Browse verified listings across all 47 Kenyan
+                                counties.
+                            </p>
+                        </div>
+                    </div>
+                    <Button
+                        asChild
+                        size="lg"
+                        className="h-11 rounded-xl">
+                        <Link href="/properties">Browse listings</Link>
+                    </Button>
                 </div>
-            </div>
+            </section>
         </main>
     )
 }
