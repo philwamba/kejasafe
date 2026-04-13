@@ -1,0 +1,786 @@
+{
+  "counties": [
+    {
+      "code": "001",
+      "name": "Mombasa",
+      "cities": [
+        {
+          "name": "Mombasa",
+          "neighborhoods": ["Nyali", "Bamburi", "Shanzu", "Tudor", "Kisauni", "Likoni", "Changamwe", "Miritini"]
+        }
+      ]
+    },
+    {
+      "code": "002",
+      "name": "Kwale",
+      "cities": [
+        {
+          "name": "Ukunda",
+          "neighborhoods": ["Diani", "Galu", "Tiwi", "Ukunda"]
+        },
+        {
+          "name": "Msambweni",
+          "neighborhoods": ["Msambweni", "Shimoni", "Lungalunga"]
+        }
+      ]
+    },
+    {
+      "code": "003",
+      "name": "Kilifi",
+      "cities": [
+        {
+          "name": "Kilifi",
+          "neighborhoods": ["Kilifi Creek", "Bofa", "Mnarani", "Tezo"]
+        },
+        {
+          "name": "Malindi",
+          "neighborhoods": ["Casuarina", "Watamu", "Mayungu", "Gede"]
+        },
+        {
+          "name": "Mtwapa",
+          "neighborhoods": ["Mtwapa", "Shanzu Beach", "Jumba Ruins"]
+        }
+      ]
+    },
+    {
+      "code": "004",
+      "name": "Tana River",
+      "cities": [
+        {
+          "name": "Hola",
+          "neighborhoods": ["Hola", "Mikinduni"]
+        },
+        {
+          "name": "Garsen",
+          "neighborhoods": ["Garsen", "Kipini"]
+        },
+        {
+          "name": "Bura",
+          "neighborhoods": ["Bura", "Madogo"]
+        }
+      ]
+    },
+    {
+      "code": "005",
+      "name": "Lamu",
+      "cities": [
+        {
+          "name": "Lamu",
+          "neighborhoods": ["Lamu Old Town", "Shela", "Manda"]
+        },
+        {
+          "name": "Mpeketoni",
+          "neighborhoods": ["Mpeketoni", "Hindi"]
+        }
+      ]
+    },
+    {
+      "code": "006",
+      "name": "Taita-Taveta",
+      "cities": [
+        {
+          "name": "Voi",
+          "neighborhoods": ["Voi", "Maungu"]
+        },
+        {
+          "name": "Wundanyi",
+          "neighborhoods": ["Wundanyi", "Mwatate"]
+        },
+        {
+          "name": "Taveta",
+          "neighborhoods": ["Taveta", "Mata"]
+        }
+      ]
+    },
+    {
+      "code": "007",
+      "name": "Garissa",
+      "cities": [
+        {
+          "name": "Garissa",
+          "neighborhoods": ["Garissa", "Bulla Iftin", "Bulla Mpya"]
+        },
+        {
+          "name": "Dadaab",
+          "neighborhoods": ["Dadaab", "Hagadera"]
+        }
+      ]
+    },
+    {
+      "code": "008",
+      "name": "Wajir",
+      "cities": [
+        {
+          "name": "Wajir",
+          "neighborhoods": ["Wajir", "Barwako"]
+        },
+        {
+          "name": "Habaswein",
+          "neighborhoods": ["Habaswein", "Eldas"]
+        }
+      ]
+    },
+    {
+      "code": "009",
+      "name": "Mandera",
+      "cities": [
+        {
+          "name": "Mandera",
+          "neighborhoods": ["Mandera", "Neboi"]
+        },
+        {
+          "name": "Elwak",
+          "neighborhoods": ["Elwak", "Rhamu"]
+        }
+      ]
+    },
+    {
+      "code": "010",
+      "name": "Marsabit",
+      "cities": [
+        {
+          "name": "Marsabit",
+          "neighborhoods": ["Marsabit", "Songa"]
+        },
+        {
+          "name": "Moyale",
+          "neighborhoods": ["Moyale", "Sololo"]
+        },
+        {
+          "name": "Loiyangalani",
+          "neighborhoods": ["Loiyangalani", "South Horr"]
+        }
+      ]
+    },
+    {
+      "code": "011",
+      "name": "Isiolo",
+      "cities": [
+        {
+          "name": "Isiolo",
+          "neighborhoods": ["Isiolo", "Bulapesa"]
+        },
+        {
+          "name": "Merti",
+          "neighborhoods": ["Merti", "Garbatulla"]
+        }
+      ]
+    },
+    {
+      "code": "012",
+      "name": "Meru",
+      "cities": [
+        {
+          "name": "Meru",
+          "neighborhoods": ["Meru", "Makutano", "Kaaga"]
+        },
+        {
+          "name": "Maua",
+          "neighborhoods": ["Maua", "Mikinduri"]
+        },
+        {
+          "name": "Nkubu",
+          "neighborhoods": ["Nkubu", "Timau"]
+        }
+      ]
+    },
+    {
+      "code": "013",
+      "name": "Tharaka-Nithi",
+      "cities": [
+        {
+          "name": "Chuka",
+          "neighborhoods": ["Chuka", "Kathwana"]
+        },
+        {
+          "name": "Marimanti",
+          "neighborhoods": ["Marimanti", "Chiakariga"]
+        }
+      ]
+    },
+    {
+      "code": "014",
+      "name": "Embu",
+      "cities": [
+        {
+          "name": "Embu",
+          "neighborhoods": ["Embu", "Blue Valley", "Majimbo"]
+        },
+        {
+          "name": "Runyenjes",
+          "neighborhoods": ["Runyenjes", "Kianjokoma"]
+        },
+        {
+          "name": "Siakago",
+          "neighborhoods": ["Siakago", "Kiritiri"]
+        }
+      ]
+    },
+    {
+      "code": "015",
+      "name": "Kitui",
+      "cities": [
+        {
+          "name": "Kitui",
+          "neighborhoods": ["Kitui", "Kyangwithya"]
+        },
+        {
+          "name": "Mwingi",
+          "neighborhoods": ["Mwingi", "Kyuso"]
+        },
+        {
+          "name": "Mutomo",
+          "neighborhoods": ["Mutomo", "Ikutha"]
+        }
+      ]
+    },
+    {
+      "code": "016",
+      "name": "Machakos",
+      "cities": [
+        {
+          "name": "Machakos",
+          "neighborhoods": ["Machakos", "Mua Hills"]
+        },
+        {
+          "name": "Athi River",
+          "neighborhoods": ["Athi River", "Mlolongo", "Syokimau", "Katani"]
+        },
+        {
+          "name": "Kangundo",
+          "neighborhoods": ["Kangundo", "Tala"]
+        }
+      ]
+    },
+    {
+      "code": "017",
+      "name": "Makueni",
+      "cities": [
+        {
+          "name": "Wote",
+          "neighborhoods": ["Wote", "Kalawa"]
+        },
+        {
+          "name": "Emali",
+          "neighborhoods": ["Emali", "Makindu"]
+        }
+      ]
+    },
+    {
+      "code": "018",
+      "name": "Nyandarua",
+      "cities": [
+        {
+          "name": "Ol Kalou",
+          "neighborhoods": ["Ol Kalou", "Karau"]
+        },
+        {
+          "name": "Ol Jorok",
+          "neighborhoods": ["Ol Jorok", "Engineer"]
+        }
+      ]
+    },
+    {
+      "code": "019",
+      "name": "Nyeri",
+      "cities": [
+        {
+          "name": "Nyeri",
+          "neighborhoods": ["Nyeri", "Ruringu", "King'ong'o"]
+        },
+        {
+          "name": "Karatina",
+          "neighborhoods": ["Karatina", "Mathira"]
+        },
+        {
+          "name": "Othaya",
+          "neighborhoods": ["Othaya", "Naro Moru"]
+        }
+      ]
+    },
+    {
+      "code": "020",
+      "name": "Kirinyaga",
+      "cities": [
+        {
+          "name": "Kerugoya",
+          "neighborhoods": ["Kerugoya", "Kutus"]
+        },
+        {
+          "name": "Sagana",
+          "neighborhoods": ["Sagana", "Baricho"]
+        },
+        {
+          "name": "Mwea",
+          "neighborhoods": ["Mwea", "Wang'uru"]
+        }
+      ]
+    },
+    {
+      "code": "021",
+      "name": "Murang'a",
+      "cities": [
+        {
+          "name": "Murang'a",
+          "neighborhoods": ["Murang'a", "Kiharu"]
+        },
+        {
+          "name": "Kenol",
+          "neighborhoods": ["Kenol", "Maragua"]
+        },
+        {
+          "name": "Kangema",
+          "neighborhoods": ["Kangema", "Gatanga"]
+        }
+      ]
+    },
+    {
+      "code": "022",
+      "name": "Kiambu",
+      "cities": [
+        {
+          "name": "Kiambu",
+          "neighborhoods": ["Kiambu Town", "Ndumberi", "Riabai"]
+        },
+        {
+          "name": "Ruiru",
+          "neighborhoods": ["Ruiru", "Kahawa Sukari", "Membley", "Kamakis"]
+        },
+        {
+          "name": "Thika",
+          "neighborhoods": ["Thika", "Makongeni", "Landless"]
+        },
+        {
+          "name": "Limuru",
+          "neighborhoods": ["Limuru", "Tigoni", "Ngecha"]
+        },
+        {
+          "name": "Kikuyu",
+          "neighborhoods": ["Kikuyu", "Sigona", "Zambezi"]
+        },
+        {
+          "name": "Ruaka",
+          "neighborhoods": ["Ruaka", "Rosslyn Riviera"]
+        }
+      ]
+    },
+    {
+      "code": "023",
+      "name": "Turkana",
+      "cities": [
+        {
+          "name": "Lodwar",
+          "neighborhoods": ["Lodwar", "Kanamkemer"]
+        },
+        {
+          "name": "Kakuma",
+          "neighborhoods": ["Kakuma", "Lokichoggio"]
+        }
+      ]
+    },
+    {
+      "code": "024",
+      "name": "West Pokot",
+      "cities": [
+        {
+          "name": "Kapenguria",
+          "neighborhoods": ["Kapenguria", "Makutano"]
+        },
+        {
+          "name": "Ortum",
+          "neighborhoods": ["Ortum", "Chepareria"]
+        }
+      ]
+    },
+    {
+      "code": "025",
+      "name": "Samburu",
+      "cities": [
+        {
+          "name": "Maralal",
+          "neighborhoods": ["Maralal", "Suguta"]
+        },
+        {
+          "name": "Baragoi",
+          "neighborhoods": ["Baragoi", "South Horr"]
+        }
+      ]
+    },
+    {
+      "code": "026",
+      "name": "Trans Nzoia",
+      "cities": [
+        {
+          "name": "Kitale",
+          "neighborhoods": ["Kitale", "Milimani", "Kiminini"]
+        },
+        {
+          "name": "Endebess",
+          "neighborhoods": ["Endebess", "Saboti"]
+        }
+      ]
+    },
+    {
+      "code": "027",
+      "name": "Uasin Gishu",
+      "cities": [
+        {
+          "name": "Eldoret",
+          "neighborhoods": ["Eldoret", "Elgon View", "Pioneer", "Kapsoya"]
+        },
+        {
+          "name": "Turbo",
+          "neighborhoods": ["Turbo", "Burnt Forest"]
+        }
+      ]
+    },
+    {
+      "code": "028",
+      "name": "Elgeyo-Marakwet",
+      "cities": [
+        {
+          "name": "Iten",
+          "neighborhoods": ["Iten", "Kamariny"]
+        },
+        {
+          "name": "Kapsowar",
+          "neighborhoods": ["Kapsowar", "Chepkorio"]
+        }
+      ]
+    },
+    {
+      "code": "029",
+      "name": "Nandi",
+      "cities": [
+        {
+          "name": "Kapsabet",
+          "neighborhoods": ["Kapsabet", "Showground"]
+        },
+        {
+          "name": "Nandi Hills",
+          "neighborhoods": ["Nandi Hills", "Mosoriot"]
+        }
+      ]
+    },
+    {
+      "code": "030",
+      "name": "Baringo",
+      "cities": [
+        {
+          "name": "Kabarnet",
+          "neighborhoods": ["Kabarnet", "Kapsoo"]
+        },
+        {
+          "name": "Eldama Ravine",
+          "neighborhoods": ["Eldama Ravine", "Marigat"]
+        }
+      ]
+    },
+    {
+      "code": "031",
+      "name": "Laikipia",
+      "cities": [
+        {
+          "name": "Nanyuki",
+          "neighborhoods": ["Baraka", "Nanyuki CBD", "Burguret", "Sweetwaters"]
+        },
+        {
+          "name": "Nyahururu",
+          "neighborhoods": ["Nyahururu", "Panorama"]
+        },
+        {
+          "name": "Rumuruti",
+          "neighborhoods": ["Rumuruti", "Ol Moran"]
+        }
+      ]
+    },
+    {
+      "code": "032",
+      "name": "Nakuru",
+      "cities": [
+        {
+          "name": "Nakuru",
+          "neighborhoods": ["Milimani", "Section 58", "Kiamunyi", "Lanet", "Naka"]
+        },
+        {
+          "name": "Naivasha",
+          "neighborhoods": ["Naivasha", "Karagita", "Lake View"]
+        },
+        {
+          "name": "Gilgil",
+          "neighborhoods": ["Gilgil", "Mbaruk"]
+        }
+      ]
+    },
+    {
+      "code": "033",
+      "name": "Narok",
+      "cities": [
+        {
+          "name": "Narok",
+          "neighborhoods": ["Narok", "Majengo"]
+        },
+        {
+          "name": "Kilgoris",
+          "neighborhoods": ["Kilgoris", "Lolgorian"]
+        }
+      ]
+    },
+    {
+      "code": "034",
+      "name": "Kajiado",
+      "cities": [
+        {
+          "name": "Kajiado",
+          "neighborhoods": ["Kajiado", "Ilbisil"]
+        },
+        {
+          "name": "Kitengela",
+          "neighborhoods": ["Kitengela", "Acacia", "Milimani", "Yukos"]
+        },
+        {
+          "name": "Ongata Rongai",
+          "neighborhoods": ["Ongata Rongai", "Maasai Lodge", "Nkoroi"]
+        },
+        {
+          "name": "Ngong",
+          "neighborhoods": ["Ngong", "Matasia", "Kiserian"]
+        }
+      ]
+    },
+    {
+      "code": "035",
+      "name": "Kericho",
+      "cities": [
+        {
+          "name": "Kericho",
+          "neighborhoods": ["Kericho", "Kapkatet"]
+        },
+        {
+          "name": "Litein",
+          "neighborhoods": ["Litein", "Ainamoi"]
+        }
+      ]
+    },
+    {
+      "code": "036",
+      "name": "Bomet",
+      "cities": [
+        {
+          "name": "Bomet",
+          "neighborhoods": ["Bomet", "Longisa"]
+        },
+        {
+          "name": "Sotik",
+          "neighborhoods": ["Sotik", "Chebole"]
+        }
+      ]
+    },
+    {
+      "code": "037",
+      "name": "Kakamega",
+      "cities": [
+        {
+          "name": "Kakamega",
+          "neighborhoods": ["Kakamega", "Milimani", "Shinyalu"]
+        },
+        {
+          "name": "Mumias",
+          "neighborhoods": ["Mumias", "Shianda"]
+        },
+        {
+          "name": "Malava",
+          "neighborhoods": ["Malava", "Lugari"]
+        }
+      ]
+    },
+    {
+      "code": "038",
+      "name": "Vihiga",
+      "cities": [
+        {
+          "name": "Mbale",
+          "neighborhoods": ["Mbale", "Majengo"]
+        },
+        {
+          "name": "Luanda",
+          "neighborhoods": ["Luanda", "Chavakali"]
+        }
+      ]
+    },
+    {
+      "code": "039",
+      "name": "Bungoma",
+      "cities": [
+        {
+          "name": "Bungoma",
+          "neighborhoods": ["Bungoma", "Khalaba"]
+        },
+        {
+          "name": "Webuye",
+          "neighborhoods": ["Webuye", "Matisi"]
+        },
+        {
+          "name": "Kimilili",
+          "neighborhoods": ["Kimilili", "Chwele"]
+        }
+      ]
+    },
+    {
+      "code": "040",
+      "name": "Busia",
+      "cities": [
+        {
+          "name": "Busia",
+          "neighborhoods": ["Busia", "Nambale"]
+        },
+        {
+          "name": "Malaba",
+          "neighborhoods": ["Malaba", "Amagoro"]
+        }
+      ]
+    },
+    {
+      "code": "041",
+      "name": "Siaya",
+      "cities": [
+        {
+          "name": "Siaya",
+          "neighborhoods": ["Siaya", "Madiany"]
+        },
+        {
+          "name": "Bondo",
+          "neighborhoods": ["Bondo", "Usenge"]
+        },
+        {
+          "name": "Ugunja",
+          "neighborhoods": ["Ugunja", "Yala"]
+        }
+      ]
+    },
+    {
+      "code": "042",
+      "name": "Kisumu",
+      "cities": [
+        {
+          "name": "Kisumu",
+          "neighborhoods": ["Milimani", "Mamboleo", "Nyalienda", "Migosi", "Tom Mboya Estate"]
+        },
+        {
+          "name": "Maseno",
+          "neighborhoods": ["Maseno", "Kisian"]
+        }
+      ]
+    },
+    {
+      "code": "043",
+      "name": "Homa Bay",
+      "cities": [
+        {
+          "name": "Homa Bay",
+          "neighborhoods": ["Homa Bay", "Arujo"]
+        },
+        {
+          "name": "Mbita",
+          "neighborhoods": ["Mbita", "Rusinga"]
+        },
+        {
+          "name": "Oyugis",
+          "neighborhoods": ["Oyugis", "Kendu Bay"]
+        }
+      ]
+    },
+    {
+      "code": "044",
+      "name": "Migori",
+      "cities": [
+        {
+          "name": "Migori",
+          "neighborhoods": ["Migori", "Oruba"]
+        },
+        {
+          "name": "Rongo",
+          "neighborhoods": ["Rongo", "Awendo"]
+        },
+        {
+          "name": "Kehancha",
+          "neighborhoods": ["Kehancha", "Isebania"]
+        }
+      ]
+    },
+    {
+      "code": "045",
+      "name": "Kisii",
+      "cities": [
+        {
+          "name": "Kisii",
+          "neighborhoods": ["Kisii", "Daraja Mbili", "Mwembe"]
+        },
+        {
+          "name": "Ogembo",
+          "neighborhoods": ["Ogembo", "Suneka"]
+        }
+      ]
+    },
+    {
+      "code": "046",
+      "name": "Nyamira",
+      "cities": [
+        {
+          "name": "Nyamira",
+          "neighborhoods": ["Nyamira", "Nyansiongo"]
+        },
+        {
+          "name": "Keroka",
+          "neighborhoods": ["Keroka", "Manga"]
+        }
+      ]
+    },
+    {
+      "code": "047",
+      "name": "Nairobi",
+      "cities": [
+        {
+          "name": "Nairobi",
+          "neighborhoods": [
+            "Westlands",
+            "Kilimani",
+            "Kileleshwa",
+            "Lavington",
+            "Karen",
+            "Runda",
+            "Riverside",
+            "Kitisuru",
+            "Loresho",
+            "Spring Valley",
+            "Parklands",
+            "Muthaiga",
+            "Gigiri",
+            "Rosslyn",
+            "Langata",
+            "Ngong Road",
+            "Mombasa Road",
+            "Kiambu Road",
+            "Embakasi",
+            "South B",
+            "South C",
+            "Donholm",
+            "Umoja",
+            "Kasarani",
+            "Roysambu",
+            "Zimmerman",
+            "Garden Estate",
+            "Thome",
+            "Utawala",
+            "Kahawa West",
+            "Riruta",
+            "Upper Hill",
+            "Hurlingham",
+            "Madaraka",
+            "Komarock"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,8 +1,15 @@
 import { PrismaClient } from '@prisma/client'
 import argon2 from 'argon2'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { readFileSync } from 'node:fs'
 
 const prisma = new PrismaClient()
+const locationCatalog = JSON.parse(
+    readFileSync(
+        new URL('../../data/locations/kenya.json', import.meta.url),
+        'utf8',
+    ),
+)
 
 const seedSources = [
     {
@@ -305,75 +312,103 @@ async function upsertLocationModels() {
     const propertyTypeMap = new Map()
     const amenityMap = new Map()
 
-    const uniqueCounties = [...new Set(seedSources.map(entry => entry.county))]
-
-    for (const countyName of uniqueCounties) {
+    for (const countyEntry of locationCatalog.counties) {
         const county = await prisma.county.upsert({
-            where: { slug: slugify(countyName) },
-            update: { name: countyName },
+            where: { slug: slugify(countyEntry.name) },
+            update: {
+                name: countyEntry.name,
+                code: countyEntry.code,
+            },
             create: {
-                name: countyName,
-                slug: slugify(countyName),
+                name: countyEntry.name,
+                slug: slugify(countyEntry.name),
+                code: countyEntry.code,
             },
         })
 
-        countyMap.set(countyName, county)
-    }
+        countyMap.set(countyEntry.name, county)
 
-    for (const entry of seedSources) {
-        const cityKey = `${entry.county}:${entry.city}`
-        if (!cityMap.has(cityKey)) {
+        for (const cityEntry of countyEntry.cities) {
+            const cityKey = `${countyEntry.name}:${cityEntry.name}`
             const city = await prisma.city.upsert({
                 where: {
                     countyId_slug: {
-                        countyId: countyMap.get(entry.county).id,
-                        slug: slugify(entry.city),
+                        countyId: county.id,
+                        slug: slugify(cityEntry.name),
                     },
                 },
-                update: { name: entry.city },
+                update: { name: cityEntry.name },
                 create: {
-                    countyId: countyMap.get(entry.county).id,
-                    name: entry.city,
-                    slug: slugify(entry.city),
+                    countyId: county.id,
+                    name: cityEntry.name,
+                    slug: slugify(cityEntry.name),
                 },
             })
 
             cityMap.set(cityKey, city)
-        }
 
-        const neighborhoodKey = `${entry.county}:${entry.neighborhood}`
-        if (!neighborhoodMap.has(neighborhoodKey)) {
-            const neighborhood = await prisma.neighborhood.upsert({
-                where: {
-                    countyId_slug: {
-                        countyId: countyMap.get(entry.county).id,
-                        slug: slugify(entry.neighborhood),
+            for (const neighborhoodName of cityEntry.neighborhoods) {
+                const neighborhoodKey = `${countyEntry.name}:${neighborhoodName}`
+                const neighborhood = await prisma.neighborhood.upsert({
+                    where: {
+                        countyId_slug: {
+                            countyId: county.id,
+                            slug: slugify(neighborhoodName),
+                        },
                     },
-                },
-                update: { name: entry.neighborhood },
-                create: {
-                    countyId: countyMap.get(entry.county).id,
-                    cityId: cityMap.get(cityKey).id,
-                    name: entry.neighborhood,
-                    slug: slugify(entry.neighborhood),
-                },
-            })
+                    update: {
+                        name: neighborhoodName,
+                        cityId: city.id,
+                    },
+                    create: {
+                        countyId: county.id,
+                        cityId: city.id,
+                        name: neighborhoodName,
+                        slug: slugify(neighborhoodName),
+                    },
+                })
 
-            neighborhoodMap.set(neighborhoodKey, neighborhood)
+                neighborhoodMap.set(neighborhoodKey, neighborhood)
+            }
         }
+    }
 
-        if (!propertyTypeMap.has(entry.propertyType)) {
-            const propertyType = await prisma.propertyType.upsert({
-                where: { slug: slugify(entry.propertyType) },
-                update: { name: entry.propertyType },
-                create: {
-                    name: entry.propertyType,
-                    slug: slugify(entry.propertyType),
-                },
-            })
+    const PROPERTY_TYPE_CATALOG = [
+        ['Apartment', 'Self-contained residential unit in a multi-unit building.'],
+        ['Bedsitter', 'Single-room unit combining living and sleeping space.'],
+        ['Studio', 'Open-plan single-room unit with kitchenette and en-suite bathroom.'],
+        ['Single Room', 'Basic single room, often with shared facilities.'],
+        ['One Bedroom', 'Apartment with one bedroom separate from the living area.'],
+        ['Two Bedroom', 'Apartment with two bedrooms.'],
+        ['Three Bedroom', 'Apartment with three bedrooms.'],
+        ['Four Bedroom', 'Apartment or house with four bedrooms.'],
+        ['Maisonette', 'Multi-level residential unit.'],
+        ['Bungalow', 'Single-storey detached house.'],
+        ['Townhouse', 'Attached multi-storey house.'],
+        ['Villa', 'Detached luxury house, often gated.'],
+        ['Mansion', 'Large luxury detached house.'],
+        ['Penthouse', 'Top-floor luxury apartment.'],
+        ['House', 'Detached residential house.'],
+        ['Hostel / Student Housing', 'Accommodation designed primarily for students.'],
+        ['Office', 'Commercial office space.'],
+        ['Shop', 'Retail commercial space.'],
+        ['Warehouse', 'Industrial or storage space.'],
+        ['Land / Plot', 'Undeveloped land for sale or lease.'],
+        ['Commercial Building', 'Full commercial building.'],
+    ]
 
-            propertyTypeMap.set(entry.propertyType, propertyType)
-        }
+    for (const [name, description] of PROPERTY_TYPE_CATALOG) {
+        const propertyType = await prisma.propertyType.upsert({
+            where: { slug: slugify(name) },
+            update: { name, description },
+            create: {
+                name,
+                slug: slugify(name),
+                description,
+            },
+        })
+
+        propertyTypeMap.set(name, propertyType)
     }
 
     const uniqueAmenities = [
@@ -409,6 +444,7 @@ async function upsertOwner() {
         create: {
             fullName: 'Kejasafe Seed Owner',
             email: 'seed-owner@kejasafe.local',
+            phone: '+254700000000',
             passwordHash,
             status: 'active',
             emailVerifiedAt: new Date(),

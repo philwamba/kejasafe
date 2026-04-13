@@ -10,6 +10,7 @@ This project is maintained as a **Monorepo**, separating the concerns of the bac
 
 - [**`api/`**](./api) - The Backend API powered by **Laravel**. This acts as the central intelligence of Kejasafe, handling business logic, database orchestration, and authentication.
 - [**`web/`**](./web) - The Frontend Web Application built with **Next.js**. It provides a modern, fast, and responsive interface for end-users.
+- [**`data/locations/kenya.json`**](./data/locations/kenya.json) - Shared Kenya location catalog used by both Laravel and Prisma seeders for counties, cities, and neighborhoods.
 
 ## 🚀 Quick Start Guide
 
