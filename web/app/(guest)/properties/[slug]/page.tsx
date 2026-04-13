@@ -26,9 +26,7 @@ export async function generateMetadata({
         const property = await fetchPropertyBySlug(slug)
 
         if (!property) {
-            return {
-                title: 'Property not found',
-            }
+            return { title: 'Property not found' }
         }
 
         return {
@@ -36,9 +34,7 @@ export async function generateMetadata({
             description: property.summary,
         }
     } catch {
-        return {
-            title: 'Property',
-        }
+        return { title: 'Property' }
     }
 }
 
@@ -102,7 +98,7 @@ export default async function PropertyDetailPage({
                         </div>
                     </div>
                     <PropertyGallery property={property} />
-                    <section className="rounded-2xl border border-stone-200 bg-white p-6">
+                    <section className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
                         <h2 className="text-2xl font-semibold tracking-tight text-stone-950">
                             Overview
                         </h2>
@@ -110,27 +106,9 @@ export default async function PropertyDetailPage({
                             {property.description}
                         </p>
                     </section>
-                    {property.coordinates ? (
-                        <section className="flex flex-col gap-4">
-                            <div>
-                                <h2 className="text-2xl font-semibold tracking-tight text-stone-950">
-                                    Location
-                                </h2>
-                                <p className="mt-1 text-sm text-stone-600">
-                                    {subtitle || property.county}
-                                </p>
-                            </div>
-                            <PropertyMap
-                                latitude={property.coordinates.latitude}
-                                longitude={property.coordinates.longitude}
-                                title={property.title}
-                                addressLabel={subtitle || property.county}
-                            />
-                        </section>
-                    ) : null}
-                    <section className="rounded-2xl border border-stone-200 bg-white p-6">
+                    <section className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
                         <h2 className="text-2xl font-semibold tracking-tight text-stone-950">
-                            Amenities and highlights
+                            Amenities And Highlights
                         </h2>
                         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                             {property.amenities.length > 0 ? (
@@ -178,9 +156,9 @@ export default async function PropertyDetailPage({
                             </Button>
                         </div>
                     </div>
-                    <div className="rounded-2xl border border-stone-200 bg-white p-6">
+                    <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
                         <h2 className="text-xl font-semibold tracking-tight text-stone-950">
-                            Property facts
+                            Property Facts
                         </h2>
                         <dl className="mt-5 grid gap-4 text-sm text-stone-800">
                             <div className="flex items-center justify-between gap-3 border-b border-stone-200 pb-3">
@@ -198,17 +176,34 @@ export default async function PropertyDetailPage({
                                 </dd>
                             </div>
                             <div className="flex items-center justify-between gap-3">
-                                <dt className="text-stone-500">Coordinates</dt>
-                                <dd>
-                                    {property.coordinates
-                                        ? `${property.coordinates.latitude}, ${property.coordinates.longitude}`
-                                        : 'Not published'}
+                                <dt className="text-stone-500">Listing purpose</dt>
+                                <dd className="capitalize">
+                                    {property.listingPurpose.replace('_', ' ')}
                                 </dd>
                             </div>
                         </dl>
                     </div>
                 </aside>
             </section>
+
+            {property.coordinates ? (
+                <section className="flex flex-col gap-4">
+                    <div>
+                        <h2 className="text-2xl font-semibold tracking-tight text-stone-950">
+                            Location On The Map
+                        </h2>
+                        <p className="mt-1 text-sm text-stone-600">
+                            {subtitle || property.county}
+                        </p>
+                    </div>
+                    <PropertyMap
+                        latitude={property.coordinates.latitude}
+                        longitude={property.coordinates.longitude}
+                        title={property.title}
+                        addressLabel={subtitle || property.county}
+                    />
+                </section>
+            ) : null}
         </>
     )
 }
