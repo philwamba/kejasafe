@@ -2,13 +2,19 @@ import { z } from 'zod'
 
 const envSchema = z.object({
     APP_NAME: z.string().default('Kejasafe'),
-    NEXT_PUBLIC_APP_URL: z.string().url(),
-    NEXT_PUBLIC_API_BASE_URL: z.string().url(),
+    NEXT_PUBLIC_APP_URL: z
+        .string()
+        .url()
+        .default('http://localhost:3000'),
+    NEXT_PUBLIC_API_BASE_URL: z
+        .string()
+        .url()
+        .default('http://localhost:3000/api/internal'),
     LARAVEL_API_BASE_URL: z.string().url().optional(),
     LARAVEL_SESSION_COOKIE: z.string().min(1).optional(),
-    AUTH_SECRET: z.string().min(32),
-    CSRF_SECRET: z.string().min(32),
-    COOKIE_DOMAIN: z.string().min(1),
+    AUTH_SECRET: z.string().min(32).optional(),
+    CSRF_SECRET: z.string().min(32).optional(),
+    COOKIE_DOMAIN: z.string().min(1).optional(),
     ACTIVE_BACKEND_MODE: z
         .enum(['prisma_neon', 'laravel_api'])
         .default('prisma_neon'),
@@ -31,31 +37,59 @@ type Env = z.infer<typeof envSchema>
 let cachedEnv: Env | undefined
 
 function parseEnv(): Env {
-    return envSchema.parse({
-        APP_NAME: process.env.APP_NAME,
-        NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-        NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
-        LARAVEL_API_BASE_URL: process.env.LARAVEL_API_BASE_URL,
-        LARAVEL_SESSION_COOKIE: process.env.LARAVEL_SESSION_COOKIE,
-        AUTH_SECRET: process.env.AUTH_SECRET,
-        CSRF_SECRET: process.env.CSRF_SECRET,
-        COOKIE_DOMAIN: process.env.COOKIE_DOMAIN,
-        ACTIVE_BACKEND_MODE: process.env.ACTIVE_BACKEND_MODE,
-        BACKEND_FALLBACK_MODE: process.env.BACKEND_FALLBACK_MODE,
-        STORAGE_DRIVER: process.env.STORAGE_DRIVER,
-        S3_BUCKET: process.env.S3_BUCKET,
-        S3_REGION: process.env.S3_REGION,
-        S3_ENDPOINT: process.env.S3_ENDPOINT,
-        S3_ACCESS_KEY_ID: process.env.S3_ACCESS_KEY_ID,
-        S3_SECRET_ACCESS_KEY: process.env.S3_SECRET_ACCESS_KEY,
-        S3_PUBLIC_BASE_URL: process.env.S3_PUBLIC_BASE_URL,
-        S3_FORCE_PATH_STYLE: process.env.S3_FORCE_PATH_STYLE,
-    })
+    try {
+        return envSchema.parse({
+            APP_NAME: process.env.APP_NAME,
+            NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+            NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+            LARAVEL_API_BASE_URL: process.env.LARAVEL_API_BASE_URL,
+            LARAVEL_SESSION_COOKIE: process.env.LARAVEL_SESSION_COOKIE,
+            AUTH_SECRET: process.env.AUTH_SECRET,
+            CSRF_SECRET: process.env.CSRF_SECRET,
+            COOKIE_DOMAIN: process.env.COOKIE_DOMAIN,
+            ACTIVE_BACKEND_MODE: process.env.ACTIVE_BACKEND_MODE,
+            BACKEND_FALLBACK_MODE: process.env.BACKEND_FALLBACK_MODE,
+            STORAGE_DRIVER: process.env.STORAGE_DRIVER,
+            S3_BUCKET: process.env.S3_BUCKET,
+            S3_REGION: process.env.S3_REGION,
+            S3_ENDPOINT: process.env.S3_ENDPOINT,
+            S3_ACCESS_KEY_ID: process.env.S3_ACCESS_KEY_ID,
+            S3_SECRET_ACCESS_KEY: process.env.S3_SECRET_ACCESS_KEY,
+            S3_PUBLIC_BASE_URL: process.env.S3_PUBLIC_BASE_URL,
+            S3_FORCE_PATH_STYLE: process.env.S3_FORCE_PATH_STYLE,
+        })
+    } catch (error) {
+        // Never crash the boot process for env issues. Log once and fall
+        // back to defaults — individual features will fail loudly when
+        // they actually need a missing value.
+        console.error(
+            '[env] Failed to parse environment variables. Using defaults where possible.',
+            error instanceof Error ? error.message : error,
+        )
+        return envSchema.parse({})
+    }
 }
 
 function getEnv(): Env {
     cachedEnv ??= parseEnv()
     return cachedEnv
+}
+
+/**
+ * Read a required env value. Throws a clear, actionable error if the
+ * value is missing. Use this inside auth/cookie/CSRF code instead of
+ * `env.XXX!` or `env.XXX ?? ''`.
+ */
+export function requireEnv<K extends keyof Env>(key: K): NonNullable<Env[K]> {
+    const value = getEnv()[key]
+    if (value === undefined || value === null || value === '') {
+        throw new Error(
+            `Missing required environment variable: ${String(key)}. ` +
+                `Set it in web/.env (local) or your hosting provider's ` +
+                `environment variables (Vercel, Railway, etc.) and redeploy.`,
+        )
+    }
+    return value as NonNullable<Env[K]>
 }
 
 export const env = new Proxy({} as Env, {

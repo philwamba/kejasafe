@@ -3,10 +3,12 @@ import { createHmac, timingSafeEqual } from 'node:crypto'
 import type { NextRequest } from 'next/server'
 
 import { authCookieNames } from '@/lib/core/auth/constants'
-import { env } from '@/lib/config/env'
+import { requireEnv } from '@/lib/config/env'
 
 function signToken(rawToken: string) {
-    return createHmac('sha256', env.CSRF_SECRET).update(rawToken).digest('hex')
+    return createHmac('sha256', requireEnv('CSRF_SECRET'))
+        .update(rawToken)
+        .digest('hex')
 }
 
 export function issueCsrfToken(rawToken: string) {
