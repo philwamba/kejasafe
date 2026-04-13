@@ -9,7 +9,7 @@ import {
     FiShare2,
     FiWifi,
 } from 'react-icons/fi'
-import { LuBath, LuBedDouble, LuRuler, LuUsers } from 'react-icons/lu'
+import { LuBath, LuBedDouble, LuUsers } from 'react-icons/lu'
 
 import { Button } from '@/components/ui/button'
 import { FavoriteButton } from '@/components/properties/FavoriteButton'
@@ -165,15 +165,6 @@ export default async function PropertyDetailPage({
                                             {property.bathrooms === 1
                                                 ? 'bathroom'
                                                 : 'bathrooms'}
-                                        </span>
-                                    </>
-                                ) : null}
-                                {property.size ? (
-                                    <>
-                                        <span className="text-stone-300">·</span>
-                                        <span className="inline-flex items-center gap-1.5">
-                                            <LuRuler className="size-4" />
-                                            {property.size}
                                         </span>
                                     </>
                                 ) : null}
