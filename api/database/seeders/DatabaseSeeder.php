@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             PlatformSettingsSeeder::class,
+            LocationsSeeder::class,
+            PropertyTypesSeeder::class,
         ]);
 
         User::factory()->create([

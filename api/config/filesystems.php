@@ -60,6 +60,19 @@ return [
             'report' => false,
         ],
 
+        'r2' => [
+            'driver' => 's3',
+            'key' => env('S3_ACCESS_KEY_ID'),
+            'secret' => env('S3_SECRET_ACCESS_KEY'),
+            'region' => env('S3_REGION', 'auto'),
+            'bucket' => env('S3_BUCKET'),
+            'url' => env('S3_PUBLIC_BASE_URL'),
+            'endpoint' => env('S3_ENDPOINT'),
+            'use_path_style_endpoint' => env('S3_FORCE_PATH_STYLE', true),
+            'throw' => false,
+            'report' => false,
+        ],
+
     ],
 
     /*

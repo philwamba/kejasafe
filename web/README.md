@@ -49,6 +49,8 @@ Follow these steps to set up the frontend locally:
 
 The frontend now includes a Prisma seed that creates a small set of Kenya property listings and their image gallery records.
 
+The location taxonomy is loaded from the shared catalog at `../data/locations/kenya.json`, which includes all 47 counties plus curated cities and neighborhoods, including the main Nairobi submarkets.
+
 ```bash
 pnpm db:seed
 ```

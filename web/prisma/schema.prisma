@@ -121,6 +121,7 @@ model User {
   loginLogs               LoginLog[]
   userRoles               UserRole[]
   authoredProperties      Property[]       @relation("PropertyOwner")
+  reviewedProperties      Property[]       @relation("PropertyReviewer")
   inquiries               Inquiry[]        @relation("InquirySender")
   viewingRequests         ViewingRequest[] @relation("ViewingRequester")
   favorites               Favorite[]
@@ -403,6 +404,11 @@ model Property {
   occupancyStatus         AvailabilityStatus @default(available)
   moderationNotes         String?
   rejectionReason         String?
+  submittedAt             DateTime?
+  reviewedAt              DateTime?
+  reviewedByUserId        String?            @db.Uuid
+  ownershipDeclaredAt     DateTime?
+  responsibilityAcceptedAt DateTime?
   createdAt               DateTime           @default(now())
   updatedAt               DateTime           @updatedAt
   deletedAt               DateTime?
@@ -410,6 +416,7 @@ model Property {
   county                  County             @relation(fields: [countyId], references: [id], onDelete: Restrict)
   neighborhood            Neighborhood?      @relation(fields: [neighborhoodId], references: [id], onDelete: SetNull)
   owner                   User               @relation("PropertyOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  reviewedByUser          User?              @relation("PropertyReviewer", fields: [reviewedByUserId], references: [id], onDelete: SetNull)
   propertyType            PropertyType       @relation(fields: [propertyTypeId], references: [id], onDelete: Restrict)
   versions                PropertyVersion[]
   images                  PropertyImage[]
