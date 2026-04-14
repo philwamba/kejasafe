@@ -2,26 +2,18 @@
 
 import { FiBell, FiSearch } from 'react-icons/fi'
 
+import { UserMenu } from '@/components/admin/UserMenu'
 import type { AuthUserDto } from '@/lib/shared/types/auth'
 
 interface AdminTopBarProps {
     user: AuthUserDto
 }
 
-function initials(name: string) {
-    return name
-        .split(' ')
-        .filter(Boolean)
-        .slice(0, 2)
-        .map(part => part[0]?.toUpperCase() ?? '')
-        .join('')
-}
-
 export function AdminTopBar({ user }: AdminTopBarProps) {
     return (
         <header className="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-stone-200 bg-white/95 px-6 backdrop-blur">
             <div className="flex min-w-0 flex-1 items-center gap-3">
-                <div className="hidden w-full max-w-md items-center gap-3 rounded-xl border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-500 sm:flex">
+                <div className="hidden w-full max-w-md items-center gap-3 rounded-xl border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-500 focus-within:border-brand focus-within:bg-white sm:flex">
                     <FiSearch className="size-4 text-stone-400" />
                     <input
                         type="search"
@@ -37,28 +29,12 @@ export function AdminTopBar({ user }: AdminTopBarProps) {
             <div className="flex items-center gap-2">
                 <button
                     type="button"
-                    className="relative inline-flex size-9 items-center justify-center rounded-lg text-stone-600 transition hover:bg-stone-100 hover:text-stone-950"
+                    className="relative inline-flex size-9 cursor-pointer items-center justify-center rounded-lg text-stone-600 transition hover:bg-stone-100 hover:text-stone-950"
                     aria-label="Notifications">
                     <FiBell className="size-4" />
                     <span className="bg-brand absolute right-1.5 top-1.5 inline-block size-1.5 rounded-full" />
                 </button>
-                <div className="flex items-center gap-3 rounded-xl border border-stone-200 bg-white px-3 py-1.5">
-                    <span className="bg-brand inline-flex size-7 items-center justify-center rounded-full text-xs font-semibold text-white">
-                        {initials(user.fullName)}
-                    </span>
-                    <div className="hidden text-xs leading-tight md:block">
-                        <p className="font-semibold text-stone-950">
-                            {user.fullName}
-                        </p>
-                        <p className="text-stone-500">
-                            {user.roles.includes('super_admin')
-                                ? 'Super admin'
-                                : user.roles.includes('admin')
-                                  ? 'Admin'
-                                  : 'Moderator'}
-                        </p>
-                    </div>
-                </div>
+                <UserMenu user={user} />
             </div>
         </header>
     )
