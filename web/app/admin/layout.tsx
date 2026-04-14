@@ -37,7 +37,7 @@ export default async function AdminLayout({
         <div className="flex min-h-screen bg-stone-50">
             <AdminSidebar pendingCount={pendingCount} />
             <div className="flex min-w-0 flex-1 flex-col">
-                <AdminTopBar user={user} />
+                <AdminTopBar user={user} workspace="admin" />
                 <div className="flex-1">{children}</div>
             </div>
         </div>
