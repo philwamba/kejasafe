@@ -7,9 +7,10 @@ import type { AuthUserDto } from '@/lib/shared/types/auth'
 
 interface AdminTopBarProps {
     user: AuthUserDto
+    workspace: 'admin' | 'portal' | 'tenant'
 }
 
-export function AdminTopBar({ user }: AdminTopBarProps) {
+export function AdminTopBar({ user, workspace }: AdminTopBarProps) {
     return (
         <header className="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-stone-200 bg-white/95 px-6 backdrop-blur">
             <div className="flex min-w-0 flex-1 items-center gap-3">
@@ -34,7 +35,7 @@ export function AdminTopBar({ user }: AdminTopBarProps) {
                     <FiBell className="size-4" />
                     <span className="bg-brand absolute right-1.5 top-1.5 inline-block size-1.5 rounded-full" />
                 </button>
-                <UserMenu user={user} />
+                <UserMenu user={user} workspace={workspace} />
             </div>
         </header>
     )

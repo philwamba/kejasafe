@@ -1,24 +1,34 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui'
 import {
+    FiBriefcase,
     FiChevronDown,
     FiExternalLink,
+    FiGrid,
     FiHome,
     FiLogOut,
+    FiRepeat,
+    FiSettings,
     FiShield,
     FiUser,
 } from 'react-icons/fi'
 import { toast } from 'sonner'
 
 import { fetchCsrfToken } from '@/lib/core/sdk/auth-client'
+import { hasAnyPermission } from '@/lib/core/rbac/access'
 import type { AuthUserDto } from '@/lib/shared/types/auth'
+import { cn } from '@/lib/utils'
+
+type Workspace = 'admin' | 'portal' | 'tenant'
 
 interface UserMenuProps {
     user: AuthUserDto
+    workspace: Workspace
 }
 
 function initials(name: string) {
@@ -30,18 +40,134 @@ function initials(name: string) {
         .join('')
 }
 
-function roleLabel(user: AuthUserDto) {
-    if (user.roles.includes('super_admin')) return 'Super admin'
-    if (user.roles.includes('admin')) return 'Admin'
-    if (user.roles.includes('moderator')) return 'Moderator'
-    if (user.roles.includes('landlord')) return 'Landlord'
-    return 'User'
+const WORKSPACE_LABELS: Record<Workspace, string> = {
+    admin: 'Admin console',
+    portal: 'Landlord portal',
+    tenant: 'Tenant workspace',
 }
 
-export function UserMenu({ user }: UserMenuProps) {
+function contextRole(user: AuthUserDto, workspace: Workspace): string {
+    if (workspace === 'admin') {
+        if (user.roles.includes('super_admin')) return 'Super admin'
+        if (user.roles.includes('admin')) return 'Admin'
+        return 'Moderator'
+    }
+    if (workspace === 'portal') {
+        if (user.roles.includes('agent')) return 'Agent'
+        if (user.roles.includes('property_manager'))
+            return 'Property manager'
+        return 'Landlord'
+    }
+    return 'Member'
+}
+
+export function UserMenu({ user, workspace }: UserMenuProps) {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
     const [open, setOpen] = useState(false)
+
+    const canAccessAdmin = hasAnyPermission(user.permissions, [
+        'manage_users',
+        'manage_settings',
+        'view_audit_logs',
+        'approve_listings',
+    ])
+    const canAccessPortal =
+        hasAnyPermission(user.permissions, ['manage_listings']) ||
+        user.roles.some(r =>
+            ['landlord', 'agent', 'property_manager'].includes(r),
+        )
+
+    // Switch destinations: other workspaces this user has access to.
+    const switchDestinations: Array<{
+        workspace: Workspace
+        href: string
+        label: string
+        icon: ReactNode
+    }> = []
+
+    if (workspace !== 'admin' && canAccessAdmin) {
+        switchDestinations.push({
+            workspace: 'admin',
+            href: '/admin',
+            label: WORKSPACE_LABELS.admin,
+            icon: <FiShield className="size-4" />,
+        })
+    }
+    if (workspace !== 'portal' && canAccessPortal) {
+        switchDestinations.push({
+            workspace: 'portal',
+            href: '/portal',
+            label: WORKSPACE_LABELS.portal,
+            icon: <FiBriefcase className="size-4" />,
+        })
+    }
+    if (workspace !== 'tenant') {
+        switchDestinations.push({
+            workspace: 'tenant',
+            href: '/dashboard',
+            label: WORKSPACE_LABELS.tenant,
+            icon: <FiGrid className="size-4" />,
+        })
+    }
+
+    // Workspace-specific menu items.
+    const workspaceLinks: Array<{
+        href: string
+        label: string
+        icon: ReactNode
+    }> = (() => {
+        if (workspace === 'admin') {
+            return [
+                {
+                    href: '/admin',
+                    label: 'Admin dashboard',
+                    icon: <FiGrid className="size-4" />,
+                },
+                {
+                    href: '/admin/users',
+                    label: 'Users',
+                    icon: <FiUser className="size-4" />,
+                },
+                {
+                    href: '/admin/audit',
+                    label: 'Audit log',
+                    icon: <FiShield className="size-4" />,
+                },
+            ]
+        }
+        if (workspace === 'portal') {
+            return [
+                {
+                    href: '/portal',
+                    label: 'My listings',
+                    icon: <FiHome className="size-4" />,
+                },
+                {
+                    href: '/portal/profile',
+                    label: 'Profile',
+                    icon: <FiUser className="size-4" />,
+                },
+                {
+                    href: '/portal/settings',
+                    label: 'Settings',
+                    icon: <FiSettings className="size-4" />,
+                },
+            ]
+        }
+        return [
+            {
+                href: '/dashboard',
+                label: 'My dashboard',
+                icon: <FiGrid className="size-4" />,
+            },
+            {
+                href: '/dashboard/settings/security',
+                label: 'Security',
+                icon: <FiShield className="size-4" />,
+            },
+        ]
+    })()
 
     function signOut() {
         startTransition(async () => {
@@ -63,7 +189,9 @@ export function UserMenu({ user }: UserMenuProps) {
                 router.refresh()
             } catch (error) {
                 toast.error(
-                    error instanceof Error ? error.message : 'Sign out failed.',
+                    error instanceof Error
+                        ? error.message
+                        : 'Sign out failed.',
                 )
             }
         })
@@ -83,10 +211,15 @@ export function UserMenu({ user }: UserMenuProps) {
                         <p className="font-semibold text-stone-950">
                             {user.fullName}
                         </p>
-                        <p className="text-stone-500">{roleLabel(user)}</p>
+                        <p className="text-stone-500">
+                            {contextRole(user, workspace)}
+                        </p>
                     </div>
                     <FiChevronDown
-                        className={`size-3.5 text-stone-400 transition ${open ? 'rotate-180' : ''}`}
+                        className={cn(
+                            'size-3.5 text-stone-400 transition',
+                            open && 'rotate-180',
+                        )}
                     />
                 </button>
             </DropdownMenuPrimitive.Trigger>
@@ -102,31 +235,52 @@ export function UserMenu({ user }: UserMenuProps) {
                         <p className="truncate text-xs text-stone-500">
                             {user.email}
                         </p>
+                        <p className="mt-1.5 inline-flex rounded-full bg-stone-100 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-stone-600 uppercase">
+                            {WORKSPACE_LABELS[workspace]}
+                        </p>
                     </div>
+
                     <div className="py-1">
-                        <MenuLink
-                            href="/dashboard"
-                            icon={<FiHome className="size-4" />}
-                            label="My dashboard"
-                        />
-                        <MenuLink
-                            href="/portal/profile"
-                            icon={<FiUser className="size-4" />}
-                            label="Profile"
-                        />
-                        <MenuLink
-                            href="/dashboard/settings/security"
-                            icon={<FiShield className="size-4" />}
-                            label="Security"
-                        />
+                        {workspaceLinks.map(link => (
+                            <MenuLink
+                                key={link.href}
+                                href={link.href}
+                                icon={link.icon}
+                                label={link.label}
+                            />
+                        ))}
+                    </div>
+
+                    {switchDestinations.length > 0 ? (
+                        <div className="border-t border-stone-100 pt-2 pb-1">
+                            <p className="px-4 pb-1 text-[10px] font-semibold tracking-[0.12em] text-stone-400 uppercase">
+                                Switch workspace
+                            </p>
+                            {switchDestinations.map(destination => (
+                                <MenuLink
+                                    key={destination.workspace}
+                                    href={destination.href}
+                                    icon={
+                                        <span className="text-brand">
+                                            {destination.icon}
+                                        </span>
+                                    }
+                                    label={destination.label}
+                                    suffix={
+                                        <FiRepeat className="size-3 text-stone-300" />
+                                    }
+                                />
+                            ))}
+                        </div>
+                    ) : null}
+
+                    <div className="border-t border-stone-100 py-1">
                         <MenuLink
                             href="/"
                             icon={<FiExternalLink className="size-4" />}
                             label="View public site"
                             external
                         />
-                    </div>
-                    <div className="border-t border-stone-100 py-1">
                         <button
                             type="button"
                             onClick={signOut}
@@ -147,11 +301,13 @@ function MenuLink({
     icon,
     label,
     external = false,
+    suffix,
 }: {
     href: string
-    icon: React.ReactNode
+    icon: ReactNode
     label: string
     external?: boolean
+    suffix?: ReactNode
 }) {
     return (
         <DropdownMenuPrimitive.Item asChild>
@@ -159,9 +315,12 @@ function MenuLink({
                 href={href}
                 target={external ? '_blank' : undefined}
                 rel={external ? 'noreferrer noopener' : undefined}
-                className="flex cursor-pointer items-center gap-3 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-stone-50 hover:text-stone-950 focus:bg-stone-50 focus:outline-none">
-                <span className="text-stone-400">{icon}</span>
-                {label}
+                className="flex cursor-pointer items-center justify-between gap-3 px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-stone-50 hover:text-stone-950 focus:bg-stone-50 focus:outline-none">
+                <span className="flex items-center gap-3">
+                    <span className="text-stone-400">{icon}</span>
+                    {label}
+                </span>
+                {suffix}
             </Link>
         </DropdownMenuPrimitive.Item>
     )
