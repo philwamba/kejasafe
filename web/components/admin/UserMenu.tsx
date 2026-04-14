@@ -3,7 +3,6 @@
 import type { ReactNode } from 'react'
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui'
 import {
     FiBriefcase,
@@ -62,7 +61,6 @@ function contextRole(user: AuthUserDto, workspace: Workspace): string {
 }
 
 export function UserMenu({ user, workspace }: UserMenuProps) {
-    const router = useRouter()
     const [isPending, startTransition] = useTransition()
     const [open, setOpen] = useState(false)
 
@@ -184,9 +182,11 @@ export function UserMenu({ user, workspace }: UserMenuProps) {
                 if (!response.ok) {
                     throw new Error('Sign out failed.')
                 }
-                toast.success('Signed out.')
-                router.push('/login')
-                router.refresh()
+                // Hard navigation so cookies are fully cleared before
+                // Next.js attempts any server-side guards or cache
+                // re-fetching. Using router.push + router.refresh
+                // races against the current route's auth redirect.
+                window.location.href = '/login'
             } catch (error) {
                 toast.error(
                     error instanceof Error
