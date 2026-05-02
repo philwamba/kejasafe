@@ -167,7 +167,7 @@ export const prismaAdminProvider: AdminProvider = {
         }
     },
 
-    async auditLogs(input) {
+    async auditLogs(input, _ctx) {
         const where = auditWhere(input)
         const [items, total, allCount] = await prisma.$transaction([
             prisma.auditLog.findMany({
@@ -175,7 +175,14 @@ export const prismaAdminProvider: AdminProvider = {
                 orderBy: { createdAt: 'desc' },
                 skip: (input.page - 1) * input.perPage,
                 take: input.perPage,
-                include: {
+                select: {
+                    id: true,
+                    action: true,
+                    entityType: true,
+                    entityId: true,
+                    backendProcessedBy: true,
+                    level: true,
+                    createdAt: true,
                     actor: {
                         select: { id: true, fullName: true, email: true },
                     },
