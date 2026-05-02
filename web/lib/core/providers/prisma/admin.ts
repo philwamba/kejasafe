@@ -2,7 +2,9 @@ import { prisma } from '@/lib/core/prisma/client'
 import type {
     AdminProvider,
     AdminUserListInput,
+    AuditLogEntry,
     AuditLogListInput,
+    AuditLogListResult,
     ModerationQueueInput,
 } from '@/lib/core/contracts/admin'
 
@@ -167,9 +169,9 @@ export const prismaAdminProvider: AdminProvider = {
         }
     },
 
-    async auditLogs(input, _ctx) {
+    async auditLogs(input, _ctx): Promise<AuditLogListResult> {
         const where = auditWhere(input)
-        const [items, total, allCount] = await prisma.$transaction([
+        const [rows, total, allCount] = await Promise.all([
             prisma.auditLog.findMany({
                 where,
                 orderBy: { createdAt: 'desc' },
@@ -191,6 +193,8 @@ export const prismaAdminProvider: AdminProvider = {
             prisma.auditLog.count({ where }),
             prisma.auditLog.count(),
         ])
+
+        const items = rows as AuditLogEntry[]
 
         return { items, total, allCount }
     },
