@@ -49,7 +49,7 @@ export function BackendSwitchCard({ setting }: BackendSwitchCardProps) {
                     },
                 )
                 setMessage(
-                    `Active backend switched to ${response.data.data.activeMode}.`,
+                    `Active platform backend switched to ${response.data.data.activeMode}. Your current login session stays on its original auth backend.`,
                 )
                 router.refresh()
             } catch (switchError) {

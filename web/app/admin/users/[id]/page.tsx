@@ -5,9 +5,12 @@ import { FiArrowLeft, FiMail, FiPhone } from 'react-icons/fi'
 
 import { UserDetailActions } from '@/components/admin/UserDetailActions'
 import { StatusBadge, statusTone } from '@/components/ui/status-badge'
-import { getServerCurrentUser } from '@/lib/core/auth/server'
+import {
+    getServerCurrentUser,
+    getServerRequestContext,
+} from '@/lib/core/auth/server'
 import { hasAnyPermission } from '@/lib/core/rbac/access'
-import { prisma } from '@/lib/core/prisma/client'
+import { getAdminUserDetail } from '@/lib/core/services/admin-service'
 
 export const metadata: Metadata = {
     title: 'User Detail',
@@ -34,42 +37,10 @@ export default async function UserDetailPage({
     }
 
     const { id } = await params
-    const [user, allRoles, recentActivity] = await Promise.all([
-        prisma.user.findUnique({
-            where: { id },
-            select: {
-                id: true,
-                fullName: true,
-                email: true,
-                phone: true,
-                status: true,
-                emailVerifiedAt: true,
-                phoneVerifiedAt: true,
-                lastLoginAt: true,
-                lastLoginIp: true,
-                createdAt: true,
-                avatarUrl: true,
-                userRoles: {
-                    select: {
-                        role: {
-                            select: { id: true, name: true, description: true },
-                        },
-                    },
-                },
-            },
-        }),
-        prisma.role.findMany({
-            orderBy: { name: 'asc' },
-            select: { id: true, name: true, description: true },
-        }),
-        prisma.auditLog.findMany({
-            where: {
-                OR: [{ actorUserId: id }, { entityId: id, entityType: 'user' }],
-            },
-            orderBy: { createdAt: 'desc' },
-            take: 10,
-        }),
-    ])
+    const { user, allRoles, recentActivity } = await getAdminUserDetail(
+        id,
+        await getServerRequestContext(),
+    )
 
     if (!user) notFound()
 

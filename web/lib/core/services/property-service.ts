@@ -8,10 +8,18 @@ import type {
     PropertySearchInput,
 } from '@/lib/core/contracts/property'
 import { logger } from '@/lib/core/logger'
-import {
-    getFallbackProvider,
-    getProvider,
-} from '@/lib/core/providers/provider-registry'
+import { getProvider } from '@/lib/core/providers/provider-registry'
+import { getConfiguredFallbackBackendMode } from '@/lib/core/system/control-plane'
+
+async function configuredFallbackProvider(currentMode: BackendMode) {
+    const fallbackMode = await getConfiguredFallbackBackendMode()
+
+    if (!fallbackMode || fallbackMode === currentMode) {
+        return null
+    }
+
+    return getProvider(fallbackMode)
+}
 
 export async function listProperties(
     mode: BackendMode,
@@ -23,7 +31,7 @@ export async function listProperties(
     try {
         return await primaryProvider.properties.list(input, ctx)
     } catch (error) {
-        const fallbackProvider = getFallbackProvider(mode)
+        const fallbackProvider = await configuredFallbackProvider(mode)
 
         if (!fallbackProvider) {
             throw error
@@ -50,7 +58,7 @@ export async function getPropertyBySlug(
     try {
         return await primaryProvider.properties.getBySlug(slug, ctx)
     } catch (error) {
-        const fallbackProvider = getFallbackProvider(mode)
+        const fallbackProvider = await configuredFallbackProvider(mode)
 
         if (!fallbackProvider) {
             throw error

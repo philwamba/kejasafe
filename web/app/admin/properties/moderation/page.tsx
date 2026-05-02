@@ -6,9 +6,12 @@ import { FiClock, FiSearch } from 'react-icons/fi'
 
 import { Pagination } from '@/components/ui/pagination'
 import { StatusBadge } from '@/components/ui/status-badge'
-import { getServerCurrentUser } from '@/lib/core/auth/server'
+import {
+    getServerCurrentUser,
+    getServerRequestContext,
+} from '@/lib/core/auth/server'
 import { hasAnyPermission } from '@/lib/core/rbac/access'
-import { prisma } from '@/lib/core/prisma/client'
+import { listModerationQueue } from '@/lib/core/services/admin-service'
 
 export const metadata: Metadata = {
     title: 'Moderation Queue',
@@ -21,11 +24,7 @@ interface SearchParams {
     status?: string
 }
 
-type ModerationStatus =
-    | 'pending_review'
-    | 'approved'
-    | 'rejected'
-    | 'all'
+type ModerationStatus = 'pending_review' | 'approved' | 'rejected' | 'all'
 
 const STATUS_FILTERS: Array<{
     value: ModerationStatus
@@ -65,73 +64,10 @@ export default async function ModerationQueuePage({
     const search = (sp.q ?? '').trim()
     const statusParam = (sp.status ?? 'pending_review') as ModerationStatus
 
-    const where = {
-        ...(statusParam !== 'all'
-            ? {
-                  moderationStatus: statusParam as
-                      | 'pending_review'
-                      | 'approved'
-                      | 'rejected',
-              }
-            : {}),
-        ...(search
-            ? {
-                  OR: [
-                      {
-                          title: {
-                              contains: search,
-                              mode: 'insensitive' as const,
-                          },
-                      },
-                      {
-                          owner: {
-                              OR: [
-                                  {
-                                      fullName: {
-                                          contains: search,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                                  {
-                                      email: {
-                                          contains: search,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                              ],
-                          },
-                      },
-                  ],
-              }
-            : {}),
-    }
-
-    const [items, total, pendingTotal] = await prisma.$transaction([
-        prisma.property.findMany({
-            where,
-            orderBy: { submittedAt: 'asc' },
-            skip: (page - 1) * perPage,
-            take: perPage,
-            include: {
-                county: true,
-                city: true,
-                propertyType: true,
-                images: { take: 1, orderBy: { position: 'asc' } },
-                owner: {
-                    select: {
-                        id: true,
-                        fullName: true,
-                        email: true,
-                        phone: true,
-                    },
-                },
-            },
-        }),
-        prisma.property.count({ where }),
-        prisma.property.count({
-            where: { moderationStatus: 'pending_review' },
-        }),
-    ])
+    const { items, total, pendingTotal } = await listModerationQueue(
+        { page, perPage, search, status: statusParam },
+        await getServerRequestContext(),
+    )
 
     const totalPages = Math.max(1, Math.ceil(total / perPage))
 
@@ -272,8 +208,7 @@ export default async function ModerationQueuePage({
                                         <p className="mt-1 text-sm text-stone-600">
                                             {property.city?.name ??
                                                 property.county.name}{' '}
-                                            · {property.propertyType.name} ·
-                                            KES{' '}
+                                            · {property.propertyType.name} · KES{' '}
                                             {Number(
                                                 property.price,
                                             ).toLocaleString()}

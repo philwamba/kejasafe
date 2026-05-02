@@ -7,9 +7,12 @@ import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/ui/data-table'
 import { Pagination } from '@/components/ui/pagination'
 import { StatusBadge, statusTone } from '@/components/ui/status-badge'
-import { getServerCurrentUser } from '@/lib/core/auth/server'
+import {
+    getServerCurrentUser,
+    getServerRequestContext,
+} from '@/lib/core/auth/server'
 import { hasAnyPermission } from '@/lib/core/rbac/access'
-import { prisma } from '@/lib/core/prisma/client'
+import { listAdminUsers } from '@/lib/core/services/admin-service'
 
 export const metadata: Metadata = {
     title: 'Users',
@@ -70,41 +73,10 @@ export default async function AdminUsersPage({
     const search = (sp.q ?? '').trim()
     const statusFilter = (sp.status ?? '') as StatusFilter | ''
 
-    const where = {
-        ...(statusFilter ? { status: statusFilter } : {}),
-        ...(search
-            ? {
-                  OR: [
-                      { fullName: { contains: search, mode: 'insensitive' as const } },
-                      { email: { contains: search, mode: 'insensitive' as const } },
-                      { phone: { contains: search, mode: 'insensitive' as const } },
-                  ],
-              }
-            : {}),
-    }
-
-    const [users, total, totals] = await prisma.$transaction([
-        prisma.user.findMany({
-            where,
-            orderBy: { createdAt: 'desc' },
-            skip: (page - 1) * perPage,
-            take: perPage,
-            select: {
-                id: true,
-                fullName: true,
-                email: true,
-                phone: true,
-                status: true,
-                lastLoginAt: true,
-                createdAt: true,
-                userRoles: {
-                    select: { role: { select: { name: true } } },
-                },
-            },
-        }),
-        prisma.user.count({ where }),
-        prisma.user.count(),
-    ])
+    const { users, total, totals } = await listAdminUsers(
+        { page, perPage, search, status: statusFilter },
+        await getServerRequestContext(),
+    )
 
     const totalPages = Math.max(1, Math.ceil(total / perPage))
 
@@ -141,10 +113,7 @@ export default async function AdminUsersPage({
                         filters.
                     </p>
                 </div>
-                <Button
-                    asChild
-                    size="lg"
-                    className="h-11 rounded-xl">
+                <Button asChild size="lg" className="h-11 rounded-xl">
                     <Link href="/admin/users/new">
                         <FiPlus />
                         Invite user
@@ -165,7 +134,11 @@ export default async function AdminUsersPage({
                         className="w-full bg-transparent text-sm text-stone-900 outline-none placeholder:text-stone-400"
                     />
                     {statusFilter ? (
-                        <input type="hidden" name="status" value={statusFilter} />
+                        <input
+                            type="hidden"
+                            name="status"
+                            value={statusFilter}
+                        />
                     ) : null}
                 </form>
                 <div className="flex flex-wrap items-center gap-1 rounded-xl border border-stone-200 bg-white p-1">

@@ -13,9 +13,16 @@ import { jsonError, jsonSuccess } from '@/lib/core/http/response'
 import { prisma } from '@/lib/core/prisma/client'
 
 const patchSchema = z.object({
-    status: z.enum(['active', 'invited', 'suspended', 'deactivated']).optional(),
+    status: z
+        .enum(['active', 'invited', 'suspended', 'deactivated'])
+        .optional(),
     roles: z.array(z.string()).optional(),
 })
+
+type TransactionClient = Omit<
+    typeof prisma,
+    '$connect' | '$disconnect' | '$on' | '$transaction' | '$extends'
+>
 
 export async function PATCH(
     request: NextRequest,
@@ -51,7 +58,7 @@ export async function PATCH(
         } = {}
         if (parsed.status) updates.status = parsed.status
 
-        const user = await prisma.$transaction(async tx => {
+        const user = await prisma.$transaction(async (tx: TransactionClient) => {
             if (Object.keys(updates).length > 0) {
                 await tx.user.update({
                     where: { id },
@@ -66,7 +73,7 @@ export async function PATCH(
                 await tx.userRole.deleteMany({ where: { userId: id } })
                 if (roles.length > 0) {
                     await tx.userRole.createMany({
-                        data: roles.map(role => ({
+                        data: roles.map((role: { id: string }) => ({
                             userId: id,
                             roleId: role.id,
                             assignedBy: actor.id,
@@ -111,7 +118,9 @@ export async function PATCH(
 
         return jsonSuccess({
             ...user,
-            roles: user.userRoles.map(r => r.role.name),
+            roles: user.userRoles.map(
+                (r: { role: { name: string } }) => r.role.name,
+            ),
         })
     } catch (error) {
         return jsonError(

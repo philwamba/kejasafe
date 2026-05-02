@@ -61,6 +61,12 @@ export async function getConfiguredBackendMode() {
     return setting?.activeMode ?? env.ACTIVE_BACKEND_MODE
 }
 
+export async function getConfiguredFallbackBackendMode() {
+    const setting = await getConfiguredBackendSetting()
+
+    return setting?.fallbackMode ?? env.BACKEND_FALLBACK_MODE ?? null
+}
+
 export async function listSystemHealth(ctx: RequestContext) {
     return Promise.all([
         getProvider('prisma_neon').system.health(ctx),

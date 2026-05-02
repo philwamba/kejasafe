@@ -43,9 +43,24 @@ export async function GET(request: NextRequest) {
         ...(search
             ? {
                   OR: [
-                      { fullName: { contains: search, mode: 'insensitive' as const } },
-                      { email: { contains: search, mode: 'insensitive' as const } },
-                      { phone: { contains: search, mode: 'insensitive' as const } },
+                      {
+                          fullName: {
+                              contains: search,
+                              mode: 'insensitive' as const,
+                          },
+                      },
+                      {
+                          email: {
+                              contains: search,
+                              mode: 'insensitive' as const,
+                          },
+                      },
+                      {
+                          phone: {
+                              contains: search,
+                              mode: 'insensitive' as const,
+                          },
+                      },
                   ],
               }
             : {}),
@@ -84,17 +99,31 @@ export async function GET(request: NextRequest) {
     ])
 
     return jsonPaginated(
-        items.map(user => ({
-            id: user.id,
-            fullName: user.fullName,
-            email: user.email,
-            phone: user.phone,
-            status: user.status,
-            roles: user.userRoles.map(r => r.role.name),
-            emailVerifiedAt: user.emailVerifiedAt,
-            lastLoginAt: user.lastLoginAt,
-            createdAt: user.createdAt,
-        })),
+        items.map(
+            (user: {
+                id: string
+                fullName: string
+                email: string
+                phone: string | null
+                status: string
+                userRoles: Array<{ role: { name: string } }>
+                emailVerifiedAt: Date | null
+                lastLoginAt: Date | null
+                createdAt: Date
+            }) => ({
+                id: user.id,
+                fullName: user.fullName,
+                email: user.email,
+                phone: user.phone,
+                status: user.status,
+                roles: user.userRoles.map(
+                    (r: { role: { name: string } }) => r.role.name,
+                ),
+                emailVerifiedAt: user.emailVerifiedAt,
+                lastLoginAt: user.lastLoginAt,
+                createdAt: user.createdAt,
+            }),
+        ),
         {
             page,
             perPage,
@@ -154,7 +183,7 @@ export async function POST(request: NextRequest) {
                 status: 'invited',
                 profile: { create: {} },
                 userRoles: {
-                    create: roles.map(role => ({
+                    create: roles.map((role: { id: string }) => ({
                         roleId: role.id,
                         assignedBy: actor.id,
                     })),
