@@ -3,9 +3,12 @@ import { redirect } from 'next/navigation'
 
 import { AdminSidebar } from '@/components/admin/AdminSidebar'
 import { AdminTopBar } from '@/components/admin/AdminTopBar'
-import { getServerCurrentUser } from '@/lib/core/auth/server'
-import { prisma } from '@/lib/core/prisma/client'
+import {
+    getServerCurrentUser,
+    getServerRequestContext,
+} from '@/lib/core/auth/server'
 import { hasAnyPermission } from '@/lib/core/rbac/access'
+import { getAdminShellSummary } from '@/lib/core/services/admin-service'
 
 export default async function AdminLayout({
     children,
@@ -29,13 +32,13 @@ export default async function AdminLayout({
         redirect('/dashboard')
     }
 
-    const pendingCount = await prisma.property
-        .count({ where: { moderationStatus: 'pending_review' } })
-        .catch(() => 0)
+    const { pendingModerationCount } = await getAdminShellSummary(
+        await getServerRequestContext(),
+    ).catch(() => ({ pendingModerationCount: 0 }))
 
     return (
         <div className="flex min-h-screen bg-stone-50">
-            <AdminSidebar pendingCount={pendingCount} />
+            <AdminSidebar pendingCount={pendingModerationCount} />
             <div className="flex min-w-0 flex-1 flex-col">
                 <AdminTopBar user={user} workspace="admin" />
                 <div className="flex-1">{children}</div>

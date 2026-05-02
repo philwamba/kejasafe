@@ -1,7 +1,7 @@
+import { Resend } from 'resend'
+
 /**
- * Transport-agnostic mailer with a console-log driver for development.
- * Swap `transport` to Resend/SES/Postmark by providing an implementation
- * that matches `MailerTransport`.
+ * Transport-agnostic mailer with console and Resend drivers.
  */
 
 export interface MailMessage {
@@ -28,6 +28,45 @@ class ConsoleMailer implements MailerTransport {
     }
 }
 
+class ResendMailer implements MailerTransport {
+    private readonly resend: Resend
+    private readonly from: string
+
+    constructor({
+        apiKey,
+        from,
+    }: {
+        apiKey: string
+        from: string
+    }) {
+        this.resend = new Resend(apiKey)
+        this.from = from
+    }
+
+    async send(message: MailMessage) {
+        const { data, error } = await this.resend.emails.send({
+            from: this.from,
+            to: message.to,
+            subject: message.subject,
+            html: message.html,
+            text: message.text,
+            replyTo: message.replyTo,
+            tags: message.tags
+                ? Object.entries(message.tags).map(([name, value]) => ({
+                      name,
+                      value,
+                  }))
+                : undefined,
+        })
+
+        if (error) {
+            throw new Error(error.message)
+        }
+
+        return { id: data?.id ?? `resend-${Date.now()}` }
+    }
+}
+
 function stripHtml(html: string): string {
     return html
         .replace(/<style[\s\S]*?<\/style>/gi, '')
@@ -36,14 +75,47 @@ function stripHtml(html: string): string {
         .trim()
 }
 
-let transport: MailerTransport = new ConsoleMailer()
+let transport: MailerTransport | null = null
 
 export function setMailerTransport(newTransport: MailerTransport) {
     transport = newTransport
 }
 
+function defaultTransport(): MailerTransport {
+    const provider = process.env.MAIL_PROVIDER?.toLowerCase()
+    const apiKey = process.env.RESEND_API_KEY
+
+    if (provider && !['console', 'resend'].includes(provider)) {
+        throw new Error(`Unsupported MAIL_PROVIDER "${provider}"`)
+    }
+
+    if (provider === 'resend' || (!provider && apiKey)) {
+        if (!apiKey) {
+            throw new Error('RESEND_API_KEY is required when MAIL_PROVIDER=resend')
+        }
+
+        return new ResendMailer({
+            apiKey,
+            from: formatSender(
+                process.env.MAIL_FROM_ADDRESS ?? 'noreply@kejasafe.co.ke',
+                process.env.MAIL_FROM_NAME ?? 'Kejasafe',
+            ),
+        })
+    }
+
+    return new ConsoleMailer()
+}
+
+function formatSender(address: string, name: string): string {
+    const safeName = name.replace(/[\r\n"]/g, '').trim()
+    const safeAddress = address.replace(/[\r\n<>]/g, '').trim()
+
+    return safeName ? `${safeName} <${safeAddress}>` : safeAddress
+}
+
 export async function sendMail(message: MailMessage) {
     try {
+        transport ??= defaultTransport()
         const result = await transport.send(message)
         return { ok: true as const, id: result.id }
     } catch (error) {

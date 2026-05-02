@@ -1,20 +1,22 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { FiActivity, FiHeart, FiHome, FiShield } from 'react-icons/fi'
 
 import { Button } from '@/components/ui/button'
-import { getServerCurrentUser } from '@/lib/core/auth/server'
-import { prisma } from '@/lib/core/prisma/client'
+import {
+    getServerCurrentUser,
+    getServerRequestContext,
+} from '@/lib/core/auth/server'
+import { getTenantDashboardStats } from '@/lib/core/services/dashboard-service'
 
 export default async function DashboardPage() {
     const user = await getServerCurrentUser()
-    if (!user) return null
+    if (!user) redirect('/login?next=/dashboard')
 
-    const [savedCount, mySubmissions] = await Promise.all([
-        prisma.favorite.count({ where: { userId: user.id } }).catch(() => 0),
-        prisma.property
-            .count({ where: { ownerId: user.id } })
-            .catch(() => 0),
-    ])
+    const { savedCount, mySubmissions } = await getTenantDashboardStats(
+        user.id,
+        await getServerRequestContext(),
+    ).catch(() => ({ savedCount: 0, mySubmissions: 0 }))
 
     return (
         <main className="mx-auto max-w-6xl px-6 py-10">
@@ -88,10 +90,7 @@ export default async function DashboardPage() {
                             </p>
                         </div>
                     </div>
-                    <Button
-                        asChild
-                        size="lg"
-                        className="h-11 rounded-xl">
+                    <Button asChild size="lg" className="h-11 rounded-xl">
                         <Link href="/properties">Browse listings</Link>
                     </Button>
                 </div>

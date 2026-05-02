@@ -20,7 +20,7 @@ export async function GET() {
     })
 
     return jsonSuccess({
-        propertyIds: favorites.map(f => f.propertyId),
+        propertyIds: favorites.map((f: { propertyId: string }) => f.propertyId),
     })
 }
 
@@ -53,7 +53,9 @@ export async function POST(request: NextRequest) {
         return jsonSuccess({ propertyId, favorited: true })
     } catch (error) {
         return jsonError(
-            error instanceof Error ? error.message : 'Unable to toggle favorite.',
+            error instanceof Error
+                ? error.message
+                : 'Unable to toggle favorite.',
             422,
         )
     }

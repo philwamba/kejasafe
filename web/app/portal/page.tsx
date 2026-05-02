@@ -11,8 +11,11 @@ import {
 } from 'react-icons/fi'
 
 import { Button } from '@/components/ui/button'
-import { getServerCurrentUser } from '@/lib/core/auth/server'
-import { prisma } from '@/lib/core/prisma/client'
+import {
+    getServerCurrentUser,
+    getServerRequestContext,
+} from '@/lib/core/auth/server'
+import { getPortalDashboardSummary } from '@/lib/core/services/dashboard-service'
 
 type StatAccent = 'brand' | 'emerald' | 'amber' | 'rose'
 
@@ -105,49 +108,16 @@ export default async function PortalPage() {
     const user = await getServerCurrentUser()
     if (!user) return null
 
-    const [listings, publishedCount, pendingCount, rejectedCount] =
-        await Promise.all([
-            prisma.property
-                .findMany({
-                    where: { ownerId: user.id },
-                    orderBy: { createdAt: 'desc' },
-                    take: 10,
-                    include: {
-                        county: { select: { name: true } },
-                        city: { select: { name: true } },
-                        images: {
-                            take: 1,
-                            orderBy: { position: 'asc' },
-                            select: { url: true },
-                        },
-                    },
-                })
-                .catch(() => []),
-            prisma.property
-                .count({
-                    where: {
-                        ownerId: user.id,
-                        listingStatus: 'published',
-                    },
-                })
-                .catch(() => 0),
-            prisma.property
-                .count({
-                    where: {
-                        ownerId: user.id,
-                        moderationStatus: 'pending_review',
-                    },
-                })
-                .catch(() => 0),
-            prisma.property
-                .count({
-                    where: {
-                        ownerId: user.id,
-                        moderationStatus: 'rejected',
-                    },
-                })
-                .catch(() => 0),
-        ])
+    const { listings, publishedCount, pendingCount, rejectedCount } =
+        await getPortalDashboardSummary(
+            user.id,
+            await getServerRequestContext(),
+        ).catch(() => ({
+            listings: [],
+            publishedCount: 0,
+            pendingCount: 0,
+            rejectedCount: 0,
+        }))
 
     const totalListings = listings.length
 
@@ -235,8 +205,8 @@ export default async function PortalPage() {
                             No listings yet
                         </h3>
                         <p className="mt-2 text-sm text-stone-600">
-                            Submit your first property and our team will
-                            review it within 24–48 hours.
+                            Submit your first property and our team will review
+                            it within 24–48 hours.
                         </p>
                         <Button
                             asChild
@@ -284,7 +254,9 @@ export default async function PortalPage() {
                                             .filter(Boolean)
                                             .join(' · ')}{' '}
                                         · KES{' '}
-                                        {Number(property.price).toLocaleString()}
+                                        {Number(
+                                            property.price,
+                                        ).toLocaleString()}
                                         {property.listingPurpose === 'rent'
                                             ? ' / mo'
                                             : ''}
@@ -321,22 +293,22 @@ export default async function PortalPage() {
                             <span className="bg-brand/10 text-brand mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold">
                                 1
                             </span>
-                            Upload 8+ high-quality photos from different
-                            angles — bright daylight works best.
+                            Upload 8+ high-quality photos from different angles
+                            — bright daylight works best.
                         </li>
                         <li className="flex items-start gap-3">
                             <span className="bg-brand/10 text-brand mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold">
                                 2
                             </span>
-                            Be specific in your description — mention
-                            amenities, nearby landmarks, and any quirks.
+                            Be specific in your description — mention amenities,
+                            nearby landmarks, and any quirks.
                         </li>
                         <li className="flex items-start gap-3">
                             <span className="bg-brand/10 text-brand mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold">
                                 3
                             </span>
-                            Respond to inquiries within 24 hours — tenants
-                            are more likely to book quickly.
+                            Respond to inquiries within 24 hours — tenants are
+                            more likely to book quickly.
                         </li>
                     </ul>
                 </article>
@@ -350,10 +322,9 @@ export default async function PortalPage() {
                                 Verification process
                             </h2>
                             <p className="mt-2 text-sm leading-6 text-stone-600">
-                                Every listing you submit is reviewed by our
-                                team within 24–48 hours. We check ownership,
-                                image accuracy, and pricing sanity before
-                                publication.
+                                Every listing you submit is reviewed by our team
+                                within 24–48 hours. We check ownership, image
+                                accuracy, and pricing sanity before publication.
                             </p>
                             <Link
                                 href="/faq"

@@ -1,6 +1,5 @@
 import { NextRequest } from 'next/server'
 
-import { attachBackendModeCookie } from '@/lib/core/auth/cookies'
 import { buildAuthContext } from '@/lib/core/auth/session'
 import { verifyRequestCsrf } from '@/lib/core/auth/csrf'
 import {
@@ -72,10 +71,7 @@ export async function PUT(request: NextRequest) {
             ),
         )
 
-        const response = jsonSuccess(setting)
-        attachBackendModeCookie(response, setting.activeMode)
-
-        return response
+        return jsonSuccess(setting)
     } catch (error) {
         return jsonError(error)
     }

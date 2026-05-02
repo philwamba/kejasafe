@@ -32,17 +32,58 @@ export function resolveBackendModeFromRequest(
     return resolvedMode === 'laravel_api' ? 'laravel_api' : 'prisma_neon'
 }
 
+function toBackendMode(value: string | null | undefined): BackendMode | null {
+    return value === 'laravel_api' || value === 'prisma_neon' ? value : null
+}
+
 export async function resolveBackendModeForRequest(
     request: NextRequest,
     requestedMode?: string | null,
 ): Promise<BackendMode> {
     const cookieMode = request.cookies.get(authCookieNames.backendMode)?.value
     const headerMode = request.headers.get('x-backend-mode')
-    const resolvedMode = requestedMode ?? headerMode ?? cookieMode
+    const resolvedMode = toBackendMode(
+        requestedMode ?? headerMode ?? cookieMode,
+    )
 
-    if (resolvedMode === 'laravel_api' || resolvedMode === 'prisma_neon') {
+    if (resolvedMode) {
         return resolvedMode
     }
 
     return getConfiguredBackendMode()
+}
+
+export async function resolveActiveBackendModeForRequest(
+    request: NextRequest,
+    requestedMode?: string | null,
+): Promise<BackendMode> {
+    const headerMode = request.headers.get('x-backend-mode')
+    const resolvedMode = toBackendMode(requestedMode ?? headerMode)
+
+    if (resolvedMode) {
+        return resolvedMode
+    }
+
+    return getConfiguredBackendMode()
+}
+
+export function resolveBackendModeFromCookieHeader(
+    cookieHeader: string | null | undefined,
+): BackendMode | null {
+    if (!cookieHeader) {
+        return null
+    }
+
+    const cookie = cookieHeader
+        .split(';')
+        .map(part => part.trim())
+        .find(part => part.startsWith(`${authCookieNames.backendMode}=`))
+
+    if (!cookie) {
+        return null
+    }
+
+    return toBackendMode(
+        decodeURIComponent(cookie.split('=').slice(1).join('=')),
+    )
 }

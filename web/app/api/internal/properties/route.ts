@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { getServerCurrentUser } from '@/lib/core/auth/server'
 import {
     buildRequestContextFromNextRequest,
-    resolveBackendModeForRequest,
+    resolveActiveBackendModeForRequest,
 } from '@/lib/core/auth/request'
 import { verifyRequestCsrf } from '@/lib/core/auth/csrf'
 import { writeAuditLog } from '@/lib/core/audit/log'
@@ -51,7 +51,7 @@ function buildSearchInput(request: NextRequest): PropertySearchInput {
 
 export async function GET(request: NextRequest) {
     try {
-        const mode = await resolveBackendModeForRequest(request)
+        const mode = await resolveActiveBackendModeForRequest(request)
         const result = await listProperties(
             mode,
             buildSearchInput(request),
@@ -117,20 +117,16 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
         const parsed = createPropertySchema.parse(body)
-        const mode = await resolveBackendModeForRequest(request)
+        const mode = await resolveActiveBackendModeForRequest(request)
         const ctx = buildRequestContextFromNextRequest(request)
 
-        const created = await createProperty(
-            mode,
-            parsed,
-            {
-                ...ctx,
-                userId: user.id,
-                roles: user.roles,
-                permissions: user.permissions,
-                backendMode: mode,
-            },
-        )
+        const created = await createProperty(mode, parsed, {
+            ...ctx,
+            userId: user.id,
+            roles: user.roles,
+            permissions: user.permissions,
+            backendMode: user.backendMode,
+        })
 
         await writeAuditLog({
             actorUserId: user.id,
@@ -150,7 +146,9 @@ export async function POST(request: NextRequest) {
         return jsonSuccess(created, { status: 201 })
     } catch (error) {
         return jsonError(
-            error instanceof Error ? error.message : 'Unable to submit listing.',
+            error instanceof Error
+                ? error.message
+                : 'Unable to submit listing.',
             422,
         )
     }

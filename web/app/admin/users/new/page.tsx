@@ -4,9 +4,12 @@ import { redirect } from 'next/navigation'
 import { FiArrowLeft } from 'react-icons/fi'
 
 import { InviteUserForm } from '@/components/admin/InviteUserForm'
-import { getServerCurrentUser } from '@/lib/core/auth/server'
+import {
+    getServerCurrentUser,
+    getServerRequestContext,
+} from '@/lib/core/auth/server'
 import { hasAnyPermission } from '@/lib/core/rbac/access'
-import { prisma } from '@/lib/core/prisma/client'
+import { listAdminRoles } from '@/lib/core/services/admin-service'
 
 export const metadata: Metadata = {
     title: 'Invite User',
@@ -20,10 +23,7 @@ export default async function InviteUserPage() {
         redirect('/dashboard')
     }
 
-    const roles = await prisma.role.findMany({
-        orderBy: { name: 'asc' },
-        select: { id: true, name: true, description: true },
-    })
+    const roles = await listAdminRoles(await getServerRequestContext())
 
     return (
         <main className="mx-auto w-full max-w-2xl px-6 py-8 lg:px-10 lg:py-10">
@@ -42,8 +42,8 @@ export default async function InviteUserPage() {
                     Invite A New User
                 </h1>
                 <p className="mt-2 text-sm text-stone-600">
-                    The new user will receive a temporary password they can
-                    use to log in and reset.
+                    The new user will receive a temporary password they can use
+                    to log in and reset.
                 </p>
             </section>
 

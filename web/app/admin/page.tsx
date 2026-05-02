@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import type { Prisma } from '@prisma/client'
 import {
     FiArrowRight,
     FiCheckCircle,
@@ -9,19 +8,8 @@ import {
     FiUsers,
 } from 'react-icons/fi'
 
-import { prisma } from '@/lib/core/prisma/client'
-
-type AuditLogEntry = Prisma.AuditLogGetPayload<{
-    include: {
-        actor: {
-            select: {
-                id: true
-                fullName: true
-                email: true
-            }
-        }
-    }
-}>
+import { getServerRequestContext } from '@/lib/core/auth/server'
+import { getAdminDashboardSummary } from '@/lib/core/services/admin-service'
 
 interface StatCardProps {
     label: string
@@ -42,7 +30,10 @@ function StatCard({
     accent = 'brand',
     href,
 }: StatCardProps) {
-    const accentClasses: Record<NonNullable<StatCardProps['accent']>, string> = {
+    const accentClasses: Record<
+        NonNullable<StatCardProps['accent']>,
+        string
+    > = {
         brand: 'bg-brand/10 text-brand',
         emerald: 'bg-emerald-100 text-emerald-700',
         amber: 'bg-amber-100 text-amber-700',
@@ -128,40 +119,22 @@ function formatRelative(date: Date): string {
     return `${diffDays}d ago`
 }
 
-async function loadRecentActivity(): Promise<AuditLogEntry[]> {
-    try {
-        return await prisma.auditLog.findMany({
-            orderBy: { createdAt: 'desc' },
-            take: 8,
-            include: {
-                actor: {
-                    select: { id: true, fullName: true, email: true },
-                },
-            },
-        })
-    } catch {
-        return []
-    }
-}
-
 export default async function AdminPage() {
-    const [
+    const {
         pendingCount,
         publishedCount,
         totalProperties,
         totalUsers,
         recentActivity,
-    ] = await Promise.all([
-        prisma.property
-            .count({ where: { moderationStatus: 'pending_review' } })
-            .catch(() => 0),
-        prisma.property
-            .count({ where: { listingStatus: 'published' } })
-            .catch(() => 0),
-        prisma.property.count().catch(() => 0),
-        prisma.user.count().catch(() => 0),
-        loadRecentActivity(),
-    ])
+    } = await getAdminDashboardSummary(await getServerRequestContext()).catch(
+        () => ({
+            pendingCount: 0,
+            publishedCount: 0,
+            totalProperties: 0,
+            totalUsers: 0,
+            recentActivity: [],
+        }),
+    )
 
     return (
         <main className="mx-auto w-full max-w-7xl px-6 py-8 lg:px-10 lg:py-10">
@@ -250,8 +223,7 @@ export default async function AdminPage() {
                                             {entry.action.replace(/_/g, ' ')}
                                         </p>
                                         <p className="mt-0.5 truncate text-xs text-stone-500">
-                                            {entry.actor?.fullName ??
-                                                'System'}{' '}
+                                            {entry.actor?.fullName ?? 'System'}{' '}
                                             · {entry.entityType}
                                             {entry.entityId
                                                 ? ` #${entry.entityId.slice(0, 8)}`
@@ -290,10 +262,7 @@ export default async function AdminPage() {
                             href="/admin/system/health"
                             label="Check backend health"
                         />
-                        <QuickAction
-                            href="/admin/users"
-                            label="Manage users"
-                        />
+                        <QuickAction href="/admin/users" label="Manage users" />
                     </div>
                 </article>
             </section>

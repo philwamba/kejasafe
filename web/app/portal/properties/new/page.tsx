@@ -6,8 +6,11 @@ import { redirect } from 'next/navigation'
 
 import { NewPropertyForm } from '@/components/portal/NewPropertyForm'
 import { Logo } from '@/components/site/Logo'
-import { getServerCurrentUser } from '@/lib/core/auth/server'
-import { prisma } from '@/lib/core/prisma/client'
+import {
+    getServerCurrentUser,
+    getServerRequestContext,
+} from '@/lib/core/auth/server'
+import { listPropertyTypeOptions } from '@/lib/core/services/catalog-service'
 import { slugify } from '@/modules/locations/content'
 
 export const metadata: Metadata = {
@@ -30,13 +33,14 @@ export default async function NewPropertyPage() {
         redirect('/login?next=/portal/properties/new')
     }
 
-    const propertyTypes = await prisma.propertyType.findMany({
-        orderBy: { name: 'asc' },
-        select: { slug: true, name: true },
-    })
+    const propertyTypes = await listPropertyTypeOptions(
+        await getServerRequestContext(),
+    )
 
     const catalogPath = resolve(process.cwd(), '../data/locations/kenya.json')
-    const catalog: CountyCatalog = JSON.parse(readFileSync(catalogPath, 'utf-8'))
+    const catalog: CountyCatalog = JSON.parse(
+        readFileSync(catalogPath, 'utf-8'),
+    )
     const counties = catalog.counties.map(county => ({
         slug: slugify(county.name),
         name: county.name,

@@ -5,9 +5,12 @@ import { notFound, redirect } from 'next/navigation'
 import { FiArrowLeft, FiMapPin } from 'react-icons/fi'
 
 import { ModerationActions } from '@/components/admin/ModerationActions'
-import { getServerCurrentUser } from '@/lib/core/auth/server'
-import { prisma } from '@/lib/core/prisma/client'
+import {
+    getServerCurrentUser,
+    getServerRequestContext,
+} from '@/lib/core/auth/server'
 import { hasAnyPermission } from '@/lib/core/rbac/access'
+import { getModerationDetail } from '@/lib/core/services/admin-service'
 
 export const metadata: Metadata = {
     title: 'Review Property',
@@ -26,25 +29,10 @@ export default async function ModerationDetailPage({
     }
 
     const { id } = await params
-    const property = await prisma.property.findUnique({
-        where: { id },
-        include: {
-            county: true,
-            city: true,
-            neighborhood: true,
-            propertyType: true,
-            images: { orderBy: { position: 'asc' } },
-            owner: {
-                select: {
-                    id: true,
-                    fullName: true,
-                    email: true,
-                    phone: true,
-                    createdAt: true,
-                },
-            },
-        },
-    })
+    const property = await getModerationDetail(
+        id,
+        await getServerRequestContext(),
+    )
 
     if (!property) notFound()
 
@@ -93,7 +81,7 @@ export default async function ModerationDetailPage({
                                         className="object-cover"
                                     />
                                     {image.isCover ? (
-                                        <span className="bg-brand absolute left-2 top-2 rounded-full px-2 py-0.5 text-[10px] font-semibold text-white">
+                                        <span className="bg-brand absolute top-2 left-2 rounded-full px-2 py-0.5 text-[10px] font-semibold text-white">
                                             Cover
                                         </span>
                                     ) : null}
@@ -115,7 +103,7 @@ export default async function ModerationDetailPage({
                         <h2 className="text-lg font-semibold text-stone-950">
                             Description
                         </h2>
-                        <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-stone-700">
+                        <p className="mt-3 text-sm leading-7 whitespace-pre-wrap text-stone-700">
                             {property.description}
                         </p>
                     </section>

@@ -6,9 +6,12 @@ import { FiFileText, FiSearch } from 'react-icons/fi'
 import { DataTable } from '@/components/ui/data-table'
 import { Pagination } from '@/components/ui/pagination'
 import { StatusBadge } from '@/components/ui/status-badge'
-import { getServerCurrentUser } from '@/lib/core/auth/server'
+import {
+    getServerCurrentUser,
+    getServerRequestContext,
+} from '@/lib/core/auth/server'
 import { hasAnyPermission } from '@/lib/core/rbac/access'
-import { prisma } from '@/lib/core/prisma/client'
+import { listAuditLogs } from '@/lib/core/services/admin-service'
 
 export const metadata: Metadata = {
     title: 'Audit Log',
@@ -73,54 +76,10 @@ export default async function AuditLogPage({
     const level = sp.level ?? ''
     const entityType = sp.entityType ?? ''
 
-    const where = {
-        ...(level
-            ? { level: level as 'info' | 'warning' | 'critical' }
-            : {}),
-        ...(entityType ? { entityType } : {}),
-        ...(search
-            ? {
-                  OR: [
-                      {
-                          action: {
-                              contains: search,
-                              mode: 'insensitive' as const,
-                          },
-                      },
-                      {
-                          entityType: {
-                              contains: search,
-                              mode: 'insensitive' as const,
-                          },
-                      },
-                      {
-                          actor: {
-                              fullName: {
-                                  contains: search,
-                                  mode: 'insensitive' as const,
-                              },
-                          },
-                      },
-                  ],
-              }
-            : {}),
-    }
-
-    const [items, total, allCount] = await prisma.$transaction([
-        prisma.auditLog.findMany({
-            where,
-            orderBy: { createdAt: 'desc' },
-            skip: (page - 1) * perPage,
-            take: perPage,
-            include: {
-                actor: {
-                    select: { id: true, fullName: true, email: true },
-                },
-            },
-        }),
-        prisma.auditLog.count({ where }),
-        prisma.auditLog.count(),
-    ])
+    const { items, total, allCount } = await listAuditLogs(
+        { page, perPage, search, level, entityType },
+        await getServerRequestContext(),
+    )
 
     const totalPages = Math.max(1, Math.ceil(total / perPage))
 
@@ -186,17 +145,13 @@ export default async function AuditLogPage({
                         label="Level"
                         options={LEVEL_FILTERS}
                         current={level}
-                        buildHref={v =>
-                            buildHref({ level: v, page: 1 })
-                        }
+                        buildHref={v => buildHref({ level: v, page: 1 })}
                     />
                     <FilterGroup
                         label="Entity"
                         options={ENTITY_FILTERS}
                         current={entityType}
-                        buildHref={v =>
-                            buildHref({ entityType: v, page: 1 })
-                        }
+                        buildHref={v => buildHref({ entityType: v, page: 1 })}
                     />
                 </div>
             </section>
@@ -211,8 +166,8 @@ export default async function AuditLogPage({
                             No audit entries
                         </p>
                         <p className="mt-1 text-sm text-stone-500">
-                            Actions will appear here as moderators work on
-                            the platform.
+                            Actions will appear here as moderators work on the
+                            platform.
                         </p>
                     </>
                 }

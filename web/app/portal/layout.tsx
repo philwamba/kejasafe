@@ -3,8 +3,11 @@ import { redirect } from 'next/navigation'
 
 import { AdminTopBar } from '@/components/admin/AdminTopBar'
 import { PortalSidebar } from '@/components/portal/PortalSidebar'
-import { getServerCurrentUser } from '@/lib/core/auth/server'
-import { prisma } from '@/lib/core/prisma/client'
+import {
+    getServerCurrentUser,
+    getServerRequestContext,
+} from '@/lib/core/auth/server'
+import { getPortalPendingCount } from '@/lib/core/services/dashboard-service'
 
 export default async function PortalLayout({
     children,
@@ -17,14 +20,10 @@ export default async function PortalLayout({
         redirect('/login?next=/portal')
     }
 
-    const pendingCount = await prisma.property
-        .count({
-            where: {
-                ownerId: user.id,
-                moderationStatus: 'pending_review',
-            },
-        })
-        .catch(() => 0)
+    const pendingCount = await getPortalPendingCount(
+        user.id,
+        await getServerRequestContext(),
+    ).catch(() => 0)
 
     return (
         <div className="flex min-h-screen bg-stone-50">
