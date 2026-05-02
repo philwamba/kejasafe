@@ -19,6 +19,11 @@ const patchSchema = z.object({
     roles: z.array(z.string()).optional(),
 })
 
+type TransactionClient = Omit<
+    typeof prisma,
+    '$connect' | '$disconnect' | '$on' | '$transaction' | '$extends'
+>
+
 export async function PATCH(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> },
@@ -53,7 +58,7 @@ export async function PATCH(
         } = {}
         if (parsed.status) updates.status = parsed.status
 
-        const user = await prisma.$transaction(async (tx: typeof prisma) => {
+        const user = await prisma.$transaction(async (tx: TransactionClient) => {
             if (Object.keys(updates).length > 0) {
                 await tx.user.update({
                     where: { id },
