@@ -1,14 +1,15 @@
+import type { Prisma } from '@prisma/client'
+
 import { prisma } from '@/lib/core/prisma/client'
 import type {
     AdminProvider,
     AdminUserListInput,
-    AuditLogEntry,
     AuditLogListInput,
     AuditLogListResult,
     ModerationQueueInput,
 } from '@/lib/core/contracts/admin'
 
-function auditWhere(input: AuditLogListInput) {
+function auditWhere(input: AuditLogListInput): Prisma.AuditLogWhereInput {
     return {
         ...(input.level
             ? {
@@ -22,20 +23,20 @@ function auditWhere(input: AuditLogListInput) {
                       {
                           action: {
                               contains: input.search,
-                              mode: 'insensitive',
+                              mode: 'insensitive' as const,
                           },
                       },
                       {
                           entityType: {
                               contains: input.search,
-                              mode: 'insensitive',
+                              mode: 'insensitive' as const,
                           },
                       },
                       {
                           actor: {
                               fullName: {
                                   contains: input.search,
-                                  mode: 'insensitive',
+                                  mode: 'insensitive' as const,
                               },
                           },
                       },
@@ -45,7 +46,7 @@ function auditWhere(input: AuditLogListInput) {
     }
 }
 
-function userWhere(input: AdminUserListInput) {
+function userWhere(input: AdminUserListInput): Prisma.UserWhereInput {
     return {
         ...(input.status
             ? {
@@ -62,19 +63,19 @@ function userWhere(input: AdminUserListInput) {
                       {
                           fullName: {
                               contains: input.search,
-                              mode: 'insensitive',
+                              mode: 'insensitive' as const,
                           },
                       },
                       {
                           email: {
                               contains: input.search,
-                              mode: 'insensitive',
+                              mode: 'insensitive' as const,
                           },
                       },
                       {
                           phone: {
                               contains: input.search,
-                              mode: 'insensitive',
+                              mode: 'insensitive' as const,
                           },
                       },
                   ],
@@ -83,7 +84,9 @@ function userWhere(input: AdminUserListInput) {
     }
 }
 
-function moderationWhere(input: ModerationQueueInput) {
+function moderationWhere(
+    input: ModerationQueueInput,
+): Prisma.PropertyWhereInput {
     return {
         ...(input.status && input.status !== 'all'
             ? {
@@ -99,7 +102,7 @@ function moderationWhere(input: ModerationQueueInput) {
                       {
                           title: {
                               contains: input.search,
-                              mode: 'insensitive',
+                              mode: 'insensitive' as const,
                           },
                       },
                       {
@@ -108,13 +111,13 @@ function moderationWhere(input: ModerationQueueInput) {
                                   {
                                       fullName: {
                                           contains: input.search,
-                                          mode: 'insensitive',
+                                          mode: 'insensitive' as const,
                                       },
                                   },
                                   {
                                       email: {
                                           contains: input.search,
-                                          mode: 'insensitive',
+                                          mode: 'insensitive' as const,
                                       },
                                   },
                               ],
@@ -194,9 +197,7 @@ export const prismaAdminProvider: AdminProvider = {
             prisma.auditLog.count(),
         ])
 
-        const items = rows as AuditLogEntry[]
-
-        return { items, total, allCount }
+        return { items: rows, total, allCount }
     },
 
     async users(input) {
@@ -329,7 +330,7 @@ export const prismaAdminProvider: AdminProvider = {
         ])
 
         return {
-            items: items.map((item: { price: unknown }) => ({
+            items: items.map(item => ({
                 ...item,
                 price: Number(item.price),
             })),

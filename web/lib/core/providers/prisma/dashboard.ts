@@ -51,7 +51,7 @@ export const prismaDashboardProvider: DashboardProvider = {
             ])
 
         return {
-            listings: listings.map((listing: { price: unknown }) => ({
+            listings: listings.map(listing => ({
                 ...listing,
                 price: Number(listing.price),
             })),
